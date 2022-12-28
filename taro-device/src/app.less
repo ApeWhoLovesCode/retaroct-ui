@@ -1,0 +1,33 @@
+@themeColor: #EB3223;
+@themeBgColor: #FFFFFF;
+// @themeRedColor: #EB4547;
+@themeGrayColor: #F9F9F9;
+@themeGray2Color: #A3A3A3;
+@themeBlackColor: #000;
+
+@maxZIndex: 1000;
+@midZIndex: 999;
+
+/** 兼容 ios 底部安全边距 */
+/* 兼容 iOS < 11.2 */
+@safeBottomConstant: calc(constant(safe-area-inset-bottom) / 2 + 10px);
+/* 兼容 iOS >= 11.2 */
+@safeBottomEnv: calc(env(safe-area-inset-bottom) / 2 + 10px);
+
+/** tabbar的高度 */
+@tabbarH: 43px;
+@tabbarHeightConstant: calc(45px + constant(safe-area-inset-bottom) / 2 + 10px);
+@tabbarHeight: calc(45px + env(safe-area-inset-bottom) / 2 + 10px);
+
+image {
+  display: block;
+}
+
+// 隐藏滚动条
+::-webkit-scrollbar {
+  // display: none 才能让ios隐藏滚动条
+  display: none;
+  width: 0;
+  height: 0;
+  color: transparent;
+}

@@ -1,0 +1,62 @@
+{
+  "private": true,
+  "name": "retaroct",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "concurrently \"npm run dumiDev\" \"npm run copyDevice\" \"npm run device\" \"npm run fileChange\"",
+    "dumiDev": "dumi dev",
+    "docs:build": "dumi build",
+    "docs:deploy": "gh-pages -d docs-dist",
+    "build": "father build",
+    "deploy": "npm run docs:build && npm run docs:deploy",
+    "prettier": "prettier --write \"**/*.{js,jsx,tsx,ts,less,md,json}\"",
+    "test": "umi-test",
+    "test:coverage": "umi-test --coverage",
+    "prepublishOnly": "npm run build",
+    "device": "cd taro-device && cnpm install && npm run dev:h5",
+    "copyDevice": "node ./helper/copyDevice.js",
+    "fileChange": "node ./helper/fileChange.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "module": "dist/esm/index.js",
+  "typings": "dist/esm/index.d.ts",
+  "gitHooks": {
+    "pre-commit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,jsx,less,md,json}": [
+      "prettier --write"
+    ],
+    "*.ts?(x)": [
+      "prettier --parser=typescript --write"
+    ]
+  },
+  "dependencies": {
+    "@tarojs/components": "3.4.11",
+    "@tarojs/plugin-framework-react": "3.4.11",
+    "@tarojs/react": "3.4.11",
+    "@tarojs/runtime": "3.4.11",
+    "@tarojs/taro": "3.4.11",
+    "react": "^16.12.0 || ^17.0.0"
+  },
+  "devDependencies": {
+    "@tarojs/mini-runner": "3.4.11",
+    "@tarojs/webpack-runner": "3.4.11",
+    "babel-preset-taro": "3.4.11",
+    "eslint-config-taro": "3.4.11",
+    "@testing-library/jest-dom": "^5.15.1",
+    "@testing-library/react": "^12.1.2",
+    "@types/jest": "^27.0.3",
+    "@umijs/fabric": "^2.8.1",
+    "@umijs/test": "^3.0.5",
+    "concurrently": "^7.0.0",
+    "dumi": "^1.1.0",
+    "dumi-theme-mobile": "^1.1.21",
+    "gh-pages": "^3.0.0",
+    "lint-staged": "^10.0.7",
+    "prettier": "^2.2.1",
+    "yorkie": "^2.0.0"
+  }
+}
