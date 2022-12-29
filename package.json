@@ -13,7 +13,7 @@
     "test": "umi-test",
     "test:coverage": "umi-test --coverage",
     "prepublishOnly": "npm run build",
-    "device": "cd taro-device && cnpm install && npm run dev:h5",
+    "device": "cd taro-device && cnpm run dev:h5",
     "copyDevice": "node ./helper/copyDevice.js",
     "fileChange": "node ./helper/fileChange.js"
   },
@@ -38,7 +38,7 @@
     "@tarojs/react": "3.2.4",
     "@tarojs/runtime": "3.2.4",
     "@tarojs/taro": "3.2.4",
-    "react": "^16.12.0 || ^17.0.0"
+    "react": "^17.0.0"
   },
   "devDependencies": {
     "@tarojs/mini-runner": "3.2.4",

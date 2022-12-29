@@ -1,0 +1,15 @@
+@class-prefix: ~'com-floating-ball';
+
+.@{class-prefix} {
+  &-button {
+    position: fixed;
+    top: var(--initial-position-top);
+    bottom: var(--initial-position-bottom);
+    left: var(--initial-position-left);
+    right: var(--initial-position-right);
+    user-select: none;
+    touch-action: none;
+    transition: transform ease-out 0.15s;
+    z-index: var(--z-index);
+  }
+}

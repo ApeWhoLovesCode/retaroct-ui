@@ -99,6 +99,9 @@ const Tabs: FC<TabsProps> = ({
         getEleInfo(`.${classPrefix}`),
         getEleInfo(`.${classPrefix}-scrollView`),
       ]).then(([tabWrapEles, tabs, tabsInfo]) => {
+        console.log('tabWrapEles: ', tabWrapEles);
+        console.log('tabs: ', tabs);
+        console.log('tabsInfo: ', tabsInfo);
         if (!tabWrapEles || !tabsInfo) return;
         const arr: TabItemType[] = tabWrapEles.map((e) => {
           const _l = e.left + e.width / 2 - tabsInfo.left;

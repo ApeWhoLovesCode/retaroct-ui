@@ -12,6 +12,7 @@ export default (props: IPreviewerProps) => {
   const [isActive, setIsActive] = useState(false);
   const isInactive = meta.mobile !== false && !isActive;
   const activeSelf = useCallback(() => {
+    console.log('props: ', props);
     const componentName = props.componentName;
     let demoUrl = '';
     if (process.env.NODE_ENV === 'production') {

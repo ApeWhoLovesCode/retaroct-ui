@@ -1,11 +1,12 @@
 import { View } from '@tarojs/components';
 import Tabs from '../index';
-import React from 'react';
+import React, { useState } from 'react';
 import './index.less';
 
-const tabsList = ['苹果', '香蕉', '菠萝'];
 
 export default () => {
+  const [tabsList, setTabsList] = useState(['苹果', '香蕉', '菠萝']);
+
   return (
     <View className="demo-tabs">
       <Tabs list={tabsList} activeTextClass="tabActive">
