@@ -34,18 +34,17 @@
     ]
   },
   "dependencies": {
-    "@tarojs/components": "3.4.11",
-    "@tarojs/plugin-framework-react": "3.4.11",
-    "@tarojs/react": "3.4.11",
-    "@tarojs/runtime": "3.4.11",
-    "@tarojs/taro": "3.4.11",
+    "@tarojs/components": "3.2.4",
+    "@tarojs/react": "3.2.4",
+    "@tarojs/runtime": "3.2.4",
+    "@tarojs/taro": "3.2.4",
     "react": "^16.12.0 || ^17.0.0"
   },
   "devDependencies": {
-    "@tarojs/mini-runner": "3.4.11",
-    "@tarojs/webpack-runner": "3.4.11",
-    "babel-preset-taro": "3.4.11",
-    "eslint-config-taro": "3.4.11",
+    "@tarojs/mini-runner": "3.2.4",
+    "@tarojs/webpack-runner": "3.2.4",
+    "babel-preset-taro": "3.2.4",
+    "eslint-config-taro": "3.2.4",
     "@testing-library/jest-dom": "^5.15.1",
     "@testing-library/react": "^12.1.2",
     "@types/jest": "^27.0.3",

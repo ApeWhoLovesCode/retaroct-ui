@@ -2,7 +2,7 @@
 export default (time?: number) => {
   return new Promise<void>((resolve, reject) => {
     setTimeout(() => {
-      resolve()
+      resolve();
     }, time ?? 1000);
-  })
-}
+  });
+};
