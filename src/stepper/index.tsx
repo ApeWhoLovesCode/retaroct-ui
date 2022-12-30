@@ -8,6 +8,7 @@ import ReduceIcon from './assets/reduce.png';
 import ReduceGrayIcon from './assets/reduce-gray.png';
 import AddIcon from './assets/add.png';
 import AddGrayIcon from './assets/add-gray.png';
+import React from 'react';
 
 export interface StepperProps {
   /** 当前输入的值 */

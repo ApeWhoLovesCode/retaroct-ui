@@ -9,10 +9,6 @@ group:
   order: 1
 ---
 
-# 组件维护人员
-
-林桓恒
-
 # 组件介绍
 
 悬浮球组件。 <br>
@@ -26,6 +22,10 @@ group:
 <code src="./demo/index.tsx"></code>
 
 <API src="./index.tsx"></API>
+
+## 组件维护人员
+
+林桓恒
 
 # 组件支持度
 

@@ -1,0 +1,30 @@
+@class-prefix: ~'com-slide-action';
+
+.@{class-prefix} {
+  overflow: hidden;
+  &-content {
+    transition: transform .3s ease-out;
+  }
+  &-left {
+    right: 100%;
+  }
+  &-right {
+    left: 100%;
+  }
+  &-btn {
+    height: 100%;
+    // padding: 0 5px;
+    min-width: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    color: #fff;
+  }
+  &-area {
+    position: absolute;
+    height: 100%;
+    top: 0;
+    display: flex;
+  }
+}

@@ -12,13 +12,12 @@ export default (props: IPreviewerProps) => {
   const [isActive, setIsActive] = useState(false);
   const isInactive = meta.mobile !== false && !isActive;
   const activeSelf = useCallback(() => {
-    console.log('props: ', props);
     const componentName = props.componentName;
     let demoUrl = '';
     if (process.env.NODE_ENV === 'production') {
-      demoUrl = `https://test.ybhospital.net/taro_device/#/pages/${componentName}/demo/index`;
+      demoUrl = `https://test/taro_device/#/pages/${componentName}/demo/index`;
     } else {
-      demoUrl = `http://localhost:9797/#/pages/${componentName}/demo/index`;
+      demoUrl = `http://${window.location.hostname}:9797/#/pages/${componentName}/demo/index`;
     }
     window.postMessage(
       {

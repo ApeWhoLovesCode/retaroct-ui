@@ -1,5 +1,5 @@
 ---
-title: loading 加载中
+title: swipe-action
 nav:
   title: 组件
   path: /components
@@ -9,23 +9,23 @@ group:
   order: 1
 ---
 
-# 组件维护人员
-
-林桓恒
-
 # 组件介绍
 
-加载中组件。 <br>
+滑动操作组件。 <br>
 
 **特性/功能**
 
-- 加载中
+- 标签
 
 ## 代码演示
 
 <code src="./demo/index.tsx"></code>
 
 <API src="./index.tsx"></API>
+
+## 组件维护人员
+
+林桓恒
 
 # 组件支持度
 

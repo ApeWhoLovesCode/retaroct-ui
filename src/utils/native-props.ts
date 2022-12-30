@@ -6,7 +6,8 @@ export type NativeProps<S extends string = never> = {
   className?: string;
   style?: CSSProperties & Partial<Record<S, string>>;
   tabIndex?: number;
-} & AriaAttributes;
+}
+// } & AriaAttributes;
 
 export function withNativeProps<P extends NativeProps>(props: P, element: ReactElement) {
   const p = {
