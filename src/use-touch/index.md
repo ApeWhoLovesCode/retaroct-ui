@@ -1,5 +1,5 @@
 ---
-title: use-render
+title: use-touch
 nav:
   title: 钩子
   path: /hooks
@@ -11,7 +11,7 @@ group:
 
 # 介绍
 
-触发 render 组件
+手指触摸触发
 
 ## 代码演示
 

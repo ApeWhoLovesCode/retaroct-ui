@@ -14,6 +14,10 @@ export type FloatingBallProps = {
   axis?: 'x' | 'y' | 'xy'
   /** 自动磁吸到边界 */
   magnetic?: 'x' | 'y'
+  /** 贴边时触发 isLeft: true 代表是左或上方向上贴边 */
+  onMagnetic?: (isLeft: boolean) => void
+  /** 位置偏移时触发 */
+  onOffsetChange?: (offset: {x: number, y: number}) => void
   children?: React.ReactNode
 } & NativeProps<
 | '--initial-position-left'
@@ -52,6 +56,7 @@ const FloatingBall: FC<FloatingBallProps> = ({
     const x = axis === 'y' ? 0 : e.touches[0].clientX - touchRef.current.startX
     const y = axis === 'x' ? 0 : e.touches[0].clientY - touchRef.current.startY
     setInfo({x, y})
+    props.onOffsetChange?.({x, y})
   }
   const onTouchEnd = (e: ITouchEvent) => {
     e.stopPropagation()
@@ -64,12 +69,14 @@ const FloatingBall: FC<FloatingBallProps> = ({
       const middleX = screenW / 2 - l_r - w / 2 // 中间分隔线的值
       const distance = -1 * _v * (screenW - w - l_r * 2) // 另一边的位置
       x = (Math.abs(x) > middleX) ? (x * _v < 0 ? distance : 0) : 0
+      props.onMagnetic?.(x === 0 ? l < r : l > r)
     } else if (magnetic === 'y') {
       const l_r = t < b ? t : b
       const _v = t < b ? -1 : 1
       const middleX = screenH / 2 - l_r - h / 2 // 中间分隔线的值
       const distance = -1 * _v * (screenH - h - l_r * 2) // 另一边的位置
       y = (Math.abs(y) > middleX) ? (y * _v < 0 ? distance : 0) : 0
+      props.onMagnetic?.(y === 0 ? t < b : t > b)
     }
     setInfo({x, y})
   }

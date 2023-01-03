@@ -15,12 +15,12 @@ export default () => {
     setTimeout(() => {
       // 假设：异步获取五分钟前创建的日期
       setCreateTime(Date.now() - 5 * 60_000)
-    }, 1000)
+    }, 2000)
   }, [])
 
   return (
     <View className='demo-countDown'>
-      <DemoBlock title='倒计时10秒' padding={10}>
+      <DemoBlock title='倒计时10秒' padding={'0 10px'}>
         <CountDown 
           value={curTime} 
           total={10_000} 
@@ -29,13 +29,13 @@ export default () => {
           }} 
         />
       </DemoBlock>
-      <DemoBlock title='倒计时50分钟'  padding={10}>
+      <DemoBlock title='倒计时50分钟' padding={'0 10px'}>
         <CountDown value={curTime} total={50 * 60_000} />
       </DemoBlock>
-      <DemoBlock title='倒计时3天'  padding={10}>
+      <DemoBlock title='倒计时3天' padding={'0 10px'}>
         <CountDown value={curTime} total={3 * 86400_000} />
       </DemoBlock>
-      <DemoBlock title='异步获取五分钟前创建的日期' padding={10}>
+      <DemoBlock title='2秒后进行五分钟倒计时' padding={'0 10px'}>
         <CountDown value={createTime} total={50 * 60_000} />
       </DemoBlock>
     </View>

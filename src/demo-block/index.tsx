@@ -6,7 +6,7 @@ const classPrefix = `com-demo-block`
 
 type PropsType = {
   title: string
-  padding?: number
+  padding?: string
   className?: string
   children: React.ReactNode
 }
