@@ -4,12 +4,12 @@ import { NativeProps, withNativeProps } from '../utils/native-props';
 import getEleInfo from '../utils/getEleInfo';
 import Taro, { nextTick } from '@tarojs/taro';
 import React from 'react';
+import { randomStr } from '../utils/random';
 
 const classPrefix = `com-floating-ball`;
 
 /** 悬浮球 */
 export type FloatingBallProps = { 
-  onClick?: (event: ITouchEvent) => void
   /** 可以进行拖动的方向，'xy' 表示自由移动 默认值xy */
   axis?: 'x' | 'y' | 'xy'
   /** 自动磁吸到边界 */
@@ -29,6 +29,7 @@ let screenH = 0
 const FloatingBall: FC<FloatingBallProps> = ({
   axis = 'xy', magnetic, ...props
 }) => {
+  const idRef = useRef(randomStr(classPrefix))
   /** 悬浮球的宽，高，上下左右距离 */
   const ball = useRef({w: 0, h: 0, r: 0, l: 0, t: 0, b: 0})
   const touchRef = useRef({
@@ -75,9 +76,9 @@ const FloatingBall: FC<FloatingBallProps> = ({
 
   useEffect(() => {
     const init = async () => {
-      const ballInfo = await getEleInfo(`.${classPrefix}-button`)
+      const ballInfo = await getEleInfo(`.${idRef.current} .${classPrefix}-button`)
       screenW = Taro.getSystemInfoSync().screenWidth
-      screenW = Taro.getSystemInfoSync().screenHeight
+      screenH = Taro.getSystemInfoSync().screenHeight
       ball.current.w = ballInfo?.width ?? 0
       ball.current.h = ballInfo?.height ?? 0
       ball.current.l = ballInfo?.left ?? 0
@@ -92,7 +93,7 @@ const FloatingBall: FC<FloatingBallProps> = ({
 
   return withNativeProps(
     props,
-    <View className={classPrefix}>
+    <View className={`${classPrefix} ${idRef.current}`}>
       <View
         ref={buttonRef} 
         className={`${classPrefix}-button`}

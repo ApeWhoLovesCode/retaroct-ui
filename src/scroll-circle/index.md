@@ -1,21 +1,21 @@
 ---
-title: swipe-action 滑动操作
+title: scrollCircle 圆形滚动
 nav:
   title: 组件
   path: /components
   order: 2
 group:
-  title: 业务组件
+  title: 试验性组件
   order: 1
 ---
 
 # 组件介绍
 
-滑动操作组件。 <br>
+圆形滚动组件。 <br>
 
 **特性/功能**
 
-- 标签
+- 将每一个卡片绕圆形旋转放置，并支持圆形滚动的方式
 
 ## 代码演示
 

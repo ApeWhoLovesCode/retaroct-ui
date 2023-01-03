@@ -1,5 +1,5 @@
 ---
-title: swipe-action 滑动操作
+title: count-down 倒计时
 nav:
   title: 组件
   path: /components
@@ -11,11 +11,11 @@ group:
 
 # 组件介绍
 
-滑动操作组件。 <br>
+倒计时组件。 <br>
 
 **特性/功能**
 
-- 标签
+- 倒计时
 
 ## 代码演示
 

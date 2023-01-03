@@ -1,5 +1,5 @@
 import { View, ITouchEvent } from '@tarojs/components'
-import { useState, useEffect, forwardRef, ReactNode, useRef, useImperativeHandle } from 'react';
+import React, { useState, useEffect, forwardRef, ReactNode, useRef, useImperativeHandle } from 'react';
 import './index.less';
 import { NativeProps, withNativeProps } from '../utils/native-props';
 import getEleInfo from '../utils/getEleInfo';
@@ -44,6 +44,11 @@ type TouchType = {
   status: 'not' | 'active' | 'lock' 
   direction: 'left' | 'normal' | 'right'
 }
+type AreaRefType = {
+  left: number
+  right: number
+  normal?: number
+}
 
 // const leftActionsArr = [{key: '12', text: '收藏', color: '#5a8afe'}]
 const rightActionsArr: Action[] = [{key: 'delete', text: '删除', color: '#ee4b46'}]
@@ -51,18 +56,18 @@ const rightActionsArr: Action[] = [{key: 'delete', text: '删除', color: '#ee4b
 const SlideAction = forwardRef<SwipeActionRef, SwipeActionProps>(({
   children, leftActions, rightActions = rightActionsArr, onAction, onActionsReveal, closeOnAction, closeOnTouchOutside = true, ...ret
 }, ref) => {
+  const idRef = useRef(randomStr(classPrefix))
   const [moveX, setMoveX] = useState<number>(0);
   const touchRef = useRef<TouchType>({
     status: 'not',
     direction: 'normal',
   })
   /** 滑块左右区域的宽度 */
-  const areaRef = useRef({
+  const areaRef = useRef<AreaRefType>({
     left: 0,
     right: 0
   })
   const touch = useTouch()
-  const idRef = useRef(classPrefix + randomStr())
 
   const close = () => {
     if(touchRef.current.direction !== 'normal') {
@@ -102,12 +107,9 @@ const SlideAction = forwardRef<SwipeActionRef, SwipeActionProps>(({
     if(touchRef.current.status === 'lock') return
     touch.move(e)
     const x = touch.deltaX.current
-    console.log('x: ', x);
     const direction = x > 0 ? 'left' : 'right'
     const rangeV = areaRef.current[direction]
-    console.log('rangeV: ', rangeV);
     const directionV = areaRef.current[`${touchRef.current.direction}`] ?? 0
-    console.log('directionV: ', directionV);
     let _moveX = -directionV
     // 触摸大于(一半区域 + 按钮显示后的宽度)
     if(Math.abs(x) >= Math.abs(rangeV) / 2 + Math.abs(directionV)) {

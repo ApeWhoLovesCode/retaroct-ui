@@ -1,5 +1,5 @@
 ---
-title: Stepper 步进器
+title: stepper 步进器
 nav:
   title: 组件
   path: /components
@@ -23,7 +23,7 @@ group:
 
 <API src="./index.tsx"></API>
 
-## 组件维护人员
+#### 组件维护人员
 
 林桓恒
 

@@ -1,5 +1,5 @@
 ---
-title: floating-ball
+title: floating-ball 悬浮球
 nav:
   title: 组件
   path: /components
@@ -23,7 +23,7 @@ group:
 
 <API src="./index.tsx"></API>
 
-## 组件维护人员
+#### 组件维护人员
 
 林桓恒
 

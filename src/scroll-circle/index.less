@@ -1,0 +1,16 @@
+@class-prefix: ~'com-scroll-circle';
+.@{class-prefix} {
+  position: relative;
+  overflow: hidden;
+  &-area {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform-origin: center center;
+    transition: transform .6s ease-out;
+  }
+  &-cardWrap {
+    position: absolute;
+    transform-origin: center center;
+  }
+}

@@ -1,5 +1,5 @@
 ---
-title: use-render
+title: use-count-down
 nav:
   title: 钩子
   path: /hooks
@@ -11,7 +11,7 @@ group:
 
 # 介绍
 
-触发 render 组件
+倒计时钩子
 
 ## 代码演示
 
