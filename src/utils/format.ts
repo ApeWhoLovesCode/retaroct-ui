@@ -4,6 +4,7 @@ export function priceFormat(price: number = 0, isLocale = true) {
   return `￥${isLocale ? price.toLocaleString() : price.toFixed(2)}`;
 }
 
+type OptKey = 'y+' | 'm+' | 'd+' | 'H+' | 'M+' | 'S+'
 /** 格式化日期 yy-mm-dd HH:MM:SS */
 export function dateFormat(date?: Date | number, fmt = 'yy-mm-dd HH:MM:SS') {
   if (!(date instanceof Date)) {
@@ -20,9 +21,10 @@ export function dateFormat(date?: Date | number, fmt = 'yy-mm-dd HH:MM:SS') {
     // 有其他格式化字符需求可以继续添加，必须转化成字符串
   };
   for (let k in opt) {
+    const _k = k as OptKey
     ret = new RegExp('(' + k + ')').exec(fmt);
     if (ret) {
-      fmt = fmt.replace(ret[1], ret[1].length == 1 ? opt[k] : opt[k].padStart(ret[1].length, '0'));
+      fmt = fmt.replace(ret[1], ret[1].length === 1 ? opt[_k] : opt[_k].padStart(ret[1].length, '0'));
     }
   }
   return fmt;

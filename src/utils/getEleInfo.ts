@@ -5,7 +5,7 @@ export type BoundingClientRectCallbackResult = {
   /** 节点的下边界坐标 */
   bottom: number;
   /** 节点的 dataset */
-  dataset: TaroGeneral.IAnyObject;
+  // dataset: TaroGeneral.IAnyObject;
   /** 节点的高度 */
   height: number;
   /** 节点的 ID */

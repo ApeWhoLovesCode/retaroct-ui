@@ -1,13 +1,14 @@
 {
-  "private": true,
-  "name": "retaroct",
-  "version": "1.0.0",
+  "private": false,
+  "name": "retaroct-ui",
+  "author": "linhuanheng",
+  "version": "1.0.3",
   "scripts": {
     "start": "concurrently \"npm run dumiDev\" \"npm run copyDevice\" \"npm run device\" \"npm run fileChange\"",
     "dumiDev": "dumi dev",
     "docs:build": "dumi build",
     "docs:deploy": "gh-pages -d docs-dist",
-    "build": "father build",
+    "build": "father-build",
     "deploy": "npm run docs:build && npm run docs:deploy",
     "prettier": "prettier --write \"**/*.{js,jsx,tsx,ts,less,md,json}\"",
     "test": "umi-test",
@@ -18,10 +19,11 @@
     "fileChange": "node ./helper/fileChange.js"
   },
   "files": [
-    "dist"
+    "es"
   ],
-  "module": "dist/esm/index.js",
-  "typings": "dist/esm/index.d.ts",
+  "main": "/es/index.js",
+  "module": "es/index.js",
+  "typings": "es/index.d.ts",
   "gitHooks": {
     "pre-commit": "lint-staged"
   },
@@ -48,12 +50,14 @@
     "@testing-library/jest-dom": "^5.15.1",
     "@testing-library/react": "^12.1.2",
     "@types/react": "^17.0.2",
+    "@types/react-is": "^17.0.3",
     "@types/jest": "^27.0.3",
     "@umijs/fabric": "^2.8.1",
     "@umijs/test": "^3.0.5",
     "concurrently": "^7.0.0",
     "dumi": "^1.1.0",
     "dumi-theme-mobile": "^1.1.21",
+    "father-build": "^1.17.2",
     "gh-pages": "^3.0.0",
     "lint-staged": "^10.0.7",
     "prettier": "^2.2.1",

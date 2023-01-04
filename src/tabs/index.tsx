@@ -1,5 +1,5 @@
 import React, { forwardRef, useImperativeHandle } from 'react';
-import TabActiveIcon from './assets/tab-active.png';
+// import TabActiveIcon from './assets/tab-active.png';
 import useRender from '../use-render';
 import { attachPropertiesToComponent } from '../utils/attach-properties-to-component';
 import getEleInfo, { getAllEleInfo } from '../utils/getEleInfo';
@@ -183,7 +183,7 @@ const Tabs = forwardRef<TabsInstance, TabsProps>(({
               }}
             >
               {activeLine ?? (
-                <Image className={`${classPrefix}-line-icon`} src={TabActiveIcon}></Image>
+                <Image className={`${classPrefix}-line-icon`} src={require('./assets/tab-active.png')}></Image>
               )}
             </View>
           )}

@@ -1,13 +1,9 @@
-import { View, Image, Input } from '@tarojs/components';
-import type { CommonEventFunction, InputProps, ITouchEvent } from '@tarojs/components';
+import { View, Image, Input, BaseEventOrig } from '@tarojs/components';
+import type { ITouchEvent } from '@tarojs/components';
 import { useState, useRef, useCallback, useEffect } from 'react';
 import './index.less';
 import { callInterceptor } from './interceptor';
 import classNames from 'classnames';
-import ReduceIcon from './assets/reduce.png';
-import ReduceGrayIcon from './assets/reduce-gray.png';
-import AddIcon from './assets/add.png';
-import AddGrayIcon from './assets/add-gray.png';
 import React from 'react';
 
 export interface StepperProps {
@@ -66,19 +62,19 @@ export interface StepperProps {
   /** 点击减少按钮时触发	 */
   onMinus?: (event: ITouchEvent, val: number | string) => void;
   /** 输入框聚焦时触发	 */
-  onFocus?: CommonEventFunction<InputProps.inputValueEventDetail>;
+  onFocus?: (event: BaseEventOrig<any>) => void;
   /** 输入框失焦时触发	 */
-  onBlur?: CommonEventFunction<InputProps.inputValueEventDetail>;
+  onBlur?: (event: BaseEventOrig<any>) => void;
 }
 
 const LONG_PRESS_INTERVAL = 200;
 const LONG_PRESS_START_TIME = 600;
 
 const btnImgArr = [
-  ReduceIcon,
-  ReduceGrayIcon, // ReduceGrayIcon,
-  AddIcon,
-  AddGrayIcon
+  require('./assets/reduce.png'),
+  require('./assets/reduce-gray.png'), // ReduceGrayIcon,
+  require('./assets/add.png'),
+  require('./assets/add-gray.png'),
 ]
 
 const Stepper = (props: StepperProps) => {
@@ -327,7 +323,7 @@ const Stepper = (props: StepperProps) => {
             onBlurVal(e.detail.value);
             props.onBlur?.(e);
           }}
-          onFocus={props.onFocus}
+          onFocus={(e) => props.onFocus?.(e)}
         />
       )}
       {props.showPlus && (
