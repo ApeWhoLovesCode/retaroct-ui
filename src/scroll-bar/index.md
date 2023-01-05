@@ -1,5 +1,5 @@
 ---
-title: count-down 倒计时
+title: scroll-bar 滚动横幅
 nav:
   title: 组件
   path: /components
@@ -11,11 +11,11 @@ group:
 
 # 组件介绍
 
-倒计时组件。 <br>
+滚动横幅组件。 <br>
 
 **特性/功能**
 
-- 倒计时
+- 可以进行滚动播放文字
 
 ## 代码演示
 
