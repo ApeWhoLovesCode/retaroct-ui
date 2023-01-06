@@ -1,5 +1,4 @@
 import React, { forwardRef, useImperativeHandle } from 'react';
-// import TabActiveIcon from './assets/tab-active.png';
 import useRender from '../use-render';
 import { attachPropertiesToComponent } from '../utils/attach-properties-to-component';
 import getEleInfo, { getAllEleInfo } from '../utils/getEleInfo';
@@ -78,6 +77,7 @@ const Tabs = forwardRef<TabsInstance, TabsProps>(({
     width: 0,
     tabList: [],
   });
+  const [isLineShow, setIsLineShow] = useState(false)
   const { renderFn } = useRender();
 
   const panes: ReactElement<ComponentProps<typeof Tab>>[] = [];
@@ -119,7 +119,7 @@ const Tabs = forwardRef<TabsInstance, TabsProps>(({
         });
         tabsRef.current.width = (ret?.isMiddleScreen ? Taro.getSystemInfoSync().screenWidth : (tabs?.width ?? 0)) / 2
         tabsRef.current.tabList = arr;
-        renderFn();
+        setIsLineShow(true)
       });
     };
     nextTick(() => {
@@ -177,7 +177,11 @@ const Tabs = forwardRef<TabsInstance, TabsProps>(({
           {/* 底部选中的横线样式 */}
           {!!list?.length && (
             <View
-              className={`${classPrefix}-line ${isAnimate ? classPrefix + '-line-animate' : ''}`}
+              className={`
+                ${classPrefix}-line 
+                ${isAnimate ? classPrefix + '-line-animate' : ''}
+                ${isLineShow ? `${classPrefix}-line-show` : `${classPrefix}-line-hide`}
+              `} 
               style={{
                 transform: `translateX(calc(${tabsRef.current.tabList[curI]?.left}px - 50%))`,
               }}

@@ -23,7 +23,7 @@ export default () => {
         <ScrollBar title='HELLO WORLD' space={100} color={'skyblue'} speed={70} />
       </DemoBlock>
       <DemoBlock title='自定义title'>
-        <ScrollBar title={newTitle} />
+        <ScrollBar speed={110} title={newTitle} />
       </DemoBlock>
     </View>
   )

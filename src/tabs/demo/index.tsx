@@ -33,6 +33,13 @@ export default () => {
         </Tabs>
         <View className='arrow' onClick={() => tabsRef.current?.scrollTo(9999)}>{'>'}</View>
       </DemoBlock>
+      <DemoBlock title='自定义选中icon'>
+        <Tabs list={tabsList2} activeLine={<View className="activeLine"></View>}>
+          {tabsList2.map((item, i) => (
+            <Tabs.Tab key={item + i} title={item} />
+          ))}
+        </Tabs>
+      </DemoBlock>
     </View>
   );
 };

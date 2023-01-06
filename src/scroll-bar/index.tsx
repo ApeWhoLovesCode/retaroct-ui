@@ -59,7 +59,8 @@ export default forwardRef<ScrollBarInstance, PropsType>((
       }
       // 需要渲染的滚动元素个数（需要大于 滚动文字 + 外部滚动区域宽度)
       const n = Math.min(Math.ceil((scrollW + itemW) / itemW), 20)
-      const duration = scrollW / speed * 1000
+      setEleNum(n)
+      const duration = Math.ceil(scrollW / speed * 1000)
       const _animation = Taro.createAnimation({
         duration: duration,
         timingFunction: 'linear',
@@ -72,15 +73,15 @@ export default forwardRef<ScrollBarInstance, PropsType>((
       const animationRun = () => {
         resetAnimation.translateX(0).step()
         setAnimationData(resetAnimation.export())
+        // 当 setTimeout间隔时间为10时，这里可能会有 setAnimationData 还没触发完就执行到setTimeout的情况
         setTimeout(() => {
           _animation.translateX(-itemW).step()
           setAnimationData(_animation.export())
-        }, 10);
+        }, 15);
       }
       animationRun()
       clearInterval(timer.current)
-      timer.current = setInterval(animationRun, duration + 10)
-      setEleNum(n)
+      timer.current = setInterval(animationRun, duration + 15)
     })
   }
 
@@ -95,13 +96,13 @@ export default forwardRef<ScrollBarInstance, PropsType>((
   }))
 
   useEffect(() => {
-    nextTick(() => {
+    setTimeout(() => {
       renderDom()
-    });
+    }, 10);
     return () => {
       clearInterval(timer.current)
     }
-  }, [])
+  }, [speed])
 
   // 滚动的元素
   const RenderItem = () => {
