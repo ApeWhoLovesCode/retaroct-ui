@@ -83,15 +83,16 @@ const FloatingBall: FC<FloatingBallProps> = ({
 
   useEffect(() => {
     const init = async () => {
-      const ballInfo = await getEleInfo(`.${idRef.current} .${classPrefix}-button`)
       screenW = Taro.getSystemInfoSync().screenWidth
       screenH = Taro.getSystemInfoSync().screenHeight
-      ball.current.w = ballInfo?.width ?? 0
-      ball.current.h = ballInfo?.height ?? 0
-      ball.current.l = ballInfo?.left ?? 0
-      ball.current.r = screenW - (ballInfo?.right ?? 0)
-      ball.current.t = ballInfo?.top ?? 0
-      ball.current.b = screenH - (ballInfo?.bottom ?? 0)
+      const ballInfo = await getEleInfo(`.${idRef.current} .${classPrefix}-button`)
+      if(!ballInfo) return
+      ball.current.w = ballInfo.width
+      ball.current.h = ballInfo.height
+      ball.current.l = ballInfo.left
+      ball.current.r = screenW - ballInfo.right
+      ball.current.t = ballInfo.top
+      ball.current.b = screenH - ballInfo.bottom
     }
     nextTick(() => {
       init()
