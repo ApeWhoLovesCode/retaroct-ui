@@ -9,11 +9,12 @@ const h5PagesList = [];
 function copyComponent(filename) {
   const currentList = filename.split('/');
   const currentCompName = currentList[0];
-
+  // demo 排除的文件夹
+  const excludeFiles = ['utils', 'style']
   files.forEach((fileItem) => {
     const strList = fileItem.split('/');
     const componentName = strList[strList.length - 1];
-    if (componentName !== 'index.ts' && componentName !== 'utils') {
+    if (componentName !== 'index.ts' && excludeFiles.every(f => f !== componentName)) {
       try {
         if (componentName === currentCompName) {
           fs.ensureDirSync(`${rootPath}/taro-device/src`);
@@ -27,7 +28,7 @@ function copyComponent(filename) {
       } catch (err) {
         console.error(err);
       }
-    } else if (componentName === 'utils') {
+    } else if (excludeFiles.some(f => f === componentName)) {
       try {
         fs.ensureDirSync(`${rootPath}/taro-device/src`);
         /** 组件目录移动 */

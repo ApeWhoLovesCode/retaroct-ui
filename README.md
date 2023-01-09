@@ -1,33 +1,35 @@
 # retaroct
 
+## 介绍
+
+基于 `taro` 小程序封装的组件库。
+
+#### 相关技术
+
+`react` , `hooks` , `ts` , `taro`
+
 ## Getting Started
 
-Install dependencies,
+安装依赖(Install dependencies),
 
 ```bash
-$ npm i
+$ cnpm i
 ```
 
-Start the dev server,
+运行项目(Start the dev server)
 
 ```bash
-$ npm start
+$ npm run start
 ```
 
-Build documentation,
-
-```bash
-$ npm run docs:build
-```
-
-Run test,
-
-```bash
-$ npm test
-```
-
-Build library via `father`,
+打包(Build)
 
 ```bash
 $ npm run build
+```
+
+打包文档(Build documentation)
+
+```bash
+$ npm run docs:build
 ```

@@ -1,5 +1,5 @@
 import { View } from '@tarojs/components';
-import FloatingBall from '../index';
+import FloatingBall from '../index-demo';
 import './index.less';
 import React, { useState } from 'react';
 
