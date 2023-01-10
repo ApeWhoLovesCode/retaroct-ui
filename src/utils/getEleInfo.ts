@@ -52,7 +52,21 @@ export const getEleScrollInfo = (selector: string): Promise<any[] | null> => {
     // 节点必须是 scroll-view 或者 viewport
     query.select(selector).scrollOffset();
     query.exec((res) => {
-      resolve(res);
+      resolve(res[0]);
+    });
+  });
+};
+
+/** 获取节点的相关信息 */
+export const getFieldsInfo = (
+  selector: string,
+  fields: Taro.NodesRef.Fields,
+): Promise<any | null> => {
+  return new Promise((resolve) => {
+    const query = createSelectorQuery();
+    query.select(selector).fields(fields);
+    query.exec((res) => {
+      resolve(res[0]);
     });
   });
 };

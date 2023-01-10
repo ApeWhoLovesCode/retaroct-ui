@@ -1,0 +1,15 @@
+@class-prefix: ~'com-circle';
+.@{class-prefix} {
+  position: relative;
+  text-align: center;
+  &-text {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    color: var(--text-color);
+    font-size: var(--text-font-size);
+    background-color: inherit;
+    transform: translateY(-50%);
+  }
+}

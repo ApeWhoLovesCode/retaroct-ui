@@ -12,9 +12,9 @@ module.exports = {
   },
   moduleNameMapper: {
     '@tarojs/taro': '@tarojs/taro-h5',
-    '@tarojs/components': '@tarojs/components/dist-h5/react',
+    // '@tarojs/components': '@tarojs/components/dist-h5/react',
     // '@tarojs/plugin-framework-react/dist/runtime': '<rootDir>/__mocks__/taro-framework',
     // '@tarojs/plugin-framework-vue2/dist/runtime': '<rootDir>/__mocks__/taro-framework',
     // '@tarojs/plugin-framework-vue3/dist/runtime': '<rootDir>/__mocks__/taro-framework',
   },
-}
+};
