@@ -1,22 +1,31 @@
+@import '../style/index.less';
 @class-prefix: ~'retaroct-stepper';
 
-@stepper-color: #54c5fe;
-@stepper-disable-round-color: #bee6fa;
 @stepper-bg-color: #f2f3f5;
-@stepper-disable-color: #a0a0a0;
 @stepper-disable-bg-color: #f7f8fa;
 
 .@{class-prefix} {
   display: flex;
   align-items: center;
   box-sizing: border-box;
-  height: 13px;
   &-btn {
     display: inline-block;
     width: 11px;
     height: 11px;
     margin: -8px;
     padding: 8px;
+    background-color: @stepper-bg-color;
+    border-radius: 4px;
+  }
+  &-reduce-round {
+    background: #fff;
+    border: 1px solid @blue;
+    border-radius: 50%;
+  }
+  &-add-round {
+    background: @blue;
+    border: 1px solid @blue;
+    border-radius: 50%;
   }
   &-inp {
     position: relative;
@@ -25,14 +34,28 @@
     height: 100%;
     margin: 0 10px;
     color: #000;
+    // background-color: @stepper-bg-color;
     font-size: 12px;
     text-align: center;
+  }
+  &-inp-round {
+    background-color: transparent;
   }
   input::-webkit-input-placeholder {
     color: #9aa5b6;
     font-size: 14px;
   }
-  .disabled {
-    color: @stepper-disable-color;
+  &-disabled {
+    color: @stepper-disable-bg-color;
+  }
+  &-disabled-reduce-round {
+    background: #fff;
+    border: 1px solid @lightBlue;
+    border-radius: 50%;
+  }
+  &-disabled-add-round {
+    background: @lightBlue;
+    border: 1px solid @lightBlue;
+    border-radius: 50%;
   }
 }

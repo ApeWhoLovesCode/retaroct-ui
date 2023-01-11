@@ -23,6 +23,8 @@ export interface StepperProps {
   buttonSize?: string | number;
   /** 固定显示的小数位数 */
   decimalLength?: number;
+  /** 样式风格，可选值为 round */
+  theme?: 'round';
   /** 输入框占位提示文字 */
   placeholder?: string;
   /** 是否只允许输入整数 默认：false */
@@ -280,9 +282,15 @@ const Stepper = (props: StepperProps) => {
       (disableMinus && eleNum === 1) ||
       (disablePlus && eleNum === 2) ||
       (eleNum && +val === newVal)
-        ? 'disabled'
+        ? `${classPrefix}-disabled`
         : '';
-    return className;
+    if (props.theme === 'round') {
+      const disabledClass = className ? className + '-' : `${classPrefix}-`;
+      className += ` ${
+        !eleNum ? `${classPrefix}-inp` : disabledClass + (eleNum === 1 ? 'reduce' : 'add')
+      }-round`;
+    }
+    return className ? `${className}` : '';
   };
 
   /** 禁用的样式 0:输入框；1:减少按钮；2:增加按钮 */

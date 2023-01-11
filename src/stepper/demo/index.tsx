@@ -44,11 +44,15 @@ export default class StepperDemo extends Component<{}, _State> {
       },
       {
         title: '自定义大小',
-        stepper: { inputWidth: 40, buttonSize: 16 },
+        stepper: { inputWidth: 28, buttonSize: 14 },
       },
       {
         title: '固定小数位数',
         stepper: { decimalLength: 1, step: 0.2 },
+      },
+      {
+        title: '圆角风格',
+        stepper: { theme: 'round', placeholder: '圆角', max: 5 },
       },
       {
         title: '限制输入整数',
