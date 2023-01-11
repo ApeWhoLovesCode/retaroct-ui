@@ -1,0 +1,27 @@
+@import '../../style/index.less';
+.demo-tabs {
+  background-color: @gray-1;
+  .tabsWrap {
+    display: flex;
+    justify-content: space-between;
+    .tabs {
+      flex: 1;
+      width: 0;
+      height: 40px;
+      background-color: #fff;
+    }
+    .arrow {
+      width: 30px;
+      height: 40px;
+      color: #fff;
+      text-align: center;
+      background-color: @blue;
+    }
+  }
+  .activeLine {
+    width: 30px;
+    height: 6px;
+    background-color: @blue;
+    border-radius: 3px;
+  }
+}
