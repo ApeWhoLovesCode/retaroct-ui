@@ -1,15 +1,16 @@
 @class-prefix: ~'com-circle';
 .@{class-prefix} {
   position: relative;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   &-text {
     position: absolute;
     top: 50%;
-    left: 0;
-    width: 100%;
+    left: 50%;
     color: var(--text-color);
     font-size: var(--text-font-size);
     background-color: inherit;
-    transform: translateY(-50%);
+    transform: translate(-50%, -50%);
   }
 }

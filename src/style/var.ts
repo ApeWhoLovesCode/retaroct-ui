@@ -8,5 +8,5 @@ export default {
   red: '#EB3223',
   // awake ny
   black: '#1F2021',
-  blue: 'skyblue',
+  blue: '#4285fb',
 };

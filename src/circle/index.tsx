@@ -1,6 +1,6 @@
-import { View, Text, Canvas } from '@tarojs/components';
-import Taro, { CanvasContext, createCanvasContext, nextTick } from '@tarojs/taro';
-import { useState, useEffect, ReactNode, useRef, useMemo } from 'react';
+import { View, Canvas } from '@tarojs/components';
+import Taro, { CanvasContext, createCanvasContext } from '@tarojs/taro';
+import { useState, useEffect, ReactNode, useRef } from 'react';
 import './index.less';
 import { NativeProps, withNativeProps } from '../utils/native-props';
 import React from 'react';
@@ -34,7 +34,7 @@ export type CircleProps = {
   fill?: string;
   /** 进度条的底色 */
   layerColor?: string;
-  /** 颜色 默认: */
+  /** 颜色 (h5暂不支持渐变) */
   color?: string | Record<string, string>;
   /** 线的宽度 默认:6 */
   strokeWidth?: number;
@@ -46,8 +46,8 @@ export type CircleProps = {
 const defaultProps = {
   value: 0,
   size: 100,
-  speed: 50,
-  color: colorVar.red,
+  speed: 100,
+  color: colorVar.blue,
   layerColor: colorVar.gray1,
   lineCap: 'round',
   strokeWidth: 6,
@@ -126,12 +126,22 @@ const Circle = (comProps: CircleProps) => {
   /** 设置进度条颜色 */
   const setCurColor = () => {
     if (isObj(color)) {
-      const _color = color as Record<string, string>;
-      const linearColor = canvasRef.current.ctx?.createLinearGradient(size, 0, 0, 0);
-      Object.keys(color)
-        .sort((a, b) => parseFloat(a) - parseFloat(b))
-        .map((key: any) => linearColor!.addColorStop(parseFloat(key) / 100, _color[key]));
-      canvasRef.current.curColor = linearColor!;
+      try {
+        const _color = color as Record<string, string>;
+        if (process.env.TARO_ENV === 'weapp') {
+          const linearColor = canvasRef.current.ctx?.createLinearGradient(size, 0, 0, 0);
+          Object.keys(color)
+            .sort((a, b) => parseFloat(a) - parseFloat(b))
+            .map((key: any) => linearColor!.addColorStop(parseFloat(key) / 100, _color[key]));
+          canvasRef.current.curColor = linearColor!;
+        } else {
+          // h5 不支持 createLinearGradient 方法 会报错
+          const keysArr = Object.keys(color).sort((a, b) => parseFloat(a) - parseFloat(b));
+          canvasRef.current.curColor = _color[keysArr.at(-1) ?? ''];
+        }
+      } catch (error) {
+        console.log('error: ', error);
+      }
     } else {
       canvasRef.current.curColor = color as string;
     }
@@ -199,6 +209,11 @@ const Circle = (comProps: CircleProps) => {
         getFieldsInfo(`#${idRef.current}`, { node: true, size: true }).then((res) => {
           const canvas = res.node;
           const ctx = canvas.getContext('2d') as CanvasContext;
+          /** 给canvas设置宽高 (html中的 width 和 height 属性没给到canvas) */
+          canvas.width = res.width * 3;
+          canvas.height = res.height * 3;
+          // 增加清晰度
+          ctx.scale(3, 3);
           canvasRef.current.ctx = ctx;
           setReady(true);
         });
