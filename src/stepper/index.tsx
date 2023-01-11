@@ -6,6 +6,8 @@ import { callInterceptor } from './interceptor';
 import classNames from 'classnames';
 import React from 'react';
 
+const classPrefix = 'retaroct-stepper';
+
 export interface StepperProps {
   /** 当前输入的值 */
   value?: number | string;
@@ -46,11 +48,11 @@ export interface StepperProps {
   /** 初始化时(组件创建后)是否触发 beforeChange 事件 默认：false */
   isInitBeforeChange?: boolean;
   /** 值没变是否触发onChange等事件 默认：false */
-  isValEqualChange?: boolean
+  isValEqualChange?: boolean;
   /** 类名 */
-  className?: string
+  className?: string;
   /** 不显示减号或加号的禁用图标 */
-  notBtnImg?: 'add' | 'reduce'
+  notBtnImg?: 'add' | 'reduce';
   /** 输入值变化前的回调函数，返回 false 可阻止输入，支持返回 Promise 默认：false  */
   beforeChange?: (value: string) => boolean | Promise<boolean>;
   /** 当绑定值变化时触发的事件 */
@@ -75,7 +77,7 @@ const btnImgArr = [
   require('./assets/reduce-gray.png'), // ReduceGrayIcon,
   require('./assets/add.png'),
   require('./assets/add-gray.png'),
-]
+];
 
 const Stepper = (props: StepperProps) => {
   const {
@@ -96,8 +98,8 @@ const Stepper = (props: StepperProps) => {
 
   const [val, setVal] = useState<string>(String(value));
   // 用于render刷新页面
-  const [_, setIsRender] = useState<boolean>(true)
-  
+  const [_, setIsRender] = useState<boolean>(true);
+
   // ref仅用于长按
   const valRef = useRef(String(value));
   const [isBeforeChange, setIsBeforeChange] = useState(props.isInitBeforeChange || false);
@@ -162,7 +164,7 @@ const Stepper = (props: StepperProps) => {
     if (longPress) {
       clearTimeout(longPressTimer.current!);
     }
-  }
+  };
   const onTouchEnd = (event: ITouchEvent) => {
     if (!longPress) return;
     clearTimeout(longPressTimer.current!);
@@ -181,7 +183,7 @@ const Stepper = (props: StepperProps) => {
 
   useEffect(() => {
     return () => clearTimeout(longPressTimer.current!);
-  }, [])
+  }, []);
 
   /** 处理按钮的事件 */
   const handleBtnEvent = (_isAdd: boolean) => ({
@@ -212,24 +214,24 @@ const Stepper = (props: StepperProps) => {
 
   /** 处理无效值 */
   const handleInvalid = () => {
-    setVal(val)
+    setVal(val);
     // 这里需要render一下，否则val没有变化，state识别不到变化了，Taro的Input输入框的值改不回原值
-    setIsRender(v => !v)
-  }
+    setIsRender((v) => !v);
+  };
 
   /** 输入值发生改变 isToFixed 是否需要小数处理 */
   const onChangeVal = (newVal: string, isToFixed: boolean = true) => {
     // 处理非数字
     if (newVal.length && newVal[0] !== '-' && isNaN(+newVal)) {
-      return handleInvalid()
+      return handleInvalid();
     }
     // 限制只能输出整数
     if (integer && newVal.indexOf('.') !== -1) {
-      return handleInvalid()
+      return handleInvalid();
     }
     // 超出范围的值
-    if(+newVal !== range(+newVal)) {
-      return handleInvalid()
+    if (+newVal !== range(+newVal)) {
+      return handleInvalid();
     }
     // 处理小数
     if (isToFixed && decimalLength) {
@@ -237,8 +239,8 @@ const Stepper = (props: StepperProps) => {
     }
 
     // 前后值相等，不触发后续事件了
-    if(!props.isValEqualChange && newVal === val) return
-    
+    if (!props.isValEqualChange && newVal === val) return;
+
     // 改变值之前的操作
     if (props.beforeChange && isBeforeChange) {
       callInterceptor({
@@ -284,27 +286,33 @@ const Stepper = (props: StepperProps) => {
   };
 
   /** 禁用的样式 0:输入框；1:减少按钮；2:增加按钮 */
-  const renderBtn = useCallback((eleNum: number) => {
-    let newVal = eleNum && (eleNum === 1 ? min : max);
-    let index = eleNum * 2 - 1
-    if(disabled || disableMinus || disablePlus || (eleNum && +val === newVal)) {
-      index = eleNum * 2
-    }
-    index = index - 1
-    // 处理不显示禁用的图片
-    if(index === 1 && notBtnImg === 'reduce') {
-      index = 0
-    } else if(index === 3 && notBtnImg === 'add') {
-      index = 2
-    }
-    return btnImgArr[index]
-  }, [min, max, btnImgArr, disabled, disableMinus, disablePlus, val])
+  const renderBtn = useCallback(
+    (eleNum: number) => {
+      let newVal = eleNum && (eleNum === 1 ? min : max);
+      let index = eleNum * 2 - 1;
+      if (disabled || disableMinus || disablePlus || (eleNum && +val === newVal)) {
+        index = eleNum * 2;
+      }
+      index = index - 1;
+      // 处理不显示禁用的图片
+      if (index === 1 && notBtnImg === 'reduce') {
+        index = 0;
+      } else if (index === 3 && notBtnImg === 'add') {
+        index = 2;
+      }
+      return btnImgArr[index];
+    },
+    [min, max, btnImgArr, disabled, disableMinus, disablePlus, val],
+  );
 
   return (
-    <View className={`component-stepper ${classNames(props.className)}`} style={{ height: styleWrap(buttonSize) }}>
+    <View
+      className={`${classPrefix} ${classNames(props.className)}`}
+      style={{ height: styleWrap(buttonSize) }}
+    >
       {props.showMinus && (
         <Image
-          className={`com-stepper-btn ${diffStyle(1)}`}
+          className={`${classPrefix}-btn ${diffStyle(1)}`}
           src={renderBtn(1)}
           style={btnSizeStyle(buttonSize)}
           {...handleBtnEvent(false)}
@@ -312,7 +320,7 @@ const Stepper = (props: StepperProps) => {
       )}
       {props.showInput && (
         <Input
-          className={`com-stepper-inp ${diffStyle(0)}`}
+          className={`${classPrefix}-inp ${diffStyle(0)}`}
           type="number"
           value={val}
           placeholder={props.placeholder}
@@ -329,7 +337,7 @@ const Stepper = (props: StepperProps) => {
       {props.showPlus && (
         <Image
           src={renderBtn(2)}
-          className={`com-stepper-btn ${diffStyle(2)}`}
+          className={`${classPrefix}-btn ${diffStyle(2)}`}
           style={btnSizeStyle(buttonSize)}
           {...handleBtnEvent(true)}
         />

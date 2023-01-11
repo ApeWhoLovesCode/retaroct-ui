@@ -1,4 +1,4 @@
-@class-prefix: ~'com-tabs';
+@class-prefix: ~'retaroct-tabs';
 
 .@{class-prefix} {
   position: relative;
@@ -12,18 +12,18 @@
   &-content {
     position: relative;
     display: flex;
-    height: 100%;
     justify-content: space-between;
+    height: 100%;
   }
   &-tabWrap {
     height: 100%;
     padding: 0 13px;
   }
   &-tab {
-    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
+    height: 100%;
     font-size: 12px;
     white-space: nowrap;
   }
@@ -32,12 +32,12 @@
   }
   &-line {
     position: absolute;
-    left: 0;
     bottom: 0;
+    left: 0;
     // 在h5页面会有默认行高，导致高度异常不能由icon撑开
     line-height: 16px;
     &-animate {
-      transition: transform .3s ease;
+      transition: transform 0.3s ease;
     }
     &-hide {
       opacity: 0;
@@ -64,9 +64,9 @@
     position: absolute;
     top: 0;
     bottom: 0;
-    height: 100%;
     z-index: 1;
     display: flex;
+    height: 100%;
   }
   &-header-left {
     left: 0;

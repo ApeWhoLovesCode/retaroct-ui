@@ -1,16 +1,17 @@
-.com-scroll-bar {
+@class-prefix: ~'retaroct-scroll-bar';
+.@{class-prefix} {
   position: relative;
+  display: flex;
+  align-items: center;
   width: 100%;
   height: 100%;
   overflow: hidden;
   white-space: nowrap;
-  display: flex;
-  align-items: center;
-  .com-scroll-bar-itemWrap {
+  &-itemWrap {
     display: inline-block;
     font-size: 20px;
-    .com-scroll-bar-item {
-      display: inline-block;
-    }
+  }
+  &-item {
+    display: inline-block;
   }
 }

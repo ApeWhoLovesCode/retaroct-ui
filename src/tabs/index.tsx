@@ -11,7 +11,7 @@ import { FC, useState, useEffect, useRef, ReactNode, ReactElement, ComponentProp
 import './index.less';
 import { randomStr } from '../utils/random';
 
-const classPrefix = `com-tabs`;
+const classPrefix = `retaroct-tabs`;
 
 export type TabProps = {
   title: ReactNode;
@@ -34,21 +34,21 @@ export type TabsProps = {
   /** 是否有默认动画 默认为true */
   isAnimate?: boolean;
   /** 激活的tab是否是基于屏幕居中 默认为false(基于tabs盒子居中) */
-  isMiddleScreen?: boolean
+  isMiddleScreen?: boolean;
   /** 每个tab的类名，主要用于设置padding */
-  tabClassName?: string
+  tabClassName?: string;
   /** 左右预占位的盒子的类名，主要用于设置宽度 */
-  placeholderBoxClass?: string
+  placeholderBoxClass?: string;
   /** children */
-  children: ReactNode
+  children: ReactNode;
   /** 当tab发生改变触发 */
   onChange?: (i: number) => void;
 } & NativeProps;
 
 export type TabsInstance = {
   /** 滚动到指定的位置 默认为 9999 滚动到最右边 */
-  scrollTo: (v?: number) => void
-}
+  scrollTo: (v?: number) => void;
+};
 
 type TabsRefType = {
   /** tabs 的总宽度 除以2 */
@@ -61,140 +61,153 @@ type TabItemType = {
   left: number;
 };
 
-const Tabs = forwardRef<TabsInstance, TabsProps>(({
-  list,
-  activeIndex = 0,
-  activeTextClass,
-  activeLine,
-  isAnimate = true,
-  onChange,
-  children,
-  ...ret
-}, ref) => {
-  const idRef = useRef(randomStr(classPrefix))
-  const [curI, setCurI] = useState<number>(activeIndex);
-  const tabsRef = useRef<TabsRefType>({
-    width: 0,
-    tabList: [],
-  });
-  const [isLineShow, setIsLineShow] = useState(false)
-  const { renderFn } = useRender();
-
-  const panes: ReactElement<ComponentProps<typeof Tab>>[] = [];
-
-  traverseReactNode(children, (child) => {
-    if (!React.isValidElement(child)) return;
-    const key = child.key;
-    if (typeof key !== 'string') return;
-    panes.push(child as unknown as ReactElement<ComponentProps<typeof Tab>>);
-  });
-
-  const toLeft = useRef({
-    left: 0,
-    preLeft: 0,
-  });
-  /** 向右滚动屏幕的宽度 */
-  const scrollTo = (newLeft = 9999) => {
-    const preLeft = toLeft.current.preLeft;
-    toLeft.current.left = newLeft === preLeft ? newLeft + 1 : newLeft;
-    toLeft.current.preLeft = toLeft.current.left;
-    renderFn();
-  };
-  useImperativeHandle(ref, () => ({
-    scrollTo
-  }))
-
-  useEffect(() => {
-    if (!list?.length) return;
-    const init = () => {
-      Promise.all([
-        getEleInfo(`.${idRef.current}`),
-        getAllEleInfo(`.${idRef.current} .${classPrefix}-tabWrap`),
-        getEleInfo(`.${idRef.current} .${classPrefix}-scrollView`),
-      ]).then(([tabs, tabWrapEles, tabsInfo]) => {
-        if (!tabs || !tabWrapEles || !tabsInfo) return;
-        const arr: TabItemType[] = tabWrapEles.map((e) => {
-          const _l = e.left + e.width / 2 - tabsInfo.left;
-          return { width: e.width, left: _l };
-        });
-        tabsRef.current.width = (ret?.isMiddleScreen ? Taro.getSystemInfoSync().screenWidth : (tabs?.width ?? 0)) / 2
-        tabsRef.current.tabList = arr;
-        setIsLineShow(true)
-      });
-    };
-    nextTick(() => {
-      init();
+const Tabs = forwardRef<TabsInstance, TabsProps>(
+  (
+    {
+      list,
+      activeIndex = 0,
+      activeTextClass,
+      activeLine,
+      isAnimate = true,
+      onChange,
+      children,
+      ...ret
+    },
+    ref,
+  ) => {
+    const idRef = useRef(randomStr(classPrefix));
+    const [curI, setCurI] = useState<number>(activeIndex);
+    const tabsRef = useRef<TabsRefType>({
+      width: 0,
+      tabList: [],
     });
-  }, [list]);
+    const [isLineShow, setIsLineShow] = useState(false);
+    const { renderFn } = useRender();
 
-  useEffect(() => {
-    setCurI(activeIndex);
-  }, [activeIndex]);
+    const panes: ReactElement<ComponentProps<typeof Tab>>[] = [];
 
-  return withNativeProps(
-    ret,
-    <View className={`${classPrefix} ${idRef.current}`}>
-      <View className={`${classPrefix}-header ${classPrefix}-header-left`}>
-        <View className={`${classPrefix}-mask ${classPrefix}-mask-left`}></View>
-      </View>
-      <View className={`${classPrefix}-header ${classPrefix}-header-right`}>
-        <View className={`${classPrefix}-mask ${classPrefix}-mask-right`}></View>
-      </View>
-      <ScrollView
-        className={`${classPrefix}-scrollView`}
-        scrollX
-        scrollWithAnimation
-        onTouchEnd={() => (toLeft.current.left = 0)}
-        scrollLeft={
-          toLeft.current.left + tabsRef.current.tabList[curI]?.left - tabsRef.current.width
-        }
-      >
-        <View className={`${classPrefix}-content`}>
-          <View className={`${classPrefix}-left-placeholder ${classNames(ret.placeholderBoxClass)}`}></View>
-          {
-            panes.map((pane, i) => (
+    traverseReactNode(children, (child) => {
+      if (!React.isValidElement(child)) return;
+      const key = child.key;
+      if (typeof key !== 'string') return;
+      panes.push(child as unknown as ReactElement<ComponentProps<typeof Tab>>);
+    });
+
+    const toLeft = useRef({
+      left: 0,
+      preLeft: 0,
+    });
+    /** 向右滚动屏幕的宽度 */
+    const scrollTo = (newLeft = 9999) => {
+      const preLeft = toLeft.current.preLeft;
+      toLeft.current.left = newLeft === preLeft ? newLeft + 1 : newLeft;
+      toLeft.current.preLeft = toLeft.current.left;
+      renderFn();
+    };
+    useImperativeHandle(ref, () => ({
+      scrollTo,
+    }));
+
+    useEffect(() => {
+      if (!list?.length) return;
+      const init = () => {
+        Promise.all([
+          getEleInfo(`.${idRef.current}`),
+          getAllEleInfo(`.${idRef.current} .${classPrefix}-tabWrap`),
+          getEleInfo(`.${idRef.current} .${classPrefix}-scrollView`),
+        ]).then(([tabs, tabWrapEles, tabsInfo]) => {
+          if (!tabs || !tabWrapEles || !tabsInfo) return;
+          const arr: TabItemType[] = tabWrapEles.map((e) => {
+            const _l = e.left + e.width / 2 - tabsInfo.left;
+            return { width: e.width, left: _l };
+          });
+          tabsRef.current.width =
+            (ret?.isMiddleScreen ? Taro.getSystemInfoSync().screenWidth : tabs?.width ?? 0) / 2;
+          tabsRef.current.tabList = arr;
+          setIsLineShow(true);
+        });
+      };
+      nextTick(() => {
+        init();
+      });
+    }, [list]);
+
+    useEffect(() => {
+      setCurI(activeIndex);
+    }, [activeIndex]);
+
+    return withNativeProps(
+      ret,
+      <View className={`${classPrefix} ${idRef.current}`}>
+        <View className={`${classPrefix}-header ${classPrefix}-header-left`}>
+          <View className={`${classPrefix}-mask ${classPrefix}-mask-left`}></View>
+        </View>
+        <View className={`${classPrefix}-header ${classPrefix}-header-right`}>
+          <View className={`${classPrefix}-mask ${classPrefix}-mask-right`}></View>
+        </View>
+        <ScrollView
+          className={`${classPrefix}-scrollView`}
+          scrollX
+          scrollWithAnimation
+          onTouchEnd={() => (toLeft.current.left = 0)}
+          scrollLeft={
+            toLeft.current.left + tabsRef.current.tabList[curI]?.left - tabsRef.current.width
+          }
+        >
+          <View className={`${classPrefix}-content`}>
+            <View
+              className={`${classPrefix}-left-placeholder ${classNames(ret.placeholderBoxClass)}`}
+            ></View>
+            {panes.map((pane, i) =>
               withNativeProps(
                 pane.props,
-                <View 
-                  className={`${classPrefix}-tabWrap ${classNames(ret.tabClassName)}`} 
-                  key={pane.key ?? i} 
+                <View
+                  className={`${classPrefix}-tabWrap ${classNames(ret.tabClassName)}`}
+                  key={pane.key ?? i}
                   onClick={() => {
-                    toLeft.current.left = 0
-                    setCurI(i)
-                    onChange?.(i)
+                    toLeft.current.left = 0;
+                    setCurI(i);
+                    onChange?.(i);
                   }}
                 >
-                  <View 
-                    className={`${classPrefix}-tab ${i === curI ? `${classPrefix}-tab-active ${classNames(activeTextClass)}` : ''}`} 
+                  <View
+                    className={`${classPrefix}-tab ${
+                      i === curI ? `${classPrefix}-tab-active ${classNames(activeTextClass)}` : ''
+                    }`}
                   >
                     {pane.props.title}
                   </View>
-                </View>
-              )
-            ))
-          }
-          <View className={`${classPrefix}-right-placeholder ${classNames(ret.placeholderBoxClass)}`}></View> 
-          {/* 底部选中的横线样式 */}
-          {!!list?.length && (
+                </View>,
+              ),
+            )}
             <View
-              className={`
+              className={`${classPrefix}-right-placeholder ${classNames(ret.placeholderBoxClass)}`}
+            ></View>
+            {/* 底部选中的横线样式 */}
+            {!!list?.length && (
+              <View
+                className={`
                 ${classPrefix}-line 
                 ${isAnimate ? classPrefix + '-line-animate' : ''}
                 ${isLineShow ? `${classPrefix}-line-show` : `${classPrefix}-line-hide`}
-              `} 
-              style={{
-                transform: `translateX(calc(${tabsRef.current.tabList[curI]?.left}px - 50%))`,
-              }}
-            >
-              {activeLine ?? (
-                <Image className={`${classPrefix}-line-icon`} src={require('./assets/tab-active.png')}></Image>
-              )}
-            </View>
-          )}
-        </View>
-      </ScrollView>
-    </View>,
-  );
-});
+              `}
+                style={{
+                  transform: `translateX(calc(${tabsRef.current.tabList[curI]?.left}px - 50%))`,
+                }}
+              >
+                {activeLine ?? (
+                  <Image
+                    className={`${classPrefix}-line-icon`}
+                    src={require('./assets/tab-active.png')}
+                  ></Image>
+                )}
+              </View>
+            )}
+          </View>
+        </ScrollView>
+      </View>,
+    );
+  },
+);
 
 export default attachPropertiesToComponent(Tabs, { Tab });

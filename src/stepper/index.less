@@ -1,26 +1,29 @@
+@class-prefix: ~'retaroct-stepper';
+
 @stepper-color: #54c5fe;
 @stepper-disable-round-color: #bee6fa;
 @stepper-bg-color: #f2f3f5;
-@stepper-disable-color: #A0A0A0;
+@stepper-disable-color: #a0a0a0;
 @stepper-disable-bg-color: #f7f8fa;
-.component-stepper {
+
+.@{class-prefix} {
   display: flex;
   align-items: center;
   box-sizing: border-box;
   height: 13px;
-  .com-stepper-btn {
+  &-btn {
     display: inline-block;
     width: 11px;
     height: 11px;
-    padding: 8px;
     margin: -8px;
+    padding: 8px;
   }
-  .com-stepper-inp {
+  &-inp {
     position: relative;
-    width: 25px;
-    margin: 0 10px;
-    height: 100%;
     z-index: 0;
+    width: 25px;
+    height: 100%;
+    margin: 0 10px;
     color: #000;
     font-size: 12px;
     text-align: center;

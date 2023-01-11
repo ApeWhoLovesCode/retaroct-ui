@@ -5,56 +5,56 @@ import React, { useState } from 'react';
 
 export default () => {
   return (
-    <View className='demo-floating-ball'>
-      <FloatingBall 
+    <View className="demo-floating-ball">
+      <FloatingBall
         style={{
           '--initial-position-bottom': '100px',
           '--initial-position-left': '0',
           '--z-index': '1000',
         }}
       >
-        <View className='item'>自由</View>
+        <View className="item">自由</View>
       </FloatingBall>
-      <FloatingBall 
-        magnetic='x'
+      <FloatingBall
+        magnetic="x"
         style={{
           '--initial-position-bottom': '100px',
           '--initial-position-right': '0',
           '--z-index': '1000',
         }}
       >
-        <View className='item'>吸边x</View>
+        <View className="item">吸边x</View>
       </FloatingBall>
-      <FloatingBall 
-        axis='y'
+      <FloatingBall
+        axis="y"
         style={{
           '--initial-position-bottom': '200px',
           '--initial-position-right': '0',
           '--z-index': '1000',
         }}
       >
-        <View className='item'>仅y动</View>
+        <View className="item">仅y动</View>
       </FloatingBall>
       <KefuBall />
     </View>
-  )
-}
+  );
+};
 
 const KefuBall = () => {
   const [status, setStatus] = useState<-1 | 0 | 1>(1);
 
   return (
-    <FloatingBall 
-      axis='xy'
-      magnetic='x'
+    <FloatingBall
+      axis="xy"
+      magnetic="x"
       onOffsetChange={() => {
-        setStatus(0)
+        setStatus(0);
       }}
       onMagnetic={(isLeft) => {
-        if(isLeft) {
-          setStatus(-1)
+        if (isLeft) {
+          setStatus(-1);
         } else {
-          setStatus(1)
+          setStatus(1);
         }
       }}
       style={{
@@ -63,11 +63,17 @@ const KefuBall = () => {
         '--z-index': '1000',
       }}
     >
-      <View className={`com-kefu-ball ${status === 0 ? 'com-kefu-ball-active' : status === -1 ? 'com-kefu-ball-left' : ''}`}>
-        <View className="kefu-ball">
-          客服
-        </View>
+      <View
+        className={`retaroct-kefu-ball ${
+          status === 0
+            ? 'retaroct-kefu-ball-active'
+            : status === -1
+            ? 'retaroct-kefu-ball-left'
+            : ''
+        }`}
+      >
+        <View className="kefu-ball">客服</View>
       </View>
     </FloatingBall>
-  )
-}
+  );
+};

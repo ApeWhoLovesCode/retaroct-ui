@@ -11,7 +11,7 @@ import { getFieldsInfo } from '../utils/getEleInfo';
 import { range } from '../utils/format';
 import { isObj } from '../utils/validate';
 
-const classPrefix = `com-circle`;
+const classPrefix = `retaroct-circle`;
 /** 圆的一周 2π */
 const PERIMETER = 2 * Math.PI;
 /** 一开始的角度，由于是顶部所以是 -90° */
