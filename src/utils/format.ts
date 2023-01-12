@@ -86,3 +86,10 @@ export function formatRichText(html: string = '') {
 export function range(num: number, min: number, max: number): number {
   return Math.min(Math.max(num, min), max);
 }
+
+/** 字母大写转-加小写 (helloWorld => hello-world) */
+export function letterUpperTolower(v: string) {
+  return v.replace(/([A-Z])/g, (_: string, $1: string) => {
+    return '-' + $1?.toLowerCase();
+  });
+}

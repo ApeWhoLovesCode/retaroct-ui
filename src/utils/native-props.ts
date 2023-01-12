@@ -1,12 +1,13 @@
 import React, { AriaAttributes } from 'react';
 import type { CSSProperties, ReactElement } from 'react';
 import classNames from 'classnames';
+import { ViewProps } from '@tarojs/components/types/View';
 
 export type NativeProps<S extends string = never> = {
   className?: string;
   style?: CSSProperties & Partial<Record<S, string>>;
   tabIndex?: number;
-}
+};
 // } & AriaAttributes;
 
 export function withNativeProps<P extends NativeProps>(props: P, element: ReactElement) {
@@ -34,4 +35,16 @@ export function withNativeProps<P extends NativeProps>(props: P, element: ReactE
   //   }
   // }
   return React.cloneElement(element, p);
+}
+
+/** 排除class和style */
+export function excludeClass<P extends ViewProps>(props: P) {
+  const p = { ...props };
+  if (p.className) {
+    delete p.className;
+  }
+  if (p.style) {
+    delete p.style;
+  }
+  return p;
 }

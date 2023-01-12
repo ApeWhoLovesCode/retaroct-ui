@@ -8,26 +8,26 @@ const getClassNames = (name: string) => ({
   'leave-to': `retaroct-${name}-leave-to retaroct-${name}-leave-active leave-to-class leave-active-class`,
 });
 
-type DurationObj = { enter: string | number; leave: string | number };
+export type TransitionDuration = { enter: string | number; leave: string | number };
 
 export type TransitionType = {
   /** 是否展示 */
   show?: boolean;
   /** 动画持续时间 */
-  duration?: string | number | DurationObj;
+  duration?: string | number | TransitionDuration;
   /** 动画的名称 */
   name?: string;
-  /** 开启动画前触发 */
+  /** 开启动画前的回调 */
   onBeforeEnter?: () => void;
-  /** 关闭动画前触发 */
+  /** 关闭动画前的回调 */
   onBeforeLeave?: () => void;
-  /** 开启动画后触发 */
+  /** 开启动画后的回调 */
   onAfterEnter?: () => void;
-  /** 关闭动画后触发 */
+  /** 关闭动画后的回调 */
   onAfterLeave?: () => void;
-  /** 开启动画触发 */
+  /** 开启动画的回调 */
   onEnter?: () => void;
-  /** 关闭动画触发 */
+  /** 关闭动画的回调 */
   onLeave?: () => void;
   /** 动画的类名 */
   enterClass?: string;
@@ -54,7 +54,7 @@ export default function useTransition({
   const status = useRef('');
   const [display, setDisplay] = useState(false);
   const [inited, setInited] = useState(false);
-  const [currentDuration, setCurrentDuration] = useState<string | number | DurationObj>(0);
+  const [currentDuration, setCurrentDuration] = useState<string | number | TransitionDuration>(0);
   const [classes, setClasses] = useState('');
 
   const classNames = useMemo(() => {
@@ -93,7 +93,9 @@ export default function useTransition({
   const transitionFn = useCallback(
     (isShow: boolean) => {
       const key = isShow ? 'enter' : 'leave';
-      const curDuration = isObj(duration) ? (duration as DurationObj)[key] : (duration as number);
+      const curDuration = isObj(duration)
+        ? (duration as TransitionDuration)[key]
+        : (duration as number);
       status.current = key;
       props[isShow ? 'onBeforeEnter' : 'onBeforeLeave']?.();
       requestAnimationFrame(() => {

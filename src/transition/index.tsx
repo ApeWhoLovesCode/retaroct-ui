@@ -1,16 +1,18 @@
 import { View } from '@tarojs/components';
 import React, { ReactNode } from 'react';
 import './index.less';
-import { NativeProps, withNativeProps } from '../utils/native-props';
+import { excludeClass, NativeProps, withNativeProps } from '../utils/native-props';
 import useMergeProps from '../use-merge-props';
 import useTransition, { TransitionType } from '../use-transition';
+import { ViewProps } from '@tarojs/components/types/View';
 
 const classPrefix = `com-transition`;
 
 export type TransitionProps = {
   children?: ReactNode;
 } & TransitionType &
-  NativeProps;
+  NativeProps &
+  ViewProps;
 
 const defaultProps = {};
 type RequireType = keyof typeof defaultProps;
@@ -63,6 +65,7 @@ const Transition = (comProps: TransitionProps) => {
         display: display ? '' : 'none',
       }}
       catchMove
+      {...excludeClass(ret)}
     >
       {children}
     </View>,
