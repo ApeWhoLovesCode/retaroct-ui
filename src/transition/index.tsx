@@ -1,44 +1,66 @@
-import { View, Text } from '@tarojs/components';
-import Taro from '@tarojs/taro';
-import React, { useState, useEffect, ReactNode } from 'react';
+import { View } from '@tarojs/components';
+import React, { ReactNode } from 'react';
 import './index.less';
 import { NativeProps, withNativeProps } from '../utils/native-props';
 import useMergeProps from '../use-merge-props';
+import useTransition, { TransitionType } from '../use-transition';
 
 const classPrefix = `com-transition`;
 
 export type TransitionProps = {
-  show?: boolean;
-  duration?: string | number | { enter: string | number; leave: string | number };
-  name?: string;
-  onBeforeEnter?: () => void;
-  onBeforeLeave?: () => void;
-  onAfterEnter?: () => void;
-  onAfterLeave?: () => void;
-  onEnter?: () => void;
-  onLeave?: () => void;
-  enterClass?: string;
-  enterActiveClass?: string;
-  enterToClass?: string;
-  leaveClass?: string;
-  leaveActiveClass?: string;
-  leaveToClass?: string;
   children?: ReactNode;
-} & NativeProps;
+} & TransitionType &
+  NativeProps;
 
 const defaultProps = {};
 type RequireType = keyof typeof defaultProps;
 
 const Transition = (comProps: TransitionProps) => {
   const props = useMergeProps<TransitionProps, RequireType>(comProps, defaultProps);
-  const { children, ...ret } = props;
+  const {
+    onBeforeEnter,
+    onBeforeLeave,
+    onAfterEnter,
+    onAfterLeave,
+    onEnter,
+    onLeave,
+    duration,
+    name,
+    show,
+    enterClass,
+    enterActiveClass,
+    enterToClass,
+    leaveClass,
+    leaveActiveClass,
+    leaveToClass,
+    children,
+    ...ret
+  } = props;
+  const { currentDuration, classes, display } = useTransition({
+    show,
+    duration: duration,
+    name: name,
+    enterClass,
+    enterActiveClass,
+    enterToClass,
+    leaveClass,
+    leaveActiveClass,
+    leaveToClass,
+    onBeforeEnter,
+    onBeforeLeave,
+    onAfterEnter,
+    onAfterLeave,
+    onEnter,
+    onLeave,
+  });
+
   return withNativeProps(
     ret,
     <View
-      className={classPrefix}
+      className={`${classPrefix} ${classes}`}
       style={{
-        transitionDuration: 0 + 'ms',
-        display: '',
+        transitionDuration: currentDuration + 'ms',
+        display: display ? '' : 'none',
       }}
       catchMove
     >
