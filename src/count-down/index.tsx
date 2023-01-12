@@ -8,7 +8,10 @@ import React from 'react';
 type PropsType = {
   /** 起始时间 如果不传就是现在的时间 */
   value?: number;
-  /** 倒计时时间，默认40min */
+  /**
+   * 倒计时时间
+   * @default 40分钟
+   */
   total?: number;
   onChange?: (val: number) => void;
 };

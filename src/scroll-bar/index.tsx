@@ -21,11 +21,20 @@ const classPrefix = 'retaroct-scroll-bar';
 type PropsType = {
   /** 滚动的内容 */
   title: string | ReactElement;
-  /** 滚动速度 默认 50 */
+  /**
+   * 滚动速度
+   * @default 50
+   */
   speed?: number;
-  /** 每段文字间的间距 默认 50 */
+  /**
+   * 每段文字间的间距
+   * @default 50
+   */
   space?: number | string;
-  /** 文字的颜色 */
+  /**
+   * 文字的颜色
+   * @default '#000'
+   */
   color?: string;
   className?: string;
 };

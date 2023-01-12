@@ -11,7 +11,10 @@ const classPrefix = `retaroct-floating-ball`;
 
 /** 悬浮球 */
 export type FloatingBallProps = {
-  /** 可以进行拖动的方向，'xy' 表示自由移动 默认值xy */
+  /**
+   * 可以进行拖动的方向，xy 表示自由移动
+   * @default xy
+   */
   axis?: 'x' | 'y' | 'xy';
   /** 自动磁吸到边界 */
   magnetic?: 'x' | 'y';

@@ -23,7 +23,7 @@ const Tab: FC<TabProps> = () => {
 };
 
 export type TabsProps = {
-  /** 当前激活 tab 的索引 */
+  /** 当前激活 tab 的索引 默认为: 0 */
   activeIndex?: number;
   /** 传入数组，主要用于获取宽度等信息 */
   list?: any[];
@@ -187,10 +187,10 @@ const Tabs = forwardRef<TabsInstance, TabsProps>(
             {!!list?.length && (
               <View
                 className={`
-                ${classPrefix}-line 
-                ${isAnimate ? classPrefix + '-line-animate' : ''}
-                ${isLineShow ? `${classPrefix}-line-show` : `${classPrefix}-line-hide`}
-              `}
+              ${classPrefix}-line 
+              ${isAnimate ? classPrefix + '-line-animate' : ''}
+              ${isLineShow ? `${classPrefix}-line-show` : `${classPrefix}-line-hide`}
+            `}
                 style={{
                   transform: `translateX(calc(${tabsRef.current.tabList[curI]?.left}px - 50%))`,
                 }}

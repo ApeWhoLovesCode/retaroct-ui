@@ -15,11 +15,20 @@ let screenH = 0;
 export type ScrollCircleProps = {
   /** 传入卡片的数组 */
   list: any[];
-  /** 滚动列表的高度 默认100% */
+  /**
+   * 滚动列表的高度
+   * @default 100%
+   */
   height?: string;
-  /** 卡片间增加的角度 默认是1 */
+  /**
+   * 卡片间增加的角度
+   * @default 1
+   */
   cardAddDeg?: number;
-  /** 索引为多少的卡片位于中间区域 从0开始算 默认是索引为3的 */
+  /**
+   * 索引为多少的卡片位于中间区域 从0开始算
+   * @default 3
+   */
   initCartNum?: number;
 };
 

@@ -11,7 +11,10 @@ import React from 'react';
 const classPrefix = 'retaroct-slider-pop';
 
 type PropsType = {
-  /** 弹出层的方向 默认为left */
+  /**
+   * 弹出层的方向
+   * @default left
+   */
   direction?: 'left' | 'right';
   /** 弹出层中的内容 */
   popContent: string | ReactElement;

@@ -30,7 +30,10 @@ export type SwipeActionProps = {
   rightActions?: Action[];
   /** 是否在点击操作按钮时自动归位 */
   closeOnAction?: boolean;
-  /** 是否在点击其他区域时自动归位 */
+  /**
+   * 是否在点击其他区域时自动归位
+   * @default true
+   */
   closeOnTouchOutside?: boolean;
   /** 点击操作按钮时触发 */
   onAction?: (action: Action, e: ITouchEvent) => void;
@@ -57,7 +60,6 @@ type AreaRefType = {
   normal?: number;
 };
 
-// const leftActionsArr = [{key: '12', text: '收藏', color: '#5a8afe'}]
 const rightActionsArr: Action[] = [{ key: 'delete', text: '删除', color: '#ee4b46' }];
 
 const SlideAction = forwardRef<SwipeActionRef, SwipeActionProps>(
