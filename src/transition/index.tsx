@@ -1,18 +1,19 @@
-import { View } from '@tarojs/components';
+import { View, ITouchEvent } from '@tarojs/components';
 import React, { ReactNode } from 'react';
 import './index.less';
 import { excludeClass, NativeProps, withNativeProps } from '../utils/native-props';
 import useMergeProps from '../use-merge-props';
 import useTransition, { TransitionType } from '../use-transition';
-import { ViewProps } from '@tarojs/components/types/View';
 
 const classPrefix = `com-transition`;
 
 export type TransitionProps = {
   children?: ReactNode;
+  onClick?: (e: ITouchEvent) => void;
+  onTouchMove?: (e: ITouchEvent) => void;
 } & TransitionType &
-  NativeProps &
-  ViewProps;
+  NativeProps;
+// & ViewProps
 
 const defaultProps = {};
 type RequireType = keyof typeof defaultProps;

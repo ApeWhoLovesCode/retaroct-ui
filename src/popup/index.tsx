@@ -12,19 +12,21 @@ const classPrefix = `retaroct-popup`;
 export type PopupCloseIconPosition = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
 export type PopupPosition = 'center' | 'top' | 'bottom' | 'right' | 'left';
 
+/** 弹出层Props */
 export type PopupProps = {
   /** 是否显示圆角 */
   round?: boolean;
   /** 是否显示关闭图标 */
   closeable?: boolean;
-  /** 自定义遮罩层样式 */
-  overlayStyle?: string | CSSProperties;
-  /** 执行 */
-  transition?: string;
   /** 弹出层的层级 */
   zIndex?: number;
-  /** 是否显示遮罩层 */
+  /**
+   *是否显示遮罩层
+   * @default true
+   */
   overlay?: boolean;
+  /** 自定义遮罩层样式 */
+  overlayStyle?: CSSProperties & Partial<Record<string, string>>;
   /** 关闭图标或图片链接 */
   closeIcon?: string;
   /** 关闭图标的位置 */
@@ -53,23 +55,11 @@ export type PopupProps = {
 } & TransitionType &
   NativeProps;
 
-const defaultProps = {
-  duration: 300,
-  position: 'center',
-  closeOnClickOverlay: true,
-  safeAreaInsetBottom: true,
-};
-type RequireType = keyof typeof defaultProps;
-type DefaultPropsType = Omit<typeof defaultProps, 'position'> & {
-  position?: PopupPosition;
-};
-
-const PopupInner = (comProps: PopupProps & { setIsShow?: (v: boolean) => void }) => {
-  const props = useMergeProps<PopupProps, RequireType>(comProps, defaultProps as DefaultPropsType);
+/** 弹出层里面的内容 */
+const PopupInner = (props: PopupProps & { setIsShow?: (v: boolean) => void }) => {
   const {
     show,
     position,
-    transition,
     duration,
     zIndex,
     round,
@@ -92,14 +82,14 @@ const PopupInner = (comProps: PopupProps & { setIsShow?: (v: boolean) => void })
   const _onAfterLeave = () => {
     onAfterLeave?.();
     setTimeout(() => {
-      comProps.setIsShow?.(false);
+      props.setIsShow?.(false);
     }, 0);
   };
 
   const { inited, currentDuration, classes, display, onTransitionEnd } = useTransition({
     show,
-    duration: transition === 'none' ? 0 : duration,
-    name: transition || position,
+    duration: duration,
+    name: position,
     onBeforeEnter,
     onBeforeLeave,
     onAfterEnter,
@@ -121,7 +111,7 @@ const PopupInner = (comProps: PopupProps & { setIsShow?: (v: boolean) => void })
       left: 'top-right',
       right: 'top-left',
     };
-    return closeIconPosition || obj[position] || '';
+    return closeIconPosition || obj[position!] || '';
   }, [position, closeIconPosition]);
 
   return inited ? (
@@ -163,6 +153,7 @@ const PopupInner = (comProps: PopupProps & { setIsShow?: (v: boolean) => void })
   );
 };
 
+/** 遮罩层 */
 export type MaskProps = {
   show?: boolean;
   lockScroll?: boolean;
@@ -172,7 +163,6 @@ export type MaskProps = {
 } & NativeProps;
 const Mask = (props: MaskProps) => {
   const { show, zIndex, lockScroll, duration, onClose, ...ret } = props;
-
   const [isShow, setIsShow] = useState(false);
 
   useEffect(() => {
@@ -198,7 +188,7 @@ const Mask = (props: MaskProps) => {
         show={show}
         duration={duration}
         className={`${classPrefix}-mask`}
-        style={{ zIndex }}
+        style={{ zIndex: zIndex ? zIndex - 1 : void 0 }}
         onClick={() => {
           onClose?.();
         }}
@@ -215,8 +205,22 @@ const Mask = (props: MaskProps) => {
   );
 };
 
-const Popup = (props: PopupProps) => {
-  const { show, zIndex, overlay = true, lockScroll = true, duration = 300, overlayStyle } = props;
+const defaultProps = {
+  duration: 300,
+  position: 'center',
+  overlay: true,
+  closeOnClickOverlay: true,
+  safeAreaInsetBottom: true,
+  lockScroll: true,
+};
+type RequireType = keyof typeof defaultProps;
+type DefaultPropsType = Omit<typeof defaultProps, 'position'> & {
+  position?: PopupPosition;
+};
+
+const Popup = (comProps: PopupProps) => {
+  const props = useMergeProps<PopupProps, RequireType>(comProps, defaultProps as DefaultPropsType);
+  const { show, zIndex, overlay, lockScroll, duration, overlayStyle } = props;
   const [isShow, setIsShow] = useState(false);
 
   useEffect(() => {
@@ -224,6 +228,13 @@ const Popup = (props: PopupProps) => {
       setIsShow(true);
     }
   }, [show]);
+
+  const onMaskClick = () => {
+    props.onClickOverlay?.();
+    if (props.closeOnClickOverlay) {
+      props.onClose?.();
+    }
+  };
 
   return (
     <>
@@ -235,7 +246,7 @@ const Popup = (props: PopupProps) => {
           duration={duration}
           style={overlayStyle}
           lockScroll={lockScroll}
-          onClose={() => props.onClose?.()}
+          onClose={() => onMaskClick()}
         />
       )}
     </>

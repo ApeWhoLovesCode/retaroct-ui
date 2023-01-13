@@ -1,6 +1,6 @@
 ---
 hero:
-  title: retaroct
+  title: retaroct-ui
   desc: retaroct site example
   actions:
     - text: Getting Started
