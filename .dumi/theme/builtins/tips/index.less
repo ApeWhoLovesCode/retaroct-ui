@@ -1,0 +1,22 @@
+@class-prefix: ~'__dumi-previewer-tips';
+.@{class-prefix} {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transform: translate(-80%, 20px);
+  opacity: 0;
+  transition: opacity 1s ease;
+  &-icon {
+    width: 30px;
+  }
+  &-text {
+    width: 85px;
+    padding: 5px 12px;
+    color: #fff;
+    font-size: 14px;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 8px;
+  }
+}
