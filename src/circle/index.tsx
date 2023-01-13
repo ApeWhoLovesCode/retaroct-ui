@@ -29,7 +29,10 @@ export type CircleProps = {
    * @default 0
    */
   value?: number;
-  /** 速度 */
+  /**
+   * 速度
+   * @default 100
+   */
   speed?: number;
   /**
    * 大小
