@@ -1,5 +1,4 @@
-import { View, Text } from '@tarojs/components';
-import Taro from '@tarojs/taro';
+import { View } from '@tarojs/components';
 import React, {
   useState,
   ReactElement,
@@ -8,6 +7,7 @@ import React, {
   forwardRef,
   useRef,
   useImperativeHandle,
+  useEffect,
 } from 'react';
 import { withNativeProps } from '../utils/native-props';
 import useMergeProps from '../use-merge-props';
@@ -18,10 +18,21 @@ import getEleInfo from '../utils/getEleInfo';
 import classNames from 'classnames';
 import { randomStr } from '../utils/random';
 
-const classPrefix = `com-dropDownMenu`;
+const classPrefix = `retaroct-dropdown-menu`;
+
+/** 用来控制关闭其他的menu */
+let menuController: {
+  [key in string]: {
+    close: () => void;
+    closeOnClickOutside: boolean;
+  };
+} = {};
 
 const defaultProps = {
   direction: 'down',
+  overlay: true,
+  closeOnClickOutside: true,
+  zIndex: 1000,
 };
 type RequireType = keyof typeof defaultProps;
 type DefaultProps = Omit<typeof defaultProps, 'direction'> & {
@@ -33,19 +44,19 @@ const DropDownMenu = forwardRef<DropdownMenuInstance, DropdownMenuProps>((comPro
     comProps,
     defaultProps as DefaultProps,
   );
-  const { direction, children, ...ret } = props;
+  const { direction, overlay, closeOnClickOutside, children, ...ret } = props;
 
   const idRef = useRef(randomStr(classPrefix));
-  const [eleInfo, setEleInfo] = useState({
-    top: 0,
-    bottom: 0,
-  });
+  /** nav区域的高度 */
+  const [navH, setNavH] = useState(0);
   /** 显示弹出层 */
   const [isShow, setIsShow] = useState<boolean>(false);
   /** 显示弹出层外层包裹盒子 */
   const [showWrapper, setShowWrapper] = useState(false);
   /** 需要展示的弹出层列表的索引 */
   const [activeKey, setActiveKey] = useState<number>(0);
+  /** 弹出层的高度 */
+  const [popH, setPopH] = useState<number>();
 
   /** item 的 children 列表 */
   const items: ReactElement<ComponentProps<typeof DropdownItem>>[] = [];
@@ -53,11 +64,13 @@ const DropDownMenu = forwardRef<DropdownMenuInstance, DropdownMenuProps>((comPro
     if (React.isValidElement(child)) {
       const childProps = {
         ...child.props,
-        className: child.props.titleClass,
-        onChange: () => {
-          changeActive(i);
-        },
+        className: child.props?.titleClass,
         active: isShow && i === activeKey,
+        direction,
+        activeColor: props.activeColor,
+        onClick: () => {
+          onNavClick(i);
+        },
       };
       items.push(child as ReactElement);
       return cloneElement(child, childProps);
@@ -66,20 +79,30 @@ const DropDownMenu = forwardRef<DropdownMenuInstance, DropdownMenuProps>((comPro
     }
   });
 
+  /** 点击了nav */
+  const onNavClick = (i: number) => {
+    changeActive(i);
+    Object.keys(menuController).forEach((key) => {
+      if (key !== idRef.current && menuController[key].closeOnClickOutside) {
+        menuController[key]?.close();
+      }
+    });
+  };
+
   /** 改变弹出层列表的索引 */
-  const changeActive = (key: number) => {
+  const changeActive = (key: number, _isShow?: boolean) => {
     // 当弹出层打开时获取 top 和 bottom 值
     if (!isShow) {
-      getEleInfo(`.${idRef.current}`).then((ele) => {
+      getEleInfo(`.${idRef.current} .${classPrefix}-nav`).then((ele) => {
         if (!ele) return;
-        setEleInfo({
-          top: ele.top + ele.height,
-          bottom: Taro.getSystemInfoSync().screenHeight - ele.top,
-        });
-        setShowWrapper(true);
+        setNavH(ele.height);
       });
+      setShowWrapper(true);
     }
-    setIsShow(!isShow || key !== activeKey);
+    if (!overlay) {
+      setPopH(void 0);
+    }
+    setIsShow(_isShow || !isShow || key !== activeKey);
     setActiveKey(key);
   };
 
@@ -101,89 +124,107 @@ const DropDownMenu = forwardRef<DropdownMenuInstance, DropdownMenuProps>((comPro
   const handlePopStyle = () => {
     // 相当于销毁弹出层
     if (!showWrapper) return;
+    const height = !overlay && popH !== void 0 ? popH + 'px' : '100vh';
     if (direction === 'down') {
-      return { top: eleInfo.top + 'px' };
+      return { top: 0 + 'px', height };
     } else {
-      return { bottom: eleInfo.bottom + 'px' };
+      return { bottom: navH + 'px', height };
     }
   };
 
+  useEffect(() => {
+    menuController[idRef.current] = {
+      closeOnClickOutside,
+      close: () => setIsShow(false),
+    };
+  }, [closeOnClickOutside]);
+
+  /** 用来处理没有遮罩层的时候 */
+  useEffect(() => {
+    if (!overlay && isShow) {
+      setTimeout(() => {
+        getEleInfo(`.${idRef.current} .${classPrefix}-popup`).then((ele) => {
+          setPopH(ele?.height);
+        });
+      }, 100);
+    }
+  }, [overlay, isShow, activeKey]);
+
   useImperativeHandle(ref, () => {
     return {
-      toggle: ({ key, show, immediate }) => {
-        changeActive(key);
+      toggle: (key, show) => {
+        changeActive(key, show);
       },
     };
+  });
+
+  /** 弹出层中的内容区域 */
+  const popContent = items.map((item, index) => {
+    const { value, popTextClass, activeColor, activeClass, options } = item.props;
+    return (
+      <View key={index} className={`${classPrefix}-popup-item`}>
+        {index === activeKey ? (
+          <>
+            {options?.map((option, i) => (
+              <View
+                key={`${option.value}-i-${i}`}
+                className={
+                  `${classPrefix}-popup-item-text ` +
+                  `${
+                    value === option.value
+                      ? `${classPrefix}-popup-item-text-active ${activeClass ?? ''}`
+                      : ''
+                  }` +
+                  ` ${classNames(popTextClass)}`
+                }
+                style={{ color: value === option.value ? activeColor : '' }}
+                onClick={() => onClickOption(option.value)}
+              >
+                {option.text}
+              </View>
+            ))}
+            {item.props?.children}
+          </>
+        ) : (
+          <></>
+        )}
+      </View>
+    );
   });
 
   return withNativeProps(
     ret,
     <View className={`${classPrefix} ${idRef.current}`}>
       <View className={`${classPrefix}-nav`}>{navs}</View>
-      <View
-        className={`${classPrefix}-popup-wrap ${classPrefix}-popup-wrap-${direction}`}
-        style={handlePopStyle()}
-      >
-        <Popup
-          className={`${classPrefix}-popup`}
-          show={isShow}
-          style={{ ...props.popupStyle, position: 'absolute' }}
-          zIndex={props.zIndex}
-          overlay={!!props.overlay}
-          overlayStyle={{ position: 'absolute' }}
-          position={direction === 'down' ? 'top' : 'bottom'}
-          duration={props.duration}
-          safeAreaInsetBottom={false}
-          closeOnClickOverlay={props.closeOnClickOverlay}
-          onClose={() => setIsShow(false)}
-          onEnter={() => {
-            handlePopFn('onOpen');
-          }}
-          onAfterEnter={() => {
-            handlePopFn('onOpened');
-          }}
-          onLeave={() => {
-            handlePopFn('onClose');
-          }}
-          onAfterLeave={() => {
-            handlePopFn('onClosed');
-          }}
-        >
-          {items.map((item, index) => {
-            const { value, popTextClass, activeColor, activeClass, options } = item.props;
-            return (
-              <View key={index} className={`${classPrefix}-popup-item`}>
-                {index === activeKey ? (
-                  <>
-                    {options?.map((option, i) => (
-                      <View
-                        key={`${option.value}-i-${i}`}
-                        className={
-                          `${classPrefix}-popup-item-text ` +
-                          `${
-                            value === option.value
-                              ? `${classPrefix}-popup-item-text-active ${activeClass ?? ''}`
-                              : ''
-                          }` +
-                          ` ${classNames(popTextClass)}`
-                        }
-                        style={{
-                          color: value === option.value ? activeColor || props.activeColor : '',
-                        }}
-                        onClick={() => onClickOption(option.value)}
-                      >
-                        {option.text}
-                      </View>
-                    ))}
-                    {item.props?.children}
-                  </>
-                ) : (
-                  <></>
-                )}
-              </View>
-            );
-          })}
-        </Popup>
+      <View style={{ position: 'relative', zIndex: props.zIndex }}>
+        <View className={`${classPrefix}-popup-wrap`} style={handlePopStyle()}>
+          <Popup
+            className={`${classPrefix}-popup`}
+            show={isShow}
+            style={{ ...props.popupStyle, position: 'absolute' }}
+            overlay={!!props.overlay}
+            overlayStyle={{ position: 'absolute' }}
+            position={direction === 'down' ? 'top' : 'bottom'}
+            duration={props.duration}
+            safeAreaInsetBottom={false}
+            closeOnClickOverlay={props.closeOnClickOverlay}
+            onClose={() => setIsShow(false)}
+            onEnter={() => {
+              handlePopFn('onOpen');
+            }}
+            onAfterEnter={() => {
+              handlePopFn('onOpened');
+            }}
+            onLeave={() => {
+              handlePopFn('onClose');
+            }}
+            onAfterLeave={() => {
+              handlePopFn('onClosed');
+            }}
+          >
+            {popContent}
+          </Popup>
+        </View>
       </View>
     </View>,
   );

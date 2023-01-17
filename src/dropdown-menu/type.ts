@@ -5,7 +5,7 @@ export type DropdownMenuProps = {
   /** 选中选项后颜色 */
   activeColor?: string;
   /**
-   * 是否展示蒙层 蒙版只是不显示，还是存在
+   * 是否展示蒙层
    * @default true
    */
   overlay?: boolean;
@@ -41,8 +41,6 @@ export type DropdownMenuProps = {
 } & NativeProps;
 
 export type DropdownItemProps = {
-  /** 当前是否是激活的 */
-  active?: boolean;
   /** 选中选项后颜色 */
   activeColor?: string;
   /** 选择选项的class */
@@ -88,7 +86,7 @@ export type DropdownMenuOption = {
  */
 export type DropdownMenuInstance = {
   /**
-   * 控制展开/收起菜单栏，key:item的索引, show:是否展开，immediate:是否不需要动画
+   * 控制展开/收起菜单栏，key:item的索引, show:是否展开(默认为打开/关闭切换)
    */
-  toggle: (e: { key: number; show?: boolean; immediate?: boolean }) => void;
+  toggle: (key: number, show?: boolean) => void;
 };

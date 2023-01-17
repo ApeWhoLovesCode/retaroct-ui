@@ -39,7 +39,7 @@ export default () => {
   return (
     <View className="demo-dropdown-menu">
       <DemoBlock title="常规使用">
-        <DropDownMenu closeOnClickOverlay={false}>
+        <DropDownMenu>
           <DropDownMenu.Item
             value={value1}
             options={state.option1}
@@ -52,11 +52,26 @@ export default () => {
           />
         </DropDownMenu>
       </DemoBlock>
-      <DemoBlock title="自定义选中元素颜色">
+      <DemoBlock title="不展示蒙版">
+        <DropDownMenu overlay={false}>
+          <DropDownMenu.Item
+            value={value1}
+            options={state.option1}
+            onChange={(v) => setValue1(v as number)}
+          />
+          <DropDownMenu.Item
+            value={value2}
+            options={state.option2}
+            onChange={(v) => setValue2(v as string)}
+          />
+        </DropDownMenu>
+      </DemoBlock>
+      <DemoBlock title="自定义箭头和选中元素颜色">
         <DropDownMenu activeColor={'skyblue'}>
           <DropDownMenu.Item
             value={value1}
             options={state.option1}
+            arrow={<View>箭头</View>}
             onChange={(v) => setValue1(v as number)}
           />
           <DropDownMenu.Item
@@ -66,6 +81,7 @@ export default () => {
             onChange={(v) => setValue2(v as string)}
           />
           <DropDownMenu.Item
+            activeClass="active"
             value={value2}
             options={state.option2}
             onChange={(v) => setValue2(v as string)}
@@ -87,7 +103,7 @@ export default () => {
           >
             <Button
               onClick={() => {
-                menuRef.current?.toggle({ key: 1 });
+                menuRef.current?.toggle(1);
               }}
             >
               确定
@@ -95,8 +111,9 @@ export default () => {
           </DropDownMenu.Item>
         </DropDownMenu>
         <Button
+          style={{ zIndex: 0 }}
           onClick={() => {
-            menuRef.current?.toggle({ key: 1, show: true });
+            menuRef.current?.toggle(1, true);
           }}
         >
           打开自定义菜单的排序
@@ -104,6 +121,34 @@ export default () => {
       </DemoBlock>
       <DemoBlock title="向上展开">
         <DropDownMenu direction="up">
+          <DropDownMenu.Item
+            value={value1}
+            options={state.option1}
+            onChange={(v) => setValue1(v as number)}
+          />
+          <DropDownMenu.Item
+            value={value2}
+            options={state.option2}
+            onChange={(v) => setValue2(v as string)}
+          />
+        </DropDownMenu>
+      </DemoBlock>
+      <DemoBlock title="向上立即展开">
+        <DropDownMenu direction="up" duration={0}>
+          <DropDownMenu.Item
+            value={value1}
+            options={state.option1}
+            onChange={(v) => setValue1(v as number)}
+          />
+          <DropDownMenu.Item
+            value={value2}
+            options={state.option2}
+            onChange={(v) => setValue2(v as string)}
+          />
+        </DropDownMenu>
+      </DemoBlock>
+      <DemoBlock title="点击其他menu时不关闭">
+        <DropDownMenu direction="up" overlay={false} closeOnClickOutside={false}>
           <DropDownMenu.Item
             value={value1}
             options={state.option1}
