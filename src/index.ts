@@ -1,5 +1,6 @@
 export { default as Circle } from './circle';
 export { default as CountDown } from './count-down';
+export { default as DropdownMenu } from './dropdown-menu';
 export { default as FloatingBall } from './floating-ball';
 export { default as ScrollBar } from './scroll-bar';
 export { default as ScrollCircle } from './scroll-circle';
