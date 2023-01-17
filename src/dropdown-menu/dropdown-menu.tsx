@@ -21,7 +21,7 @@ import { randomStr } from '../utils/random';
 const classPrefix = `retaroct-dropdown-menu`;
 
 /** 用来控制关闭其他的menu */
-let menuController: {
+const menuController: {
   [key in string]: {
     close: () => void;
     closeOnClickOutside: boolean;
@@ -133,10 +133,12 @@ const DropDownMenu = forwardRef<DropdownMenuInstance, DropdownMenuProps>((comPro
   };
 
   useEffect(() => {
-    menuController[idRef.current] = {
-      closeOnClickOutside,
-      close: () => setIsShow(false),
-    };
+    if (closeOnClickOutside) {
+      menuController[idRef.current] = {
+        closeOnClickOutside,
+        close: () => setIsShow(false),
+      };
+    }
   }, [closeOnClickOutside]);
 
   /** 用来处理没有遮罩层的时候 */

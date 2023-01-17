@@ -6,7 +6,7 @@ nav:
   order: 2
 group:
   title: 试验性组件
-  order: 1
+  order: 2
 ---
 
 # 组件介绍

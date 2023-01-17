@@ -15,6 +15,13 @@ import { nextTick } from '@tarojs/taro';
 import { randomStr } from '../utils/random';
 
 const classPrefix = 'retaroct-slide-action';
+/** 用来控制关闭其他的滑块 */
+const controller: {
+  [key in string]: {
+    closeOnTouchOutside: boolean;
+    close: () => void;
+  };
+} = {};
 
 export type SwipeActionRef = {
   /** 让滑动条归位 */
@@ -31,7 +38,7 @@ export type SwipeActionProps = {
   /** 是否在点击操作按钮时自动归位 */
   closeOnAction?: boolean;
   /**
-   * 是否在点击其他区域时自动归位
+   * 是否在操作其他滑块时自动归位
    * @default true
    */
   closeOnTouchOutside?: boolean;
@@ -121,6 +128,11 @@ const SlideAction = forwardRef<SwipeActionRef, SwipeActionProps>(
       const directionV = areaRef.current[`${touchRef.current.direction}`] ?? 0;
       const _x = Math[x < 0 ? 'max' : 'min'](x - directionV, rangeV);
       setMoveX(_x);
+      Object.keys(controller).forEach((key) => {
+        if (key !== idRef.current && controller[key].closeOnTouchOutside) {
+          controller[key]?.close();
+        }
+      });
     };
     const onTouchEnd = (e: ITouchEvent) => {
       e.stopPropagation();
@@ -155,6 +167,15 @@ const SlideAction = forwardRef<SwipeActionRef, SwipeActionProps>(
       },
       close,
     }));
+
+    useEffect(() => {
+      if (closeOnTouchOutside) {
+        controller[idRef.current] = {
+          closeOnTouchOutside,
+          close: () => close(),
+        };
+      }
+    }, [closeOnTouchOutside]);
 
     useEffect(() => {
       const init = () => {
