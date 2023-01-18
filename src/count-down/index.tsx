@@ -23,7 +23,7 @@ export default ({ value, total = 2400_000, onChange }: PropsType) => {
     if (value !== void 0) {
       setCountDown(value, total);
     }
-  }, [value]);
+  }, [value, total]);
   useEffect(() => {
     if (countDownNum !== void 0) {
       onChange?.(countDownNum);

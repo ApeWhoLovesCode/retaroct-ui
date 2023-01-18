@@ -21,9 +21,9 @@
   "files": [
     "es"
   ],
-  "main": "/es/index.js",
-  "module": "es/index.js",
-  "typings": "es/index.d.ts",
+  "main": "./es/index.js",
+  "module": "./es/index.js",
+  "types": "./es/index.d.ts",
   "gitHooks": {
     "pre-commit": "lint-staged"
   },
