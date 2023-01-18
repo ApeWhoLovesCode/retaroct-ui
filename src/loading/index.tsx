@@ -1,6 +1,5 @@
 import { View, Text } from '@tarojs/components';
-import Taro from '@tarojs/taro';
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import './index.less';
 import { NativeProps, withNativeProps } from '../utils/native-props';
 import useMergeProps from '../use-merge-props';
@@ -10,9 +9,10 @@ const classPrefix = `retaroct-loading`;
 
 export type LoadingProps = {
   type?: LoadingType;
+  color?: string;
   size?: number | string;
 } & NativeProps;
-export type LoadingType = 'circular' | 'spinner';
+export type LoadingType = 'circular' | 'three-point' | 'rotate-xz';
 
 const defaultProps = {
   type: 'circular',
@@ -25,17 +25,26 @@ const Loading = (comProps: LoadingProps) => {
     comProps,
     defaultProps as DefaultPropsType,
   );
-  const { size, type, ...ret } = props;
+  const { size, color, type, ...ret } = props;
 
   return withNativeProps(
     ret,
     <View
       className={classPrefix}
       style={{
+        color,
         fontSize: stylePxTransform(size),
       }}
     >
       {type === 'circular' && <View className={`${classPrefix}-circular`}></View>}
+      {type === 'three-point' && (
+        <View className={`${classPrefix}-three-point`}>
+          <Text className={`${classPrefix}-three-point-item`}></Text>
+          <Text className={`${classPrefix}-three-point-item`}></Text>
+          <Text className={`${classPrefix}-three-point-item`}></Text>
+        </View>
+      )}
+      {type === 'rotate-xz' && <View className={`${classPrefix}-rotate-xz`}></View>}
     </View>,
   );
 };
