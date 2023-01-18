@@ -1,0 +1,28 @@
+@import '../style/index.less';
+@class-prefix: ~'retaroct-loading';
+.@{class-prefix} {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  color: @gray-2;
+  line-height: 1em;
+  &-circular {
+    display: inline-block;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    border: 2px solid transparent;
+    border-top-color: currentcolor;
+    border-left-color: currentcolor;
+    border-radius: 50%;
+    animation: circular 0.8s linear infinite;
+  }
+}
+@keyframes circular {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

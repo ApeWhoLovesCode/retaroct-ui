@@ -8,12 +8,24 @@ export const handleStylePx = (v: number | string) => {
 };
 
 /** 按手机比例处理style */
-export const stylePxTransform = (v: number | string) => {
+export const stylePxTransform = (v?: number | string) => {
+  if (!v) return '';
   if (typeof v === 'string') {
     v = parseInt(v);
   }
   const _v = Taro.pxTransform(v, Taro.getSystemInfoSync().windowWidth);
   return handleStylePx(_v);
+};
+
+/** 处理类名与需要判断的类名 */
+export const classBem = (classnames: string, obj?: { [key in string]?: boolean }) => {
+  let str = classnames;
+  if (obj) {
+    Object.keys(obj).forEach((key) => {
+      str += ' ' + (obj[key] ? classnames + '-' + key : '');
+    });
+  }
+  return str;
 };
 
 /** 判断是移动端还是pc端 */

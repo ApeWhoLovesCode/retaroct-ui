@@ -1,0 +1,31 @@
+@class-prefix: ~'retaroct-switch';
+
+.@{class-prefix} {
+  position: relative;
+  display: inline-block;
+  box-sizing: content-box;
+  width: 2em;
+  height: 1em;
+  background-color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 1em;
+  transition: background-color 0.3s;
+  &-round {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1em;
+    height: 1em;
+    background-color: #fff;
+    border-radius: 100%;
+    box-shadow: 0 3px 1px 0 rgba(0, 0, 0, 0.05), 0 2px 2px 0 rgba(0, 0, 0, 0.1),
+      0 3px 3px 0 rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s;
+  }
+  &-disabled {
+    opacity: 0.4;
+  }
+}
