@@ -1,16 +1,42 @@
 import { View } from '@tarojs/components';
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import useTouchs from '..';
-import useRender from '../../use-render';
 import './index.less';
 
 const Demo: React.FC = () => {
   const ref = useRef<HTMLDivElement>(null);
-  const touch = useTouchs(ref);
-  const { renderFn } = useRender();
+  const [dom, setDom] = useState({
+    x: 0,
+    y: 0,
+  });
+
+  const { info } = useTouchs(
+    ref,
+    {
+      onTouchStart() {
+        console.log('onTouchStart: ', dom);
+      },
+      onTouchMove() {
+        setDom({ x: info.x, y: info.y });
+      },
+      onTouchEnd(e) {
+        console.log('onTouchEnd: ', e);
+      },
+    },
+    [dom],
+  );
+
   return (
-    <View ref={ref} className="demo-use-touchs">
-      touches
+    <View className="demo-use-touches">
+      <View
+        ref={ref}
+        className="ball"
+        style={{
+          transform: `translate(${dom.x}px, ${dom.y}px)`,
+        }}
+      >
+        移动
+      </View>
     </View>
   );
 };

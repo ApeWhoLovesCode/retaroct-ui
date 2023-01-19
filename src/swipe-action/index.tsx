@@ -114,15 +114,15 @@ const SlideAction = forwardRef<SwipeActionRef, SwipeActionProps>(
       touch.move(e);
       if (touchRef.current.status !== 'active') {
         // 当前垂直方向滚动大于10px
-        if (touch.offsetY.current > 10) {
+        if (touch.info.offsetY > 10) {
           touchRef.current.status = 'lock';
           return;
         }
         // 触摸时间小于100ms
-        if (touch.time.current < 100) return;
+        if (touch.info.time < 100) return;
         touchRef.current.status = 'active';
       }
-      const x = touch.deltaX.current;
+      const x = touch.info.deltaX;
       const rangeV = -1 * areaRef.current[x < 0 ? 'right' : 'left'];
       // 滑块发生了位移的值
       const directionV = areaRef.current[`${touchRef.current.direction}`] ?? 0;
@@ -138,7 +138,7 @@ const SlideAction = forwardRef<SwipeActionRef, SwipeActionProps>(
       e.stopPropagation();
       if (touchRef.current.status === 'lock') return;
       touch.move(e);
-      const x = touch.deltaX.current;
+      const x = touch.info.deltaX;
       const direction = x > 0 ? 'left' : 'right';
       const rangeV = areaRef.current[direction];
       const directionV = areaRef.current[`${touchRef.current.direction}`] ?? 0;

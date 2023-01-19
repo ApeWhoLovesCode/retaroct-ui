@@ -3,7 +3,26 @@ import { ITouchEvent } from '@tarojs/components';
 import { MouseTouchE } from '../utils/handleDom';
 const MIN_DISTANCE = 10;
 
-type Direction = '' | 'vertical' | 'horizontal';
+export type TouchDirection = '' | 'vertical' | 'horizontal';
+export type TouchState = {
+  /** 由始至终的x,y值 */
+  preX: number;
+  preY: number;
+  x: number;
+  y: number;
+  /** 起始的位置 */
+  startX: number;
+  startY: number;
+  /** 偏移的值 */
+  deltaX: number;
+  deltaY: number;
+  /** 位移的值 正数 */
+  offsetX: number;
+  offsetY: number;
+  /** 当前移动的方向 */
+  direction: TouchDirection;
+  time: number;
+};
 
 function getDirection(x: number, y: number) {
   if (x > y && x > MIN_DISTANCE) {
@@ -15,30 +34,41 @@ function getDirection(x: number, y: number) {
   return '';
 }
 const useTouch = () => {
-  /** 起始的位置 */
-  const startX = useRef(0);
-  const startY = useRef(0);
-  /** 偏移的值 */
-  const deltaX = useRef(0);
-  const deltaY = useRef(0);
-  /** 位移的值 正数 */
-  const offsetX = useRef(0);
-  const offsetY = useRef(0);
-  /** 当前移动的方向 */
-  const direction = useRef<Direction>('');
-  /** 触摸时间 */
+  const state = useRef<TouchState>({
+    preX: 0,
+    preY: 0,
+    x: 0,
+    y: 0,
+    startX: 0,
+    startY: 0,
+    deltaX: 0,
+    deltaY: 0,
+    offsetX: 0,
+    offsetY: 0,
+    direction: '',
+    time: 0,
+  });
+  /** 触摸开始时间 */
   const startTime = useRef(0);
-  const time = useRef(0);
+
+  const setState = (options: Partial<TouchState>) => {
+    Object.keys(options).forEach((key) => {
+      state.current[key] = options[key];
+    });
+  };
 
   const reset = () => {
-    deltaX.current = 0;
-    deltaY.current = 0;
-    offsetX.current = 0;
-    offsetY.current = 0;
-    direction.current = '';
+    setState({
+      deltaX: 0,
+      deltaY: 0,
+      offsetX: 0,
+      offsetY: 0,
+      direction: '',
+    });
   };
 
   const changeEvent = (event: ITouchEvent | MouseTouchE) => {
+    // changedTouches 是 touchEnd 的值
     return (
       (event as ITouchEvent)?.touches?.[0] ??
       (event as ITouchEvent)?.changedTouches?.[0] ??
@@ -49,41 +79,45 @@ const useTouch = () => {
   const start = (event: ITouchEvent | MouseTouchE) => {
     reset();
     const touch = changeEvent(event);
-    startX.current = touch.clientX;
-    startY.current = touch.clientY;
+    setState({
+      startX: touch.clientX,
+      startY: touch.clientY,
+      preX: state.current.x,
+      preY: state.current.y,
+    });
     startTime.current = Date.now();
   };
 
   const move = (event: ITouchEvent | MouseTouchE) => {
-    // changedTouches 是 touchEnd 的值
     const touch = changeEvent(event);
     // Fix: Safari back will set clientX to negative number
-    deltaX.current = touch.clientX < 0 ? 0 : touch.clientX - startX.current;
-    deltaY.current = touch.clientY - startY.current;
-    offsetX.current = Math.abs(deltaX.current);
-    offsetY.current = Math.abs(deltaY.current);
-    time.current = Date.now() - startTime.current;
+    const { preX, preY, startX, startY, direction } = state.current;
+    const deltaX = touch.clientX < 0 ? 0 : touch.clientX - startX;
+    const deltaY = touch.clientY - startY;
+    const offsetX = Math.abs(deltaX);
+    const offsetY = Math.abs(deltaY);
+    const time = Date.now() - startTime.current;
 
-    if (!direction.current) {
-      direction.current = getDirection(offsetX.current, offsetY.current);
-    }
+    setState({
+      x: preX + deltaX,
+      y: preY + deltaY,
+      deltaX,
+      deltaY,
+      offsetX,
+      offsetY,
+      time,
+      direction: !direction ? getDirection(offsetX, offsetY) : '',
+    });
   };
 
-  const isVertical = () => direction.current === 'vertical';
-  const isHorizontal = () => direction.current === 'horizontal';
+  const isVertical = () => state.current.direction === 'vertical';
+  const isHorizontal = () => state.current.direction === 'horizontal';
 
   return {
+    info: state.current,
     move,
     start,
     reset,
-    startX,
-    startY,
-    deltaX,
-    deltaY,
-    offsetX,
-    offsetY,
-    direction,
-    time,
     isVertical,
     isHorizontal,
   };

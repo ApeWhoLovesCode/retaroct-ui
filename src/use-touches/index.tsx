@@ -1,35 +1,65 @@
-import { useEffect, useLayoutEffect } from 'react';
-import type { MutableRefObject } from 'react';
+import { useLayoutEffect } from 'react';
 import { isMobile, MouseTouchEvent } from '../utils/handleDom';
-import { ITouchEvent } from '@tarojs/components';
+import useTouch from '../use-touch';
 
-type TargetValue<T> = T | undefined | null;
+export type UseTouchesOptions = {
+  onTouchStart?: (e: MouseTouchEvent) => void;
+  onTouchMove?: (e: MouseTouchEvent) => void;
+  onTouchEnd?: (e: MouseTouchEvent) => void;
+};
 
-type TargetType = HTMLElement | Element | Window | Document;
+function useTouches(
+  ref: React.RefObject<HTMLDivElement>,
+  options: UseTouchesOptions = {},
+  deps: React.DependencyList = [],
+) {
+  const touch = useTouch();
 
-export type BasicTarget<T extends TargetType = Element> =
-  | (() => TargetValue<T>)
-  | TargetValue<T>
-  | MutableRefObject<TargetValue<T>>;
-
-function useTouchs(ref: React.RefObject<HTMLDivElement>) {
   useLayoutEffect(() => {
+    const onTouchStart = (e: MouseTouchEvent) => {
+      touch.start(e);
+      if (!isMobile()) {
+        document.addEventListener('mousemove', onTouchMove, true);
+        document.addEventListener('mouseup', onTouchEnd, true);
+      }
+      options.onTouchStart?.(e);
+    };
+    const onTouchMove = (e: MouseTouchEvent) => {
+      touch.move(e);
+      options.onTouchMove?.(e);
+    };
+    const onTouchEnd = (e: MouseTouchEvent) => {
+      touch.move(e);
+      if (!isMobile()) {
+        document.removeEventListener('mousemove', onTouchMove, true);
+        document.removeEventListener('mouseup', onTouchEnd, true);
+      }
+      options.onTouchEnd?.(e);
+    };
+
     if (!isMobile()) {
       ref.current?.addEventListener('mousedown', onTouchStart);
-      ref.current?.addEventListener('mouseup', onTouchEnd);
     } else {
-      ref.current?.addEventListener('touchstart', onTouchStart);
-      ref.current?.addEventListener('touchmove', onTouchMove);
-      ref.current?.addEventListener('touchend', onTouchEnd);
-      ref.current?.addEventListener('touchcancel', onTouchEnd);
+      ref.current?.addEventListener('touchstart', onTouchStart as any);
+      ref.current?.addEventListener('touchmove', onTouchMove as any);
+      ref.current?.addEventListener('touchend', onTouchEnd as any);
+      ref.current?.addEventListener('touchcancel', onTouchEnd as any);
     }
-  }, []);
+    return () => {
+      if (!isMobile()) {
+        ref.current?.removeEventListener('mousedown', onTouchStart);
+      } else {
+        ref.current?.removeEventListener('touchstart', onTouchStart as any);
+        ref.current?.removeEventListener('touchmove', onTouchMove as any);
+        ref.current?.removeEventListener('touchend', onTouchEnd as any);
+        ref.current?.removeEventListener('touchcancel', onTouchEnd as any);
+      }
+    };
+  }, deps);
 
-  const onTouchStart = (e: TouchEvent | MouseEvent) => {};
-
-  const onTouchMove = (e: any) => {};
-
-  const onTouchEnd = (e: any) => {};
+  return {
+    ...touch,
+  };
 }
 
-export default useTouchs;
+export default useTouches;
