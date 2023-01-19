@@ -4,15 +4,15 @@ import useTouch from '..';
 import useRender from '../../use-render';
 import './index.less';
 
-const UseRenderDemo: React.FC = () => {
-  const touch = useTouch()
-  const {renderFn} = useRender()
+const Demo: React.FC = () => {
+  const touch = useTouch();
+  const { renderFn } = useRender();
   return (
-    <View 
+    <View
       className="demo-use-touch"
-      onTouchStart={e => touch.start(e)}
-      onTouchMove={e => {
-        touch.move(e); 
+      onTouchStart={(e) => touch.start(e)}
+      onTouchMove={(e) => {
+        touch.move(e);
         renderFn();
       }}
     >
@@ -22,4 +22,4 @@ const UseRenderDemo: React.FC = () => {
   );
 };
 
-export default UseRenderDemo;
+export default Demo;

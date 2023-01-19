@@ -1,6 +1,6 @@
 import { View } from '@tarojs/components';
-import SwipeAction, { Action } from '../index';
-import React, { useState } from 'react';
+import SwipeAction, { Action } from '../index-demo';
+import React from 'react';
 import './index.less';
 import DemoBlock from '../../demo-block';
 
