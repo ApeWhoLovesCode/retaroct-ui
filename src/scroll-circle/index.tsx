@@ -6,11 +6,9 @@ import { getLineAngle } from '../utils/handleCircle';
 import { attachPropertiesToComponent } from '../utils/attach-properties-to-component';
 import { nextTick } from '@tarojs/taro';
 import { randomStr } from '../utils/random';
+import { getScreenInfo, screenH, screenW } from '../utils/handleDom';
 
 const classPrefix = 'retaroct-scroll-circle';
-
-let screenW = 0;
-let screenH = 0;
 
 export type ScrollCircleProps = {
   /** 传入卡片的数组 */
@@ -70,9 +68,8 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
         getEleInfo(`.${idRef.current}`),
         getEleInfo(`.${idRef.current} .${classPrefix}-cardWrap`),
       ]).then(([cWrap, cInfo]) => {
+        getScreenInfo();
         info.current.circleWrapHeight = cWrap?.height ?? 0;
-        screenW = Taro.getSystemInfoSync().screenWidth;
-        screenH = Taro.getSystemInfoSync().screenHeight;
         info.current.cardH = cInfo?.height ?? 0;
         const cW = cInfo?.width ?? 0;
         info.current.circleR = Math.round(screenH);

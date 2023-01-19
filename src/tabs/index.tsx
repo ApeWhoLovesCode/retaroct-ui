@@ -10,6 +10,7 @@ import classNames from 'classnames';
 import { FC, useState, useEffect, useRef, ReactNode, ReactElement, ComponentProps } from 'react';
 import './index.less';
 import { randomStr } from '../utils/random';
+import { getScreenInfo, screenW } from '../utils/handleDom';
 
 const classPrefix = `retaroct-tabs`;
 
@@ -116,13 +117,13 @@ const Tabs = forwardRef<TabsInstance, TabsProps>(
           getAllEleInfo(`.${idRef.current} .${classPrefix}-tabWrap`),
           getEleInfo(`.${idRef.current} .${classPrefix}-scrollView`),
         ]).then(([tabs, tabWrapEles, tabsInfo]) => {
+          getScreenInfo();
           if (!tabs || !tabWrapEles || !tabsInfo) return;
           const arr: TabItemType[] = tabWrapEles.map((e) => {
             const _l = e.left + e.width / 2 - tabsInfo.left;
             return { width: e.width, left: _l };
           });
-          tabsRef.current.width =
-            (ret?.isMiddleScreen ? Taro.getSystemInfoSync().screenWidth : tabs?.width ?? 0) / 2;
+          tabsRef.current.width = (ret?.isMiddleScreen ? screenW : tabs?.width ?? 0) / 2;
           tabsRef.current.tabList = arr;
           setIsLineShow(true);
         });

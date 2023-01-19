@@ -2,6 +2,21 @@ import { ITouchEvent } from '@tarojs/components';
 import type { MouseEvent } from 'react';
 import Taro from '@tarojs/taro';
 
+/** 屏幕宽高 */
+export let screenW = 0;
+export let screenH = 0;
+
+/** 获取屏幕宽高 */
+export const getScreenInfo = () => {
+  if (window && window.innerWidth) {
+    screenW = window.innerWidth;
+    screenH = window.innerHeight;
+  } else {
+    screenW = Taro.getSystemInfoSync().screenWidth;
+    screenH = Taro.getSystemInfoSync().screenHeight;
+  }
+};
+
 /** 处理style的px */
 export const handleStylePx = (v: number | string) => {
   return typeof v === 'number' ? v + 'px' : v;

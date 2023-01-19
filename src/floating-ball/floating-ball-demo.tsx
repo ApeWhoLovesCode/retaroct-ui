@@ -2,10 +2,17 @@ import { View } from '@tarojs/components';
 import { useState, useEffect, FC, useRef, useCallback } from 'react';
 import { NativeProps, withNativeProps } from '../utils/native-props';
 import getEleInfo from '../utils/getEleInfo';
-import Taro, { nextTick } from '@tarojs/taro';
+import { nextTick } from '@tarojs/taro';
 import React from 'react';
 import { randomStr } from '../utils/random';
-import { handleMouseOfTouch, isMobile, MouseTouchEvent } from '../utils/handleDom';
+import {
+  getScreenInfo,
+  handleMouseOfTouch,
+  isMobile,
+  MouseTouchEvent,
+  screenH,
+  screenW,
+} from '../utils/handleDom';
 
 const classPrefix = `retaroct-floating-ball`;
 
@@ -30,9 +37,6 @@ export type FloatingBallProps = {
   | '--initial-position-bottom'
   | '--z-index'
 >;
-
-let screenW = 0;
-let screenH = 0;
 
 const FloatingBall: FC<FloatingBallProps> = ({ axis = 'xy', magnetic, ...props }) => {
   const idRef = useRef(randomStr(classPrefix));
@@ -102,8 +106,7 @@ const FloatingBall: FC<FloatingBallProps> = ({ axis = 'xy', magnetic, ...props }
 
   useEffect(() => {
     const init = async () => {
-      screenW = Taro.getSystemInfoSync().screenWidth;
-      screenH = Taro.getSystemInfoSync().screenHeight;
+      getScreenInfo();
       const ballInfo = await getEleInfo(`.${idRef.current} .${classPrefix}-button`);
       if (!ballInfo) return;
       ball.current.w = ballInfo.width;
