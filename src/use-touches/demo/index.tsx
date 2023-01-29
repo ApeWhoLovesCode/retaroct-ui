@@ -10,21 +10,17 @@ const Demo: React.FC = () => {
     y: 0,
   });
 
-  const { info } = useTouchs(
-    ref,
-    {
-      onTouchStart() {
-        console.log('onTouchStart: ', dom);
-      },
-      onTouchMove() {
-        setDom({ x: info.x, y: info.y });
-      },
-      onTouchEnd(e) {
-        console.log('onTouchEnd: ', e);
-      },
+  const { info } = useTouchs(ref, {
+    onTouchStart(e) {
+      console.log('onTouchStart: ', e);
     },
-    [dom],
-  );
+    onTouchMove() {
+      setDom({ x: info.x, y: info.y });
+    },
+    onTouchEnd(e) {
+      console.log('onTouchEnd: ', e);
+    },
+  });
 
   return (
     <View className="demo-use-touches">

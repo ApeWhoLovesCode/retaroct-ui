@@ -1,6 +1,7 @@
 import { useLayoutEffect } from 'react';
 import { isMobile, MouseTouchEvent } from '../utils/handleDom';
 import useTouch from '../use-touch';
+import useLatest from '../use-latest';
 
 export type UseTouchesOptions = {
   onTouchStart?: (e: MouseTouchEvent) => void;
@@ -8,12 +9,9 @@ export type UseTouchesOptions = {
   onTouchEnd?: (e: MouseTouchEvent) => void;
 };
 
-function useTouches(
-  ref: React.RefObject<HTMLDivElement>,
-  options: UseTouchesOptions = {},
-  deps: React.DependencyList = [],
-) {
+function useTouches(ref: React.RefObject<HTMLDivElement>, options: UseTouchesOptions = {}) {
   const touch = useTouch();
+  const optionsRef = useLatest(options);
 
   useLayoutEffect(() => {
     const onTouchStart = (e: MouseTouchEvent) => {
@@ -22,11 +20,11 @@ function useTouches(
         document.addEventListener('mousemove', onTouchMove, true);
         document.addEventListener('mouseup', onTouchEnd, true);
       }
-      options.onTouchStart?.(e);
+      optionsRef.current.onTouchStart?.(e);
     };
     const onTouchMove = (e: MouseTouchEvent) => {
       touch.move(e);
-      options.onTouchMove?.(e);
+      optionsRef.current.onTouchMove?.(e);
     };
     const onTouchEnd = (e: MouseTouchEvent) => {
       touch.move(e);
@@ -34,7 +32,7 @@ function useTouches(
         document.removeEventListener('mousemove', onTouchMove, true);
         document.removeEventListener('mouseup', onTouchEnd, true);
       }
-      options.onTouchEnd?.(e);
+      optionsRef.current.onTouchEnd?.(e);
     };
 
     if (!isMobile()) {
@@ -55,7 +53,7 @@ function useTouches(
         ref.current?.removeEventListener('touchcancel', onTouchEnd as any);
       }
     };
-  }, deps);
+  }, []);
 
   return {
     ...touch,
