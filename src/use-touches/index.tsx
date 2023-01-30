@@ -1,11 +1,11 @@
 import { useLayoutEffect } from 'react';
 import { isMobile, MouseTouchEvent } from '../utils/handleDom';
-import useTouch from '../use-touch';
+import useTouch, { TouchState } from '../use-touch';
 import useLatest from '../use-latest';
 
 export type UseTouchesOptions = {
   onTouchStart?: (e: MouseTouchEvent) => void;
-  onTouchMove?: (e: MouseTouchEvent) => void;
+  onTouchMove?: (e: MouseTouchEvent, touchState: TouchState) => void;
   onTouchEnd?: (e: MouseTouchEvent) => void;
 };
 
@@ -24,7 +24,7 @@ function useTouches(ref: React.RefObject<HTMLDivElement>, options: UseTouchesOpt
     };
     const onTouchMove = (e: MouseTouchEvent) => {
       touch.move(e);
-      optionsRef.current.onTouchMove?.(e);
+      optionsRef.current.onTouchMove?.(e, touch.info);
     };
     const onTouchEnd = (e: MouseTouchEvent) => {
       touch.move(e);

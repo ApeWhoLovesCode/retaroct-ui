@@ -1,4 +1,45 @@
 @import '../style/index.less';
 @class-prefix: ~'retaroct-slider';
+@sliderValue: 3px;
 .@{class-prefix} {
+  position: relative;
+  height: @sliderValue;
+  background-color: @gray-2;
+  border-radius: 999px;
+  &-bar {
+    width: 100%;
+    height: 100%;
+    background-color: @blue;
+    border-radius: 999px;
+  }
+  &-btn {
+    width: 24px;
+    height: 24px;
+    background-color: #fff;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    &-wrap {
+      position: absolute;
+      top: 50%;
+      left: 0;
+    }
+  }
+  &-vertical {
+    width: @sliderValue;
+    .retaroct-slider-btn-wrap {
+      top: 0;
+      left: 50%;
+    }
+  }
+  &-disabled {
+    opacity: 0.5;
+  }
+  &-isAnimation {
+    .retaroct-slider-bar {
+      transition: all 0.2s ease-out;
+    }
+    .retaroct-slider-btn-wrap {
+      transition: all 0.2s ease-out;
+    }
+  }
 }
