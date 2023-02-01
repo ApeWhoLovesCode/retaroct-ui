@@ -53,16 +53,10 @@ export default () => {
       </DemoBlock>
       <DemoBlock className="block" title="垂直方向" padding="5px 20px">
         <View className="sliderWrap">
-          <Slider value={20} vertical style={{ height: '200px' }} />
+          <Slider value={20} vertical />
         </View>
         <View className="sliderWrap">
-          <Slider
-            isTwo
-            vertical
-            value={[20, 60]}
-            style={{ height: '200px' }}
-            onDragEnd={(v) => showToast(v.toString())}
-          />
+          <Slider isTwo vertical value={[20, 60]} onDragEnd={(v) => showToast(v.toString())} />
         </View>
       </DemoBlock>
     </View>
