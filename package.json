@@ -2,7 +2,7 @@
   "private": false,
   "name": "retaroct-ui",
   "author": "linhuanheng",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "scripts": {
     "start": "concurrently \"npm run dumiDev\" \"npm run copyDevice\" \"npm run device\" \"npm run fileChange\"",
     "dumiDev": "dumi dev",

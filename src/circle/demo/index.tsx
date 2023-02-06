@@ -1,6 +1,6 @@
 import { View, Button } from '@tarojs/components';
 import Circle from '../index';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import React from 'react';
 import './index.less';
 import DemoBlock from '../../demo-block';
