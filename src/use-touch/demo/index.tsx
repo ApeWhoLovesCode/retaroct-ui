@@ -16,8 +16,8 @@ const Demo: React.FC = () => {
         renderFn();
       }}
     >
-      <View>deltaX: {touch.deltaX.current}</View>
-      <View>deltaY: {touch.deltaY.current}</View>
+      <View>deltaX: {touch.info.deltaX}</View>
+      <View>deltaY: {touch.info.deltaY}</View>
     </View>
   );
 };

@@ -23,7 +23,7 @@ export type CircleProps = {
   /** 其中的文本信息 */
   text?: ReactNode;
   /** 线条的端点样式 */
-  lineCap?: keyof CanvasContext.lineCap;
+  lineCap?: keyof CanvasContext.LineCap;
   /**
    * @description 进度值 最小为0 最大为100
    * @default 0
@@ -70,7 +70,7 @@ const defaultProps = {
 };
 type RequireType = keyof typeof defaultProps;
 type DefaultPropsType = Omit<typeof defaultProps, 'lineCap'> & {
-  lineCap?: keyof CanvasContext.lineCap;
+  lineCap?: keyof CanvasContext.LineCap;
 };
 
 const Circle = (comProps: CircleProps) => {

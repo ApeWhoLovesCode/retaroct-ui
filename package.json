@@ -2,7 +2,7 @@
   "private": false,
   "name": "retaroct-ui",
   "author": "linhuanheng",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "scripts": {
     "start": "concurrently \"npm run dumiDev\" \"npm run copyDevice\" \"npm run device\" \"npm run fileChange\"",
     "dumiDev": "dumi dev",
@@ -36,17 +36,18 @@
     ]
   },
   "dependencies": {
-    "@tarojs/components": "3.2.4",
-    "@tarojs/react": "3.2.4",
-    "@tarojs/runtime": "3.2.4",
-    "@tarojs/taro": "3.2.4",
+    "@tarojs/components": "3.4.11",
+    "@tarojs/react": "3.4.11",
+    "@tarojs/runtime": "3.4.11",
+    "@tarojs/taro": "3.4.11",
+    "less": "^3.13.1",
     "react": "^17.0.0"
   },
   "devDependencies": {
-    "@tarojs/mini-runner": "3.2.4",
-    "@tarojs/webpack-runner": "3.2.4",
-    "babel-preset-taro": "3.2.4",
-    "eslint-config-taro": "3.2.4",
+    "@tarojs/mini-runner": "3.4.11",
+    "@tarojs/webpack-runner": "3.4.11",
+    "babel-preset-taro": "3.4.11",
+    "eslint-config-taro": "3.4.11",
     "@testing-library/jest-dom": "^5.15.1",
     "@testing-library/react": "^12.1.2",
     "@types/react": "^17.0.2",
