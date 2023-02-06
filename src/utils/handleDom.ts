@@ -45,9 +45,13 @@ export const classBem = (classnames: string, obj?: { [key in string]?: boolean }
 
 /** 判断是移动端还是pc端 */
 export const isMobile = () => {
-  return navigator.userAgent.match(
-    /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i,
-  );
+  // h5
+  if (Taro.getEnv() === Taro.ENV_TYPE.WEB) {
+    return navigator.userAgent.match(
+      /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i,
+    );
+  }
+  return true;
 };
 
 /** 鼠标事件 */

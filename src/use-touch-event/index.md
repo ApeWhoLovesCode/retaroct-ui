@@ -1,5 +1,5 @@
 ---
-title: use-touchs
+title: use-touch-event
 nav:
   title: 钩子
   path: /hooks
@@ -25,4 +25,4 @@ group:
 
 | H5  | 微信小程序 |
 | :-: | :--------: |
-| ✅  |     ❌     |
+| ✅  |     ✅     |

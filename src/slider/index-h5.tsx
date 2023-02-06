@@ -4,7 +4,7 @@ import './index.less';
 import { NativeProps, withNativeProps } from '../utils/native-props';
 import useMergeProps from '../use-merge-props';
 import { randomStr } from '../utils/random';
-import useTouchEvent, { UseTouchesOptions } from '../use-touch-event';
+import useTouches, { UseTouchesOptions } from '../use-touches';
 import { range } from '../utils/format';
 import getEleInfo from '../utils/getEleInfo';
 import { classBem, stylePxTransform } from '../utils/handleDom';
@@ -113,9 +113,7 @@ const Slider = (comProps: SliderProps) => {
       const { w, h } = sliderInfo.current;
       const _preVal = (preVal![i] ?? preVal) - min;
       let val = _range(
-        !vertical
-          ? (_preVal / total) * w + (info?.deltaX ?? 0)
-          : (_preVal / total) * h + (info?.deltaY ?? 0),
+        !vertical ? (_preVal / total) * w + info.deltaX : (_preVal / total) * h + info.deltaY,
       );
       let newVal: ValueType = val;
       if (typeof _value !== 'number') {
@@ -131,8 +129,10 @@ const Slider = (comProps: SliderProps) => {
       onDragEnd?.(_value);
     },
   });
-  const { onTouchFn: onTouchFn_1 } = useTouchEvent(getOptions(0));
-  const { onTouchFn: onTouchFn_2 } = useTouchEvent(getOptions(1));
+  const ref = useRef<HTMLDivElement>(null);
+  useTouches(ref, getOptions(0));
+  const ref2 = useRef<HTMLDivElement>(null);
+  useTouches(ref2, getOptions(1));
 
   useEffect(() => {
     setValue(value);
@@ -186,25 +186,25 @@ const Slider = (comProps: SliderProps) => {
         }}
       ></View>
       <View
+        ref={ref}
         className={`${classPrefix}-btn-wrap `}
         style={{
           transform: `translate(calc(${!vertical ? getBtnMove(_value[0]) : 0}px - 50%), calc(${
             vertical ? getBtnMove(_value[0]) : 0
           }px - 50%))`,
         }}
-        {...onTouchFn_1}
       >
         {button ?? <View className={`${classPrefix}-btn`}></View>}
       </View>
       {isTwo && (
         <View
+          ref={ref2}
           className={`${classPrefix}-btn-wrap`}
           style={{
             transform: `translate(calc(${!vertical ? getBtnMove(_value[1]) : 0}px - 50%), calc(${
               vertical ? getBtnMove(_value[1]) : 0
             }px - 50%))`,
           }}
-          {...onTouchFn_2}
         >
           {button ?? <View className={`${classPrefix}-btn`}></View>}
         </View>

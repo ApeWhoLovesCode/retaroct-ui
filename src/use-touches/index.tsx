@@ -9,6 +9,7 @@ export type UseTouchesOptions = {
   onTouchEnd?: (e: MouseTouchEvent) => void;
 };
 
+/** 绑定手指触摸或鼠标事件仅h5可用 */
 function useTouches(ref: React.RefObject<HTMLDivElement>, options: UseTouchesOptions = {}) {
   const touch = useTouch();
   const optionsRef = useLatest(options);
