@@ -1,5 +1,6 @@
 import DemoBlock from '../../demo-block';
-import React, { View } from '@tarojs/components';
+import React from 'react';
+import { View } from '@tarojs/components';
 import Switch from '..';
 import { useState } from 'react';
 import './index.less';

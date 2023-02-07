@@ -16,7 +16,8 @@
     "prepublishOnly": "npm run build",
     "device": "cd taro-device && cnpm run dev:h5",
     "copyDevice": "node ./helper/copyDevice.js",
-    "fileChange": "node ./helper/fileChange.js"
+    "fileChange": "node ./helper/fileChange.js",
+    "webpack": "dumi webpack"
   },
   "files": [
     "es"
