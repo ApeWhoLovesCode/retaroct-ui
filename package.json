@@ -5,7 +5,7 @@
   "version": "1.0.5",
   "scripts": {
     "start": "concurrently \"npm run dumiDev\" \"npm run copyDevice\" \"npm run device\" \"npm run fileChange\"",
-    "dumiDev": "dumi dev",
+    "dumiDev": "PORT=9696 dumi dev",
     "docs:build": "dumi build",
     "docs:deploy": "gh-pages -d docs-dist",
     "build": "father-build",

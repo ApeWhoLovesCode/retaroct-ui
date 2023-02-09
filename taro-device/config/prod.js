@@ -6,6 +6,7 @@ module.exports = {
   },
   mini: {},
   h5: {
+    port: 9797, // 端口号
     /**
      * WebpackChain 插件配置
      * @docs https://github.com/neutrinojs/webpack-chain
