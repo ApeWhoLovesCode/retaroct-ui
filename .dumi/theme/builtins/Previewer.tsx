@@ -16,7 +16,7 @@ export default (props: IPreviewerProps) => {
     const componentName = props.componentName;
     let demoUrl = '';
     if (process.env.NODE_ENV === 'production') {
-      demoUrl = `https://test/taro_device/#/pages/${componentName}/demo/index`;
+      demoUrl = `https://${window.location.hostname}:9797/#/pages/${componentName}/demo/index`;
     } else {
       demoUrl = `http://${window.location.hostname}:9797/#/pages/${componentName}/demo/index`;
     }

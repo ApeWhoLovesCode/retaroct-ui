@@ -1,5 +1,5 @@
 import { View, Canvas } from '@tarojs/components';
-import Taro, { CanvasContext, createCanvasContext } from '@tarojs/taro';
+import Taro, { CanvasContext, createCanvasContext, createSelectorQuery } from '@tarojs/taro';
 import { useState, useEffect, ReactNode, useRef } from 'react';
 import './index.less';
 import { NativeProps, withNativeProps } from '../utils/native-props';
@@ -7,7 +7,7 @@ import React from 'react';
 import useMergeProps from '../use-merge-props';
 import { randomStr } from '../utils/random';
 import colorVar from '../style/var';
-import { getFieldsInfo } from '../utils/getEleInfo';
+import { getFieldsInfo, getNodeContext } from '../utils/getEleInfo';
 import { range } from '../utils/format';
 import { isObj } from '../utils/validate';
 
@@ -233,9 +233,11 @@ const Circle = (comProps: CircleProps) => {
           setReady(true);
         });
       } else {
-        const ctx = createCanvasContext(idRef.current);
-        canvasRef.current.ctx = ctx;
-        setReady(true);
+        // const ctx = createCanvasContext(idRef.current);
+        getNodeContext(`#${idRef.current}`).then((ctx) => {
+          canvasRef.current.ctx = ctx;
+          setReady(true);
+        });
       }
     };
     setTimeout(() => {

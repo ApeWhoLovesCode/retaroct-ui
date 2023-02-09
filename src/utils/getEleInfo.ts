@@ -70,3 +70,15 @@ export const getFieldsInfo = (
     });
   });
 };
+
+/** 获取节点的上下文 */
+export const getNodeContext = (selector: string): Promise<any | null> => {
+  return new Promise((resolve) => {
+    createSelectorQuery()
+      .select(selector)
+      .context((res) => {
+        resolve(res?.context);
+      })
+      .exec();
+  });
+};
