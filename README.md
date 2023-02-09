@@ -6,12 +6,6 @@
 
 `react` , `hooks` , `ts` , `taro`
 
-## 注意 `taro` 版本
-
-1. 正常使用 taro: 3.2.4
-
-2. 上线 taro: 3.4.11
-
 ## Getting Started
 
 安装依赖(Install dependencies),
