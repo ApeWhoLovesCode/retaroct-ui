@@ -1,6 +1,8 @@
 @import '../../style/index.less';
 .demo-scroll-circle {
   position: relative;
+  width: 100vw;
+  height: 100vh;
   .card {
     width: 135px;
     height: 174px;
@@ -9,9 +11,9 @@
   }
   .navWrap {
     position: absolute;
-    right: 40px;
     top: 50%;
-    transform: translateY(-50%);
+    right: 40px;
     background-color: @blue;
+    transform: translateY(-50%);
   }
 }

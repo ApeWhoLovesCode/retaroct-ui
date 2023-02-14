@@ -45,7 +45,6 @@ export const onTouchMouse = ({ onTouchStart, onTouchMove, onTouchEnd }: UseTouch
   if (!isMobile()) {
     return {
       onMouseDown: onTouchStart,
-      onMouseUp: onTouchEnd,
     };
   } else {
     return {
