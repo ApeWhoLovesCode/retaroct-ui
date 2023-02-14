@@ -1,11 +1,11 @@
-import { View, Image, ITouchEvent } from '@tarojs/components';
-import React, { useState, useEffect, ReactNode, CSSProperties, useCallback, useMemo } from 'react';
+import { View, Image } from '@tarojs/components';
+import React, { useState, useEffect, ReactNode, CSSProperties, useMemo } from 'react';
 import './index.less';
 import { NativeProps, withNativeProps } from '../utils/native-props';
 import useMergeProps from '../use-merge-props';
-import useTransition, { TransitionDuration, TransitionType } from '../use-transition';
+import useTransition, { TransitionType } from '../use-transition';
 import { letterUpperTolower } from '../utils/format';
-import Transition from '../transition';
+import Mask from '../mask';
 
 const classPrefix = `retaroct-popup`;
 
@@ -153,58 +153,6 @@ const PopupInner = (props: PopupProps & { setIsShow?: (v: boolean) => void }) =>
   );
 };
 
-/** 遮罩层 */
-export type MaskProps = {
-  show?: boolean;
-  lockScroll?: boolean;
-  zIndex?: number;
-  duration?: string | number | TransitionDuration;
-  onClose?: () => void;
-} & NativeProps;
-const Mask = (props: MaskProps) => {
-  const { show, zIndex, lockScroll, duration, onClose, ...ret } = props;
-  const [isShow, setIsShow] = useState(false);
-
-  useEffect(() => {
-    if (show) {
-      setIsShow(true);
-    }
-  }, [show]);
-
-  const _noop = useCallback(
-    (event: ITouchEvent) => {
-      if (lockScroll) {
-        event.stopPropagation();
-        event.preventDefault();
-      }
-    },
-    [lockScroll],
-  );
-
-  return isShow ? (
-    withNativeProps(
-      ret,
-      <Transition
-        show={show}
-        duration={duration}
-        className={`${classPrefix}-mask`}
-        style={{ zIndex: zIndex ? zIndex - 1 : void 0 }}
-        onClick={() => {
-          onClose?.();
-        }}
-        onAfterLeave={() => {
-          setTimeout(() => {
-            setIsShow(false);
-          }, 0);
-        }}
-        onTouchMove={_noop}
-      />,
-    )
-  ) : (
-    <></>
-  );
-};
-
 const defaultProps = {
   duration: 300,
   position: 'center',
@@ -238,17 +186,17 @@ const Popup = (comProps: PopupProps) => {
 
   return (
     <>
-      {isShow && <PopupInner setIsShow={setIsShow} {...props} />}
       {overlay && (
         <Mask
           show={show}
-          zIndex={zIndex}
+          zIndex={zIndex ? zIndex - 1 : void 0}
           duration={duration}
           style={overlayStyle}
           lockScroll={lockScroll}
           onClose={() => onMaskClick()}
         />
       )}
+      {isShow && <PopupInner setIsShow={setIsShow} {...props} />}
     </>
   );
 };
