@@ -26,6 +26,11 @@ export default () => {
   const onPageChange = ({ pageNum, pageSize }: { pageNum: number; pageSize: number }) => {
     const preIndex = (pageNum - 1) * pageSize;
     const newItems = list.slice(preIndex, preIndex + pageSize);
+    // 填充空数据
+    const length = newItems.length;
+    for (let i = 0; i < pageSize - length; i++) {
+      newItems.push({ _id: 'id-i-' + i, title: 'Null-' + i });
+    }
     setItems(newItems);
     setPageNum(pageNum);
     setPageSize(pageSize);

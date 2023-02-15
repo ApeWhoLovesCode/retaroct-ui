@@ -15,6 +15,7 @@ export const getScreenInfo = () => {
     screenW = Taro.getSystemInfoSync().screenWidth;
     screenH = Taro.getSystemInfoSync().screenHeight;
   }
+  return { screenW, screenH };
 };
 
 /** 处理style的px */
