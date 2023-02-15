@@ -16,7 +16,7 @@ export default () => {
   /** 初始化获取数据 */
   const init = () => {
     setTimeout(() => {
-      const newList = new Array(23).fill('Tops').map((a, i) => ({ _id: 'id' + i, title: a + i }));
+      const newList = new Array(30).fill('Tops').map((a, i) => ({ _id: 'id' + i, title: a + i }));
       const preIndex = (pageNum - 1) * pageSize;
       const newItems = newList.slice(preIndex, preIndex + pageSize);
       setItems(newItems);

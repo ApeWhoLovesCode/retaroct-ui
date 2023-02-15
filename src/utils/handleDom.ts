@@ -8,7 +8,8 @@ export let screenH = 0;
 
 /** 获取屏幕宽高 */
 export const getScreenInfo = () => {
-  if (window && window.innerWidth) {
+  // h5
+  if (Taro.getEnv() === Taro.ENV_TYPE.WEB) {
     screenW = window.innerWidth;
     screenH = window.innerHeight;
   } else {

@@ -4,7 +4,7 @@ import './index.less';
 import getEleInfo from '../utils/getEleInfo';
 import { getLineAngle } from '../utils/handleCircle';
 import { attachPropertiesToComponent } from '../utils/attach-properties-to-component';
-import { nextTick } from '@tarojs/taro';
+import Taro, { nextTick } from '@tarojs/taro';
 import { randomStr } from '../utils/random';
 import { classBem, getScreenInfo, screenH, screenW } from '../utils/handleDom';
 import useTouchEvent from '../use-touch-event';
@@ -32,7 +32,7 @@ export type ScrollCircleProps = {
   cardAddDeg?: number;
   /**
    * 索引为多少的卡片位于中间区域 从0开始算
-   * @default 3
+   * @default 0
    */
   initCartNum?: number;
   /**
@@ -65,7 +65,7 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
   cardAddDeg = 1,
   width = '100%',
   height = '100%',
-  initCartNum = 3,
+  initCartNum = 0,
   isAverage = true,
   isClockwise = true,
   leftArrow,
@@ -101,44 +101,56 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
   const init = async (isInit = false) => {
     getScreenInfo();
     isVertical.current = screenH > screenW;
-    Promise.all([
-      getEleInfo(`.${idRef.current}`),
-      getEleInfo(`.${idRef.current} .${classPrefix}-cardWrap`),
-    ]).then(([cWrap, cInfo]) => {
-      info.current.circleWrapWH = cWrap?.[isVertical.current ? 'height' : 'width'] ?? 0;
-      info.current.cardWH = cInfo?.[isVertical.current ? 'height' : 'width'] ?? 0;
-      const cWH = cInfo?.[isVertical.current ? 'width' : 'height'] ?? 0;
-      info.current.circleR = Math.round(isVertical.current ? screenH : screenW);
-      // 屏幕宽高度对应的圆的角度
-      info.current.scrollViewDeg = getLineAngle(info.current.circleWrapWH, info.current.circleR);
-      // 每张卡片所占用的角度
-      const _cardDeg =
-        (2 * 180 * Math.atan((info.current.cardWH ?? 0) / 2 / (info.current.circleR - cWH / 2))) /
-          Math.PI +
-        cardAddDeg;
-      let { pageNum, pageSize } = pageState;
-      // 是否采用均分卡片的方式
-      if (isAverage && list) {
-        const cardNum = Math.floor(360 / _cardDeg);
-        // 判断总卡片数是否超过一个圆
-        const _cardNum = Math.min(cardNum, list.length);
-        pageSize = _cardNum;
-        setPageState((p) => ({ ...p, pageSize }));
-        cardDeg.current = 360 / _cardNum;
-      } else {
-        cardDeg.current = _cardDeg;
-      }
-      const text = isVertical.current ? '高' : '宽';
-      console.log(
-        `可滚动区域${text}度: ${info.current.circleWrapWH}px\n` +
-          `可滚动区域占的度数: ${info.current.scrollViewDeg}°\n` +
-          `卡片${text}度: ${info.current.cardWH}px\n` +
-          `圆的半径: ${info.current.circleR}px\n` +
-          `卡片间的角度: ${cardDeg.current}°`,
-      );
-      onPageChange?.({ pageNum, pageSize });
-      setRotateDeg(0);
-    });
+    let cWrap = { width: 0, height: 0 };
+    let cInfo = { width: 0, height: 0 };
+    if (Taro.getEnv() === Taro.ENV_TYPE.WEB) {
+      const circleWrap = document.querySelector(`.${idRef.current}`);
+      const cardInfo = document.querySelector(`.${idRef.current} .${classPrefix}-cardWrap`);
+      cWrap.width = circleWrap?.clientWidth ?? 0;
+      cWrap.height = circleWrap?.clientHeight ?? 0;
+      cInfo.width = cardInfo?.clientWidth ?? 0;
+      cInfo.height = cardInfo?.clientHeight ?? 0;
+    } else {
+      const res = await Promise.all([
+        getEleInfo(`.${idRef.current}`),
+        getEleInfo(`.${idRef.current} .${classPrefix}-cardWrap`),
+      ]);
+      cWrap = res[0] as { width: number; height: number };
+      cInfo = res[1] as { width: number; height: number };
+    }
+    info.current.circleWrapWH = cWrap?.[isVertical.current ? 'height' : 'width'] ?? 0;
+    info.current.cardWH = cInfo?.[isVertical.current ? 'height' : 'width'] ?? 0;
+    const cWH = cInfo?.[isVertical.current ? 'width' : 'height'] ?? 0;
+    info.current.circleR = Math.round(isVertical.current ? screenH : screenW);
+    // 屏幕宽高度对应的圆的角度
+    info.current.scrollViewDeg = getLineAngle(info.current.circleWrapWH, info.current.circleR);
+    // 每张卡片所占用的角度
+    const _cardDeg =
+      (2 * 180 * Math.atan((info.current.cardWH ?? 0) / 2 / (info.current.circleR - cWH / 2))) /
+        Math.PI +
+      cardAddDeg;
+    let { pageNum, pageSize } = pageState;
+    // 是否采用均分卡片的方式
+    if (isAverage && list) {
+      const cardNum = Math.floor(360 / _cardDeg);
+      // 判断总卡片数是否超过一个圆
+      const _cardNum = Math.min(cardNum, list.length);
+      pageSize = _cardNum;
+      setPageState((p) => ({ ...p, pageSize }));
+      cardDeg.current = 360 / _cardNum;
+    } else {
+      cardDeg.current = _cardDeg;
+    }
+    const text = isVertical.current ? '高' : '宽';
+    console.log(
+      `可滚动区域${text}度: ${info.current.circleWrapWH}px\n` +
+        `可滚动区域占的度数: ${info.current.scrollViewDeg}°\n` +
+        `卡片${text}度: ${info.current.cardWH}px\n` +
+        `圆的半径: ${info.current.circleR}px\n` +
+        `卡片间的角度: ${cardDeg.current}°`,
+    );
+    onPageChange?.({ pageNum, pageSize });
+    setRotateDeg(cardDeg.current * initCartNum);
   };
 
   const resizeFn = useDebounce(() => {
