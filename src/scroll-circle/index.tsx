@@ -97,6 +97,7 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
     /** 每页条数 */
     pageSize: 10,
   });
+  const [duration, setDuration] = useState(0.6);
 
   const init = async (isInit = false) => {
     getScreenInfo();
@@ -175,6 +176,7 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
   const { info: tInfo, onTouchFn } = useTouchEvent({
     onTouchStart() {
       touchInfo.current.startDeg = rotateDeg;
+      setDuration(0.1);
     },
     onTouchMove() {
       const xy = isVertical.current ? tInfo.deltaY : -tInfo.deltaX;
@@ -187,14 +189,14 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
       const { startDeg } = touchInfo.current;
       // 移动的距离
       const xy = isVertical.current ? tInfo.deltaY : -tInfo.deltaX;
-      // 触摸的时间
-      const _time = Date.now() - tInfo.time;
+      let _duration = 0.6;
       let deg = rotateDeg;
       // 触摸的始末距离大于卡片高度的一半，并且触摸时间小于300ms，则触摸距离和时间旋转更多
-      if (Math.abs(xy) > info.current.cardWH / 2 && _time < 300) {
+      if (Math.abs(xy) > info.current.cardWH / 2 && tInfo.time < 300) {
         // 增加角度变化
-        const v = _time / 300;
+        const v = tInfo.time / 300;
         const changeDeg = (info.current.scrollViewDeg * (xy / info.current.circleWrapWH)) / v;
+        _duration = 1;
         deg = Math.round(startDeg - changeDeg);
       }
       // 处理转动的角度为：卡片的角度的倍数 (xy > 0 表示向上滑动)
@@ -204,6 +206,7 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
       } else {
         mathMethods = xy > 0 ? 'floor' : 'ceil';
       }
+      setDuration(_duration);
       const _deg = cardDeg.current * Math[mathMethods](deg / cardDeg.current);
       setRotateDeg(_deg);
     },
@@ -233,9 +236,10 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
     return {
       width: `${info.current.circleR * 2}px`,
       height: `${info.current.circleR * 2}px`,
+      transitionDuration: duration + 's',
       transform: `translate(calc(-50% + ${w}px), calc(-50% + ${h}px)) rotate(${rotateDeg}deg)`,
     };
-  }, [rotateDeg]);
+  }, [rotateDeg, duration]);
 
   return (
     <ScrollCircleCtx.Provider
