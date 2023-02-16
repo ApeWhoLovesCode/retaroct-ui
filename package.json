@@ -17,7 +17,10 @@
     "device": "cd taro-device && cnpm run dev:h5",
     "copyDevice": "node ./helper/copyDevice.js",
     "fileChange": "node ./helper/fileChange.js",
-    "webpack": "dumi webpack"
+    "webpack": "dumi webpack",
+    "iconfont": "node --loader ts-node/esm ./iconfont-cli/commands/help.ts",
+    "iconfont-init": "node --loader ts-node/esm ./iconfont-cli/commands/createJson.ts",
+    "iconfont-wechat": "node --experimental-json-modules --loader ts-node/esm ./iconfont-cli/commands/createIcon.ts"
   },
   "files": [
     "es"
@@ -47,18 +50,16 @@
   "devDependencies": {
     "@tarojs/mini-runner": "3.4.11",
     "@tarojs/webpack-runner": "3.4.11",
-    "babel-preset-taro": "3.4.11",
-    "eslint-config-taro": "3.4.11",
     "@testing-library/jest-dom": "^5.15.1",
     "@testing-library/react": "^12.1.2",
     "@types/react": "^17.0.2",
     "@types/react-is": "^17.0.3",
-    "@types/jest": "^27.0.3",
     "@umijs/fabric": "^2.8.1",
     "@umijs/test": "^3.0.5",
     "concurrently": "^7.0.0",
     "dumi": "^1.1.0",
     "dumi-theme-mobile": "^1.1.21",
+    "eslint-config-taro": "3.4.11",
     "father-build": "^1.17.2",
     "gh-pages": "^3.0.0",
     "lint-staged": "^10.0.7",
