@@ -7,7 +7,7 @@ import minimist from 'minimist';
 export interface Config {
   symbol_url: string;
   save_dir: string;
-  use_rpx: boolean;
+  demo_dir: string;
   trim_icon_prefix: string;
   default_icon_size: number;
 }

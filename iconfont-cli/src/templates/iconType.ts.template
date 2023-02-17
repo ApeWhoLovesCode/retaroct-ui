@@ -1,0 +1,9 @@
+export type IconName = @iconName
+
+export enum IconEnum {
+  @iconEnum
+}
+
+export type IconObjType = {
+  [key in IconEnum]: string
+}

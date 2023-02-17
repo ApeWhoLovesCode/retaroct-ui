@@ -1,0 +1,51 @@
+.demo-icon-block {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  .iconWrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    height: 100px;
+    margin: 5px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s linear;
+    &:hover {
+      background-color: #4285fb;
+      .icon-logo {
+        .icon {
+          color: #fff;
+          font-size: 30px;
+        }
+      }
+      .icon-text {
+        color: #fff;
+      }
+    }
+    .icon-logo {
+      display: flex;
+      flex: 1;
+      align-items: flex-end;
+      padding-bottom: 8px;
+      .icon {
+        color: #666;
+        font-size: 24px;
+        line-height: 24px;
+        transition: all 0.3s linear;
+      }
+    }
+    .icon-text {
+      flex: 1;
+      width: 80px;
+      color: #333;
+      font-size: 12px;
+      line-height: 14px;
+      text-align: center;
+      word-break: break-all;
+      transition: color 0.3s linear;
+    }
+  }
+}

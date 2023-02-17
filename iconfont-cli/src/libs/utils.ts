@@ -1,15 +1,11 @@
 import { XmlData } from './fetchXml';
-import { replaceHexToRgb } from './replace';
 
 const ATTRIBUTE_FILL_MAP = ['path'];
 
-export const generateCase = (
-  data: XmlData['svg']['symbol'][number],
-  config?: {
-    hexToRgb: boolean;
-  },
-) => {
-  let template = `<svg viewBox='${data.$.viewBox}' xmlns='http://www.w3.org/2000/svg' width='{{svgSize}}px' height='{{svgSize}}px'>`;
+export const generateCase = (data: XmlData['svg']['symbol'][number]) => {
+  let template =
+    `<svg viewBox='${data.$.viewBox}' ` +
+    "xmlns='http://www.w3.org/2000/svg' width='${size}' height='${size}'>";
 
   for (const domName of Object.keys(data)) {
     if (domName === '$') {
@@ -21,10 +17,10 @@ export const generateCase = (
     };
 
     if (data[domName].$) {
-      template += `<${domName}${addAttribute(domName, data[domName], counter, config)} />`;
+      template += `<${domName}${addAttribute(domName, data[domName], counter)} />`;
     } else if (Array.isArray(data[domName])) {
       data[domName].forEach((sub) => {
-        template += `<${domName}${addAttribute(domName, sub, counter, config)} />`;
+        template += `<${domName}${addAttribute(domName, sub, counter)} />`;
       });
     }
   }
@@ -38,31 +34,17 @@ const addAttribute = (
   domName: string,
   sub: XmlData['svg']['symbol'][number]['path'][number],
   counter: { colorIndex: number },
-  config?: {
-    hexToRgb: boolean;
-  },
 ) => {
   let template = '';
 
   if (sub && sub.$) {
     if (ATTRIBUTE_FILL_MAP.includes(domName)) {
-      // Set default color same as in iconfont.cn
-      // And create placeholder to inject color by user's behavior
       sub.$.fill = sub.$.fill || '#333333';
     }
 
     for (const attributeName of Object.keys(sub.$)) {
       if (attributeName === 'fill') {
-        let color: string | undefined;
-        let keyword: string;
-        if (config?.hexToRgb) {
-          color = replaceHexToRgb(sub.$[attributeName]);
-          keyword = 'colors';
-        } else {
-          keyword = 'color';
-          color = sub.$[attributeName];
-        }
-        template += ` ${attributeName}='{{(isStr ? ${keyword} : ${keyword}[${counter.colorIndex}]) || '${color}'}}'`;
+        template += ` ${attributeName}` + "='${color}'";
         counter.colorIndex += 1;
       } else {
         template += ` ${attributeName}='${sub.$[attributeName]}'`;
