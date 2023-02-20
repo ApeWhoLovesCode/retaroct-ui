@@ -1,8 +1,9 @@
 import { View } from '@tarojs/components';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './index.less';
 import ScrollRotate from '../index';
 import React from 'react';
+import Taro from '@tarojs/taro';
 
 export default () => {
   const [list, setList] = useState<any[]>([]);
@@ -36,14 +37,55 @@ export default () => {
     setPageSize(pageSize);
   };
 
+  /** --- 需要点击卡片中的内容，触发回调时建议这样做 start ---  */
+  const touchInfo = useRef({
+    isLock: false,
+    touchTime: 0,
+  });
+  const onTouchStart = () => {
+    touchInfo.current.touchTime = Date.now();
+    touchInfo.current.isLock = false;
+  };
+  const onTouchMove = () => {
+    if (touchInfo.current.isLock) return;
+    if (Date.now() - touchInfo.current.touchTime > 150) {
+      touchInfo.current.isLock = true;
+    }
+  };
+  const onTitleClick = (title: string) => {
+    if (!touchInfo.current.isLock) {
+      console.log(`点击了${title}`);
+    }
+  };
+  /** --- end --- */
+
   return (
     <View className="demo-scroll-circle">
       <View className="top" style={{ height: '50px', background: '#458cfe' }}></View>
-      <ScrollRotate list={list} height={`calc(100vh - 100px)`} onPageChange={onPageChange}>
+      <ScrollRotate
+        list={list}
+        height={`calc(100vh - 100px)`}
+        onPageChange={onPageChange}
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+      >
         {items?.map((item, i) => (
-          <ScrollRotate.Item key={item._id} index={i}>
+          <ScrollRotate.Item
+            key={item._id}
+            index={i}
+            onClick={() => {
+              Taro.showToast({ title: `点击了卡片的回调`, icon: 'none', duration: 1000 });
+            }}
+          >
             <View className={`card`}>
-              <View className="cardTitle">{item.title}</View>
+              <View
+                className="cardTitle"
+                onClick={() => {
+                  onTitleClick(item.title);
+                }}
+              >
+                {item.title}
+              </View>
             </View>
           </ScrollRotate.Item>
         ))}

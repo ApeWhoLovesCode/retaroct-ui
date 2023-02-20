@@ -49,7 +49,13 @@ export type ScrollCircleProps = {
   leftArrow?: ReactNode;
   /** 右边分页箭头的内容区域 */
   rightArrow?: ReactNode;
-  /** 分页完成，触发回调改变页码 */
+  /** 发生触摸的回调 */
+  onTouchStart?: () => void;
+  /** 发生滚动的回调 */
+  onTouchMove?: () => void;
+  /** 触摸结束的回调 */
+  onTouchEnd?: () => void;
+  /** 分页触发回调改变页码 */
   onPageChange?: (page: { pageNum: number; pageSize: number }) => void;
 };
 
@@ -58,6 +64,7 @@ const ScrollCircleCtx = React.createContext({
   cardDeg: 0,
   isVertical: false,
   isClockwise: false,
+  isClick: false,
 });
 
 export const ScrollCircle: React.FC<ScrollCircleProps> = ({
@@ -72,6 +79,7 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
   rightArrow,
   children,
   onPageChange,
+  ...props
 }) => {
   const idRef = useRef(randomStr(classPrefix));
   /** 滚动盒子需要的信息 */
@@ -84,6 +92,7 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
   /** 触摸信息 */
   const touchInfo = useRef<CircleTouchType>({
     startDeg: 0,
+    isClick: false,
   });
   /** 卡片间的度数 */
   const cardDeg = useRef(0);
@@ -177,6 +186,7 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
     onTouchStart() {
       touchInfo.current.startDeg = rotateDeg;
       setDuration(0.1);
+      props.onTouchStart?.();
     },
     onTouchMove() {
       const xy = isVertical.current ? tInfo.deltaY : -tInfo.deltaX;
@@ -184,6 +194,7 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
         touchInfo.current.startDeg - info.current.scrollViewDeg * (xy / info.current.circleWrapWH),
       );
       setRotateDeg(deg);
+      props.onTouchMove?.();
     },
     onTouchEnd() {
       const { startDeg } = touchInfo.current;
@@ -206,9 +217,12 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
       } else {
         mathMethods = xy > 0 ? 'floor' : 'ceil';
       }
+      // 触摸时间小于100 则视为是点击
+      touchInfo.current.isClick = tInfo.time < 150;
       setDuration(_duration);
       const _deg = cardDeg.current * Math[mathMethods](deg / cardDeg.current);
       setRotateDeg(_deg);
+      props.onTouchEnd?.();
     },
   });
 
@@ -248,6 +262,7 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
         cardDeg: cardDeg.current,
         isVertical: isVertical.current,
         isClockwise,
+        isClick: touchInfo.current.isClick,
       }}
     >
       <View
@@ -285,13 +300,15 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
   );
 };
 
-type ScrollRotateItemType = {
+export type ScrollRotateItemType = {
   /** 当前item的索引 */
   index: number;
+  /** 点击了卡片(触摸时间小于150ms) */
+  onClick?: (i: number) => void;
 };
 /** item */
-const ScrollRotateItem: React.FC<ScrollRotateItemType> = ({ index, children }) => {
-  const { circleR, cardDeg, isVertical, isClockwise } = useContext(ScrollCircleCtx);
+const ScrollRotateItem: React.FC<ScrollRotateItemType> = ({ index, onClick, children }) => {
+  const { circleR, cardDeg, isVertical, isClockwise, isClick } = useContext(ScrollCircleCtx);
 
   const cardStyle = useMemo(() => {
     const initDeg = isVertical ? 90 : 0;
@@ -301,7 +318,6 @@ const ScrollRotateItem: React.FC<ScrollRotateItemType> = ({ index, children }) =
     const top = circleR * (1 - Math.cos((deg * Math.PI) / 180));
     const left = circleR * (1 - n * Math.sin((deg * Math.PI) / 180));
     const rotate = initDeg - n * deg;
-    // console.log(top, left, rotate);
     return {
       top: `${top}px`,
       left: `${left}px`,
@@ -310,7 +326,13 @@ const ScrollRotateItem: React.FC<ScrollRotateItemType> = ({ index, children }) =
   }, [circleR, cardDeg, isVertical, isClockwise]);
 
   return (
-    <View className={`${classPrefix}-cardWrap`} style={cardStyle}>
+    <View
+      className={`${classPrefix}-cardWrap`}
+      style={cardStyle}
+      onClick={() => {
+        isClick && onClick?.(index);
+      }}
+    >
       {children}
     </View>
   );
@@ -332,4 +354,6 @@ type CircleInfoType = {
 type CircleTouchType = {
   /** 记录滚动触摸的旋转度数 */
   startDeg: number;
+  /** 当前是否是点击 */
+  isClick: boolean;
 };
