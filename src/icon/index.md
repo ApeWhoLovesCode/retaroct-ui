@@ -11,7 +11,7 @@ group:
 
 # 组件介绍
 
-`svg` 字体图标 <br>
+基于 `svg` 的 `iconfont` 字体图标 <br>
 
 ## 注意:
 

@@ -30,7 +30,7 @@ export default () => {
         {arr.map((name) => (
           <View key={name} className="iconWrap" onClick={() => copy(name)}>
             <View className="icon-logo">
-              <Icon name={name} size={20} className="icon" />
+              <Icon name={name} className="icon" />
             </View>
             <Text className="icon-text">{name}</Text>
           </View>

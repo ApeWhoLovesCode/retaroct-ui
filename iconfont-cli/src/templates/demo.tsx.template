@@ -7,7 +7,9 @@ import { IconName } from '../iconfont/iconType';
 import './index.less'
 
 export default () => {
-  const arr: IconName[] = @icon-names
+  const arr: IconName[] = [
+    @icon-names
+  ]
   return (
     <>
       <DemoBlock title="默认图标" className='demo-icon-block'>

@@ -30,14 +30,14 @@ export const generateWechatComponent = (data: XmlData, config: Config) => {
   });
 
   // 生成svg图标名称的类型
-  let iconName: string[] = [],
+  let iconNames: string[] = [],
     iconEnum: string[] = [];
   names.forEach((name) => {
-    iconName.push(`"${name}"`);
+    iconNames.push(`"${name}"`);
     iconEnum.push(`"${name}" = "${name}"`);
   }, [] as string[]);
   const iconType = getTemplate('iconType.ts')
-    .replace('@iconName', iconName.join(' | '))
+    .replace('@iconName', iconNames.join(' | '))
     .replace('@iconEnum', iconEnum.join(',\n  '));
   fs.writeFileSync(path.join(saveDir, 'iconType.ts'), iconType);
 
@@ -52,13 +52,12 @@ export const generateWechatComponent = (data: XmlData, config: Config) => {
   );
 
   // 生成demo文件
-  // let demoIcon = getTemplate('demoIcon')
   fs.writeFileSync(
     path.join(path.resolve(config.demo_dir), 'index.less'),
     getTemplate('demo.less'),
   );
   let demo = getTemplate('demo.tsx');
-  demo = demo.replace('@icon-names', JSON.stringify(names));
+  demo = demo.replace('@icon-names', iconNames.join(',\n    '));
   fs.writeFileSync(path.join(path.resolve(config.demo_dir), 'index.tsx'), demo);
 
   console.log(

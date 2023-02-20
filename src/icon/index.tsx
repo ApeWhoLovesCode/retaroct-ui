@@ -28,12 +28,14 @@ const Icon = (comProps: IconProps) => {
 
   return withNativeProps(
     ret,
+    // h5
     Taro.getEnv() === Taro.ENV_TYPE.WEB ? (
       <View
         className={classPrefix}
         dangerouslySetInnerHTML={{ __html: decodeURIComponent(getIconObj()[name]) }}
       />
     ) : (
+      // 小程序
       <View
         className={classPrefix}
         style={`background-image: url("data:image/svg+xml, ${
