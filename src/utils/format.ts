@@ -45,28 +45,36 @@ export function dateFormatEnglish(date?: Date | number) {
 }
 
 /** 格式化剩余时间 */
-export function formatRemainTime(time?: number) {
+export function formatRemainTime(time?: number, format = 'D天HH时mm分ss秒') {
   // 当初始化时间为 undefined 时返回
   if (time === void 0) return '0';
-  const addZero = (n: number) => (n >= 10 ? n : '0' + n);
-  const timeArr: { s: string; t: number }[] = [
-    { s: '天', t: 86400 },
-    { s: '时', t: 3600 },
-    { s: '分', t: 60 },
-    { s: '秒', t: 1 },
-  ];
-  time = Math.ceil(time / 1000);
-  let res = '';
-  for (let i = 0; i < timeArr.length - 1; i++) {
-    const item = timeArr[i];
-    if (time >= item.t) {
-      const tartget = ~~(time / item.t);
-      res += (!i ? tartget : addZero(tartget)) + item.s;
-      time %= item.t;
+  const opt = {
+    D: 86400,
+    H: 3600,
+    m: 60,
+    s: 1,
+  };
+  let _time = Math.ceil(time / 1000);
+  const arr = Object.keys(opt);
+  arr.forEach((k, i) => {
+    let time = '';
+    if (_time >= opt[k]) {
+      time = String(~~(_time / opt[k]));
+      _time %= opt[k];
     }
-  }
-  res += addZero(~~time) + timeArr.at(-1)!.s;
-  return res;
+    if (!time && i < arr.length - 1) {
+      format = format.slice(format.indexOf(arr[i + 1]));
+    } else {
+      const ret = new RegExp(`${k}+`).exec(format);
+      if (ret) {
+        format = format.replace(
+          ret[0],
+          ret[0].length === 1 ? time : time.padStart(ret[0].length, '0'),
+        );
+      }
+    }
+  });
+  return format;
 }
 
 /**

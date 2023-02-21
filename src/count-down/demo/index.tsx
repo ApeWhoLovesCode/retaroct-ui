@@ -27,7 +27,7 @@ export default () => {
           value={curTime}
           total={10_000}
           onChange={(v) => {
-            if (v <= 0) Taro.showToast({ title: '到时间了', icon: 'none' });
+            if (v <= 0) Taro.showToast({ title: '10秒倒计时结束', icon: 'none' });
           }}
         />
       </DemoBlock>
@@ -36,6 +36,9 @@ export default () => {
       </DemoBlock>
       <DemoBlock title="倒计时3天" padding={'0 10px'}>
         <CountDown value={curTime} total={3 * 86400_000} />
+      </DemoBlock>
+      <DemoBlock title="不同格式化" padding={'0 10px'}>
+        <CountDown value={curTime} total={3 * 86400_000} format="D天HH:mm:ss" />
       </DemoBlock>
       <DemoBlock title="2秒后进行五分钟倒计时" padding={'0 10px'}>
         <CountDown value={createTime} total={50 * 60_000} />

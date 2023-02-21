@@ -13,10 +13,16 @@ type PropsType = {
    * @default 40分钟
    */
   total?: number;
+  /**
+   * 字符串格式化
+   * 天:D; 时:H; 分:m; 秒:s; 两个重复就是用0来补齐两位
+   * @default D天HH时mm分ss秒
+   */
+  format?: string;
   onChange?: (val: number) => void;
 };
 
-export default ({ value, total = 2400_000, onChange }: PropsType) => {
+export default ({ value, total = 2400_000, format = 'D天HH时mm分ss秒', onChange }: PropsType) => {
   // 待付款倒计时 待处理-倒计时时间为0退出当前页
   const [countDownNum, setCountDown] = useCountDown();
   useEffect(() => {
@@ -29,5 +35,5 @@ export default ({ value, total = 2400_000, onChange }: PropsType) => {
       onChange?.(countDownNum);
     }
   }, [countDownNum]);
-  return <Text className="retaroct-count-down">{formatRemainTime(countDownNum)}</Text>;
+  return <Text className="retaroct-count-down">{formatRemainTime(countDownNum, format)}</Text>;
 };
