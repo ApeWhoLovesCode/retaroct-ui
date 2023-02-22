@@ -1,7 +1,7 @@
 {
   "private": false,
   "name": "retaroct-ui",
-  "author": "linhuanheng",
+  "author": "林桓恒 <970519495@qq.com>",
   "version": "1.0.5",
   "scripts": {
     "start": "concurrently \"npm run dumiDev\" \"npm run copyDevice\" \"npm run device\" \"npm run fileChange\"",
@@ -17,10 +17,7 @@
     "device": "cd taro-device && cnpm run dev:h5",
     "copyDevice": "node ./helper/copyDevice.js",
     "fileChange": "node ./helper/fileChange.js",
-    "webpack": "dumi webpack",
-    "iconfont": "node --loader ts-node/esm ./iconfont-cli/commands/help.ts",
-    "iconfont-init": "node --loader ts-node/esm ./iconfont-cli/commands/createJson.ts",
-    "iconfont-wechat": "node --experimental-json-modules --loader ts-node/esm ./iconfont-cli/commands/createIcon.ts"
+    "webpack": "dumi webpack"
   },
   "files": [
     "es"
