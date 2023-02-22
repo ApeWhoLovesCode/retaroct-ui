@@ -44,10 +44,21 @@ export function dateFormatEnglish(date?: Date | number) {
   return `${arr[1]} ${arr[2]}, ${arr[0]}`;
 }
 
+/** 加0 */
+export const addZero = (v: number) => (v >= 10 ? '' : '0') + v;
+
 /** 格式化剩余时间 */
 export function formatRemainTime(time?: number, format = 'D天HH时mm分ss秒') {
   // 当初始化时间为 undefined 时返回
   if (time === void 0) return '0';
+  // 处理 中括号[] 中的替换文本
+  let _format = format;
+  let keyObj = format.match(/\[(.+?)\]/g)?.reduce((pre, cur, i) => {
+    const key = `$${i + 1}$`;
+    pre[key] = cur.match(/\[(.*)\]/)?.[1] ?? cur;
+    _format = _format.replace(cur, key);
+    return pre;
+  }, {});
   const opt = {
     D: 86400,
     H: 3600,
@@ -63,18 +74,22 @@ export function formatRemainTime(time?: number, format = 'D天HH时mm分ss秒') 
       _time %= opt[k];
     }
     if (!time && i < arr.length - 1) {
-      format = format.slice(format.indexOf(arr[i + 1]));
+      // 删除为0的时间
+      _format = _format.slice(_format.indexOf(arr[i + 1]));
     } else {
-      const ret = new RegExp(`${k}+`).exec(format);
+      const ret = new RegExp(`${k}+`).exec(_format);
       if (ret) {
-        format = format.replace(
+        _format = _format.replace(
           ret[0],
           ret[0].length === 1 ? time : time.padStart(ret[0].length, '0'),
         );
       }
     }
   });
-  return format;
+  for (let k in keyObj) {
+    _format = _format.replace(k, keyObj[k]);
+  }
+  return _format;
 }
 
 /**

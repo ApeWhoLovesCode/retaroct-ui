@@ -40,6 +40,9 @@ export default () => {
       <DemoBlock title="不同格式化" padding={'0 10px'}>
         <CountDown value={curTime} total={3 * 86400_000} format="D天HH:mm:ss" />
       </DemoBlock>
+      <DemoBlock title="格式化-D[day]HH[hour]mm[min]ss秒" padding={'0 10px'}>
+        <CountDown value={curTime} total={1.1 * 86400_000} format="D[day]HH[hour]mm[min]ss秒" />
+      </DemoBlock>
       <DemoBlock title="2秒后进行五分钟倒计时" padding={'0 10px'}>
         <CountDown value={createTime} total={50 * 60_000} />
       </DemoBlock>
