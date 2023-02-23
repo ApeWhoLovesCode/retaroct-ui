@@ -1,0 +1,24 @@
+@class-prefix: ~'com-pull-to-refresh';
+
+.@{class-prefix} {
+  // overflow: hidden;
+  overflow-y: scroll;
+  user-select: none;
+  &-scrollView {
+    position: relative;
+    height: 100%;
+  }
+  &-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    overflow: hidden;
+    color: #ccc;
+    font-size: 14px;
+    transform: translateY(-100%);
+  }
+}
