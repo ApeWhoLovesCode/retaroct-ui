@@ -49,17 +49,15 @@ export default () => {
 
   return (
     <View className="demo-pull-to-refresh">
-      <Tabs
-        activeIndex={activeIndex}
-        style={{ height: '60px' }}
-        onChange={(i) => setActiveIndex(i)}
-      >
-        <Tabs.Tab title="基础用法" key="1" />
-        <Tabs.Tab title="文案修改" key="2" />
-        <Tabs.Tab title="自定义内容" key="3" />
-      </Tabs>
+      <View className="tabsWrap" style={{ height: '50px' }}>
+        <Tabs activeIndex={activeIndex} onChange={(i) => setActiveIndex(i)}>
+          <Tabs.Tab title="基础用法" key="1" />
+          <Tabs.Tab title="文案修改" key="2" />
+          <Tabs.Tab title="自定义内容" key="3" />
+        </Tabs>
+      </View>
       {activeIndex === 0 ? (
-        <PullToRefresh onRefresh={() => onRefresh()} style={{ height: 'calc(100vh - 60px)' }}>
+        <PullToRefresh onRefresh={() => onRefresh()} style={{ height: 'calc(100vh - 50px)' }}>
           {renderContent}
         </PullToRefresh>
       ) : activeIndex === 1 ? (
@@ -69,7 +67,7 @@ export default () => {
           completeText="恭喜你，刷新成功了"
           loadingType="circular"
           onRefresh={() => onRefresh()}
-          style={{ height: 'calc(100vh - 60px)' }}
+          style={{ height: 'calc(100vh - 50px)' }}
         >
           {renderContent}
         </PullToRefresh>
@@ -94,7 +92,7 @@ export default () => {
             }
           }}
           onRefresh={() => onRefresh()}
-          style={{ height: 'calc(100vh - 60px)' }}
+          style={{ height: 'calc(100vh - 50px)' }}
         >
           {renderContent}
         </PullToRefresh>

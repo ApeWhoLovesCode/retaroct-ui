@@ -110,7 +110,6 @@ const Tabs = forwardRef<TabsInstance, TabsProps>(
     }));
 
     useEffect(() => {
-      if (!list?.length) return;
       const init = () => {
         Promise.all([
           getEleInfo(`.${idRef.current}`),
@@ -185,25 +184,20 @@ const Tabs = forwardRef<TabsInstance, TabsProps>(
               className={`${classPrefix}-right-placeholder ${classNames(ret.placeholderBoxClass)}`}
             ></View>
             {/* 底部选中的横线样式 */}
-            {!!list?.length && (
+            {
               <View
                 className={`
-              ${classPrefix}-line 
-              ${isAnimate ? classPrefix + '-line-animate' : ''}
-              ${isLineShow ? `${classPrefix}-line-show` : `${classPrefix}-line-hide`}
-            `}
+                  ${classPrefix}-line 
+                  ${isAnimate ? classPrefix + '-line-animate' : ''}
+                  ${isLineShow ? `${classPrefix}-line-show` : `${classPrefix}-line-hide`}
+                `}
                 style={{
                   transform: `translateX(calc(${tabsRef.current.tabList[curI]?.left}px - 50%))`,
                 }}
               >
-                {activeLine ?? (
-                  <Image
-                    className={`${classPrefix}-line-icon`}
-                    src={require('./assets/tab-active.png')}
-                  ></Image>
-                )}
+                {activeLine ?? <View className={`${classPrefix}-line-line`}></View>}
               </View>
-            )}
+            }
           </View>
         </ScrollView>
       </View>,
