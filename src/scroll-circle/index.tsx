@@ -6,7 +6,7 @@ import { getLineAngle } from '../utils/handleCircle';
 import { attachPropertiesToComponent } from '../utils/attach-properties-to-component';
 import Taro, { nextTick } from '@tarojs/taro';
 import { randomStr } from '../utils/random';
-import { classBem, getScreenInfo, screenH, screenW } from '../utils/handleDom';
+import { classBem, getScreenInfo, isMobile, screenH, screenW } from '../utils/handleDom';
 import useTouchEvent from '../use-touch-event';
 import useDebounce from '../use-debounce';
 
@@ -108,7 +108,7 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
   });
   const [duration, setDuration] = useState(0.6);
 
-  const init = async (isInit = false) => {
+  const init = async () => {
     getScreenInfo();
     isVertical.current = screenH > screenW;
     let cWrap = { width: 0, height: 0 };
@@ -167,9 +167,10 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
     init();
   }, 300);
   useEffect(() => {
-    if (window) window.addEventListener('resize', resizeFn);
+    const isPc = !isMobile();
+    if (isPc) window.addEventListener('resize', resizeFn);
     return () => {
-      if (window) window.removeEventListener('resize', resizeFn);
+      if (isPc) window.removeEventListener('resize', resizeFn);
     };
   }, []);
 
@@ -177,7 +178,7 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
     /** 获取card的信息 */
     if (list?.length) {
       nextTick(() => {
-        init(true);
+        init();
       });
     }
   }, [list, cardAddDeg]);
