@@ -1,36 +1,46 @@
 export type IconName =
-  | 'xuanxiangka_fuzhi'
-  | 'shangchuan'
-  | 'gold'
-  | 'slash'
-  | 'disablecase'
-  | 'remen1'
-  | 'mn_shengyinwu_fill'
-  | 'mn_shengyin_fill'
-  | 'jianshen-daduzi-pijiudu'
-  | '24gf-pause2'
-  | 'xuanxiang'
-  | 'gift'
+  | 'add'
+  | 'add-circle'
+  | 'arrow-down'
   | 'ashbin'
-  | 'kaishi1'
-  | 'jinbi1';
+  | 'arrow-right'
+  | 'browse'
+  | 'bottom'
+  | 'back'
+  | 'bad'
+  | 'camera'
+  | 'chart-bar'
+  | 'attachment'
+  | 'code'
+  | 'close'
+  | 'check-item'
+  | 'comment'
+  | 'copy'
+  | 'search'
+  | 'setting'
+  | 'user';
 
 export enum IconEnum {
-  'xuanxiangka_fuzhi' = 'xuanxiangka_fuzhi',
-  'shangchuan' = 'shangchuan',
-  'gold' = 'gold',
-  'slash' = 'slash',
-  'disablecase' = 'disablecase',
-  'remen1' = 'remen1',
-  'mn_shengyinwu_fill' = 'mn_shengyinwu_fill',
-  'mn_shengyin_fill' = 'mn_shengyin_fill',
-  'jianshen-daduzi-pijiudu' = 'jianshen-daduzi-pijiudu',
-  '24gf-pause2' = '24gf-pause2',
-  'xuanxiang' = 'xuanxiang',
-  'gift' = 'gift',
+  'add' = 'add',
+  'add-circle' = 'add-circle',
+  'arrow-down' = 'arrow-down',
   'ashbin' = 'ashbin',
-  'kaishi1' = 'kaishi1',
-  'jinbi1' = 'jinbi1',
+  'arrow-right' = 'arrow-right',
+  'browse' = 'browse',
+  'bottom' = 'bottom',
+  'back' = 'back',
+  'bad' = 'bad',
+  'camera' = 'camera',
+  'chart-bar' = 'chart-bar',
+  'attachment' = 'attachment',
+  'code' = 'code',
+  'close' = 'close',
+  'check-item' = 'check-item',
+  'comment' = 'comment',
+  'copy' = 'copy',
+  'search' = 'search',
+  'setting' = 'setting',
+  'user' = 'user',
 }
 
 export type IconObjType = {
