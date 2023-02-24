@@ -10,7 +10,7 @@ import { randomStr } from '../utils/random';
 import React from 'react';
 import { PullStatus, PullToRefreshProps } from './type';
 
-const classPrefix = `com-pull-to-refresh`;
+const classPrefix = `retaroct-pull-to-refresh`;
 
 const defaultProps = {
   headHeight: 60,
@@ -21,9 +21,10 @@ const defaultProps = {
   loadingType: 'three-point' as LoadingType,
   completeText: '刷新成功',
 };
+type RequireType = keyof typeof defaultProps;
 
 const PullToRefresh: React.FC<PullToRefreshProps> = (comProps) => {
-  const props = useMergeProps(comProps, defaultProps);
+  const props = useMergeProps<PullToRefreshProps, RequireType>(comProps, defaultProps);
   const { loadingType, headHeight, pullDistance, animationDuration, ...ret } = props;
 
   const idRef = useRef(randomStr(`${classPrefix}-header`));

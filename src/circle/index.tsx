@@ -1,5 +1,5 @@
 import { View, Canvas } from '@tarojs/components';
-import Taro, { CanvasContext, createCanvasContext, createSelectorQuery } from '@tarojs/taro';
+import Taro, { CanvasContext } from '@tarojs/taro';
 import { useState, useEffect, ReactNode, useRef } from 'react';
 import './index.less';
 import { NativeProps, withNativeProps } from '../utils/native-props';
@@ -64,17 +64,14 @@ const defaultProps = {
   speed: 100,
   color: colorVar.blue,
   layerColor: colorVar.gray1,
-  lineCap: 'round',
+  lineCap: 'round' as keyof CanvasContext.LineCap,
   strokeWidth: 6,
   clockwise: true,
 };
 type RequireType = keyof typeof defaultProps;
-type DefaultPropsType = Omit<typeof defaultProps, 'lineCap'> & {
-  lineCap?: keyof CanvasContext.LineCap;
-};
 
 const Circle = (comProps: CircleProps) => {
-  const props = useMergeProps<CircleProps, RequireType>(comProps, defaultProps as DefaultPropsType);
+  const props = useMergeProps<CircleProps, RequireType>(comProps, defaultProps);
   const {
     value,
     size,

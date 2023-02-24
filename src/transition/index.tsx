@@ -5,7 +5,7 @@ import { excludeClass, NativeProps, withNativeProps } from '../utils/native-prop
 import useMergeProps from '../use-merge-props';
 import useTransition, { TransitionType } from '../use-transition';
 
-const classPrefix = `com-transition`;
+const classPrefix = `retaroct-transition`;
 
 export type TransitionProps = {
   children?: ReactNode;

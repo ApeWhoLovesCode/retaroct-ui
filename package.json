@@ -2,7 +2,7 @@
   "private": false,
   "name": "retaroct-ui",
   "author": "林桓恒 <970519495@qq.com>",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "scripts": {
     "start": "concurrently \"npm run dumiDev\" \"npm run copyDevice\" \"npm run device\" \"npm run fileChange\"",
     "dumiDev": "PORT=9696 dumi dev",

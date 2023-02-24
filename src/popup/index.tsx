@@ -155,19 +155,16 @@ const PopupInner = (props: PopupProps & { setIsShow?: (v: boolean) => void }) =>
 
 const defaultProps = {
   duration: 300,
-  position: 'center',
+  position: 'center' as PopupPosition,
   overlay: true,
   closeOnClickOverlay: true,
   safeAreaInsetBottom: true,
   lockScroll: true,
 };
 type RequireType = keyof typeof defaultProps;
-type DefaultPropsType = Omit<typeof defaultProps, 'position'> & {
-  position?: PopupPosition;
-};
 
 const Popup = (comProps: PopupProps) => {
-  const props = useMergeProps<PopupProps, RequireType>(comProps, defaultProps as DefaultPropsType);
+  const props = useMergeProps<PopupProps, RequireType>(comProps, defaultProps);
   const { show, zIndex, overlay, lockScroll, duration, overlayStyle } = props;
   const [isShow, setIsShow] = useState(false);
 

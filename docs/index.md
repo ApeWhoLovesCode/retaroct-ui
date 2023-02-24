@@ -1,7 +1,7 @@
 ---
 hero:
   title: retaroct-ui
-  desc: retaroct site example
+  desc: npm i retaroct-ui
   actions:
     - text: Getting Started
       link: /components
@@ -18,4 +18,10 @@ features:
 footer: Open-source MIT Licensed | Copyright © 2020<br />Powered by [dumi](https://d.umijs.org)
 ---
 
-## Hello retaroct!
+## Hello retaroct-ui!
+
+#### 使用
+
+```
+npm i retaroct-ui
+```

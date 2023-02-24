@@ -1,6 +1,6 @@
 import { View, Button } from '@tarojs/components';
 import Transition from '../index';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import './index.less';
 const animations = [
   'fade',
@@ -16,10 +16,14 @@ const animations = [
 
 export default () => {
   const [show, setShow] = useState('');
+  const timer = useRef<NodeJS.Timer>();
+
   const onShowAction = (s: string) => {
+    clearTimeout(timer.current);
     setShow(s);
-    setTimeout(() => {
+    timer.current = setTimeout(() => {
       setShow('');
+      clearTimeout(timer.current);
     }, 1000);
   };
 

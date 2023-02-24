@@ -15,16 +15,12 @@ export type LoadingProps = {
 export type LoadingType = 'circular' | 'three-point' | 'rotate-xz';
 
 const defaultProps = {
-  type: 'circular',
+  type: 'circular' as LoadingType,
 };
 type RequireType = keyof typeof defaultProps;
-type DefaultPropsType = Omit<LoadingProps, 'type'> & { type: LoadingType };
 
 const Loading = (comProps: LoadingProps) => {
-  const props = useMergeProps<LoadingProps, RequireType>(
-    comProps,
-    defaultProps as DefaultPropsType,
-  );
+  const props = useMergeProps<LoadingProps, RequireType>(comProps, defaultProps);
   const { size, color, type, ...ret } = props;
 
   return withNativeProps(

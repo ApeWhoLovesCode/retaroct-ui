@@ -6,6 +6,12 @@
 
 `react` , `hooks` , `ts` , `taro`
 
+## 使用组件库
+
+```
+npm i retaroct-ui
+```
+
 ## Getting Started
 
 安装依赖(Install dependencies),
