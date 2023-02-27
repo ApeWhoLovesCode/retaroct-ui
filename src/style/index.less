@@ -10,11 +10,6 @@
 @lightBlue: #b1cdfd;
 @blue: #4285fb;
 
-.theme(@property, @imp) {
-  @{property}: e(replace(@imp, '(-?)@([^() ]+)', '$1@{$2}', 'ig'));
-  @{property}: e(replace(@imp, '(-?)@([^() ]+)', 'var(--$2, $1@{$2})', 'ig'));
-}
-
 @prefix: ~'retaroct';
 .@{prefix} {
   &-safe-bottom {

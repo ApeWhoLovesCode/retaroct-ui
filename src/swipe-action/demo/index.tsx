@@ -1,18 +1,18 @@
 import { View } from '@tarojs/components';
-import SwipeAction, { Action } from '../index-demo';
+import SwipeAction, { SwipeActionType } from '..';
 import React from 'react';
 import './index.less';
 import DemoBlock from '../../demo-block';
 
 export default () => {
-  const leftActions: Action[] = [{ key: 'collection', text: '收藏', color: 'green' }];
-  const rightActions: Action[] = [
+  const leftActions: SwipeActionType[] = [{ key: 'collection', text: '收藏', color: 'green' }];
+  const rightActions: SwipeActionType[] = [
     { key: 'like', text: '点赞', color: 'red' },
     { key: 'coin', text: '投币', color: 'green' },
     { key: 'collection', text: '收藏', color: 'blue' },
   ];
   const customText = <View className="customText">自定义的内容</View>;
-  const customList: Action[] = [{ key: 'custom', text: customText }];
+  const customList: SwipeActionType[] = [{ key: 'custom', text: customText }];
 
   return (
     <View className="demo-swipe-action">

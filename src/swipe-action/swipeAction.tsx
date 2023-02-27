@@ -1,20 +1,19 @@
-import { View, ITouchEvent } from '@tarojs/components';
+import { View } from '@tarojs/components';
 import React, {
   useState,
   useEffect,
   forwardRef,
-  ReactNode,
   useRef,
   useImperativeHandle,
   useCallback,
 } from 'react';
-import './index.less';
-import { NativeProps, withNativeProps } from '../utils/native-props';
+import { withNativeProps } from '../utils/native-props';
 import getEleInfo from '../utils/getEleInfo';
 import useTouch from '../use-touch';
 import { nextTick } from '@tarojs/taro';
 import { randomStr } from '../utils/random';
 import { isMobile, MouseTouchEvent } from '../utils/handleDom';
+import { SwipeActionProps, SwipeActionRef, SwipeActionType } from './type';
 
 const classPrefix = 'retaroct-slide-action';
 /** 用来控制关闭其他的滑块 */
@@ -24,39 +23,6 @@ const controller: {
     close: () => void;
   };
 } = {};
-
-export type SwipeActionRef = {
-  /** 让滑动条归位 */
-  close: () => void;
-  /** 滑动出操作按钮，side 参数默认为 right */
-  show: (side?: 'left' | 'right') => void;
-};
-
-export type SwipeActionProps = {
-  /** 左侧的操作按钮列表 */
-  leftActions?: Action[];
-  /** 右侧的操作按钮列表 */
-  rightActions?: Action[];
-  /** 是否在点击操作按钮时自动归位 */
-  closeOnAction?: boolean;
-  /**
-   * 是否在操作其他滑块时自动归位
-   * @default true
-   */
-  closeOnTouchOutside?: boolean;
-  /** 点击操作按钮时触发 */
-  onAction?: (action: Action, e: ITouchEvent) => void;
-  /** 按钮完全出现时触发 */
-  onActionsReveal?: (side: 'left' | 'right') => void;
-  children: ReactNode;
-} & NativeProps<'--background'>;
-
-export type Action = {
-  key: string;
-  text: ReactNode;
-  color?: string;
-  onClick?: (e: ITouchEvent) => void;
-};
 
 type TouchType = {
   /** 触摸锁定状态 */
@@ -69,7 +35,7 @@ type AreaRefType = {
   normal?: number;
 };
 
-const rightActionsArr: Action[] = [{ key: 'delete', text: '删除', color: '#ee4b46' }];
+const rightActionsArr: SwipeActionType[] = [{ key: 'delete', text: '删除', color: '#ee4b46' }];
 
 const SlideAction = forwardRef<SwipeActionRef, SwipeActionProps>(
   (
@@ -202,7 +168,7 @@ const SlideAction = forwardRef<SwipeActionRef, SwipeActionProps>(
       });
     }, [leftActions, rightActions]);
 
-    const renderButton = (btn: Action) => {
+    const renderButton = (btn: SwipeActionType) => {
       return (
         <View
           key={btn.key}

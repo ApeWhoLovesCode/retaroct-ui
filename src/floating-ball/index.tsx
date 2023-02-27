@@ -1,5 +1,6 @@
-import './floating-ball.less'
-import FloatingBall from './floating-ball'
-export type { FloatingBallProps } from './floating-ball'
+import './floating-ball.less';
+import FloatingBall from './floating-ball';
 
-export default FloatingBall
+export { FloatingBall };
+export default FloatingBall;
+export type { FloatingBallProps } from './floating-ball';

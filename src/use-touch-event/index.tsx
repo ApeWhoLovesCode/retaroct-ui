@@ -1,12 +1,7 @@
 import { isMobile, MouseTouchEvent } from '../utils/handleDom';
-import useTouch, { TouchState } from '../use-touch';
+import useTouch from '../use-touch';
 import useLatest from '../use-latest';
-
-export type UseTouchesOptions = {
-  onTouchStart?: (e: MouseTouchEvent) => void;
-  onTouchMove?: (e: MouseTouchEvent, touchState?: TouchState) => void;
-  onTouchEnd?: (e: MouseTouchEvent) => void;
-};
+import { UseTouchesOptions } from '../use-touches';
 
 /** 绑定手指触摸或鼠标事件 */
 export default function useTouchEvent(options: UseTouchesOptions = {}) {

@@ -1,50 +1,16 @@
 import { View } from '@tarojs/components';
 import React, { useState, useEffect, useRef } from 'react';
-import './index.less';
-import { NativeProps, withNativeProps } from '../utils/native-props';
+import { withNativeProps } from '../utils/native-props';
 import useMergeProps from '../use-merge-props';
 import { randomStr } from '../utils/random';
-import useTouches, { UseTouchesOptions } from '../use-touches';
+import useTouchEvent from '../use-touch-event';
 import { range } from '../utils/format';
 import getEleInfo from '../utils/getEleInfo';
 import { classBem, stylePxTransform } from '../utils/handleDom';
+import { SliderProps, ValueType } from './type';
+import { UseTouchesOptions } from '../use-touches';
 
 const classPrefix = `retaroct-slider`;
-
-type ValueType = number | number[];
-
-export type SliderProps = {
-  /** 是否有双滑块 需要保证value为数组 */
-  isTwo?: boolean;
-  /** 是否禁用 */
-  disabled?: boolean;
-  /** 激活的颜色 */
-  activeColor?: string;
-  /** 未激活的颜色 */
-  inactiveColor?: string;
-  /** 最大值 */
-  max?: number;
-  /** 最小值 */
-  min?: number;
-  /** 步长值 */
-  step?: number;
-  /** 当前的滑块值 */
-  value?: ValueType;
-  /** 滑块bar的高度 */
-  barHeight?: number | string;
-  /** 是否是垂直方向 */
-  vertical?: boolean;
-  /** 自定义的按钮样式 */
-  button?: React.ReactNode;
-  /** 是否有动画 */
-  isAnimation?: boolean;
-  /** 值改变时触发 */
-  onChange?: (v: ValueType) => void;
-  /** 拖拽开始触发 */
-  onDragStart?: (v: ValueType) => void;
-  /** 拖拽结束触发 */
-  onDragEnd?: (v: ValueType) => void;
-} & NativeProps;
 
 const defaultProps = {
   max: 100,
@@ -113,7 +79,9 @@ const Slider = (comProps: SliderProps) => {
       const { w, h } = sliderInfo.current;
       const _preVal = (preVal![i] ?? preVal) - min;
       let val = _range(
-        !vertical ? (_preVal / total) * w + info.deltaX : (_preVal / total) * h + info.deltaY,
+        !vertical
+          ? (_preVal / total) * w + (info?.deltaX ?? 0)
+          : (_preVal / total) * h + (info?.deltaY ?? 0),
       );
       let newVal: ValueType = val;
       if (typeof _value !== 'number') {
@@ -129,10 +97,8 @@ const Slider = (comProps: SliderProps) => {
       onDragEnd?.(_value);
     },
   });
-  const ref = useRef<HTMLDivElement>(null);
-  useTouches(ref, getOptions(0));
-  const ref2 = useRef<HTMLDivElement>(null);
-  useTouches(ref2, getOptions(1));
+  const { onTouchFn: onTouchFn_1 } = useTouchEvent(getOptions(0));
+  const { onTouchFn: onTouchFn_2 } = useTouchEvent(getOptions(1));
 
   useEffect(() => {
     setValue(value);
@@ -186,25 +152,25 @@ const Slider = (comProps: SliderProps) => {
         }}
       ></View>
       <View
-        ref={ref}
         className={`${classPrefix}-btn-wrap `}
         style={{
           transform: `translate(calc(${!vertical ? getBtnMove(_value[0]) : 0}px - 50%), calc(${
             vertical ? getBtnMove(_value[0]) : 0
           }px - 50%))`,
         }}
+        {...onTouchFn_1}
       >
         {button ?? <View className={`${classPrefix}-btn`}></View>}
       </View>
       {isTwo && (
         <View
-          ref={ref2}
           className={`${classPrefix}-btn-wrap`}
           style={{
             transform: `translate(calc(${!vertical ? getBtnMove(_value[1]) : 0}px - 50%), calc(${
               vertical ? getBtnMove(_value[1]) : 0
             }px - 50%))`,
           }}
+          {...onTouchFn_2}
         >
           {button ?? <View className={`${classPrefix}-btn`}></View>}
         </View>

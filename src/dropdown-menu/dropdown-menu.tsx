@@ -29,21 +29,15 @@ const menuController: {
 } = {};
 
 const defaultProps = {
-  direction: 'down',
+  direction: 'down' as 'down' | 'up',
   overlay: true,
   closeOnClickOutside: true,
   zIndex: 1000,
 };
 type RequireType = keyof typeof defaultProps;
-type DefaultProps = Omit<typeof defaultProps, 'direction'> & {
-  direction: 'down' | 'up';
-};
 
 const DropDownMenu = forwardRef<DropdownMenuInstance, DropdownMenuProps>((comProps, ref) => {
-  const props = useMergeProps<DropdownMenuProps, RequireType>(
-    comProps,
-    defaultProps as DefaultProps,
-  );
+  const props = useMergeProps<DropdownMenuProps, RequireType>(comProps, defaultProps);
   const { direction, overlay, closeOnClickOutside, children, ...ret } = props;
 
   const idRef = useRef(randomStr(classPrefix));
