@@ -4,12 +4,14 @@ import { Text } from '@tarojs/components';
 import { useEffect } from 'react';
 import React from 'react';
 import { CountDownProps } from './type';
+import { withNativeProps } from '../utils/native-props';
 
 export default ({
   value,
   total = 2400_000,
   format = 'D天HH时mm分ss秒',
   onChange,
+  ...ret
 }: CountDownProps) => {
   // 待付款倒计时 待处理-倒计时时间为0退出当前页
   const [countDownNum, setCountDown] = useCountDown();
@@ -23,5 +25,8 @@ export default ({
       onChange?.(countDownNum);
     }
   }, [countDownNum]);
-  return <Text className="retaroct-count-down">{formatRemainTime(countDownNum, format)}</Text>;
+  return withNativeProps(
+    ret,
+    <Text className="retaroct-count-down">{formatRemainTime(countDownNum, format)}</Text>,
+  );
 };

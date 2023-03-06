@@ -1,3 +1,5 @@
+import { NativeProps } from '../utils/native-props';
+
 export type CountDownProps = {
   /** 起始时间 如果不传就是现在的时间 */
   value?: number;
@@ -13,4 +15,4 @@ export type CountDownProps = {
    */
   format?: string;
   onChange?: (val: number) => void;
-};
+} & NativeProps;

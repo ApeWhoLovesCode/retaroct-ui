@@ -1,6 +1,6 @@
 import { View } from '@tarojs/components';
 import { useState, useEffect, FC, useRef, useCallback } from 'react';
-import { NativeProps, withNativeProps } from '../utils/native-props';
+import { withNativeProps } from '../utils/native-props';
 import getEleInfo from '../utils/getEleInfo';
 import { nextTick } from '@tarojs/taro';
 import React from 'react';
@@ -13,30 +13,9 @@ import {
   screenH,
   screenW,
 } from '../utils/handleDom';
+import { FloatingBallProps } from './type';
 
 const classPrefix = `retaroct-floating-ball`;
-
-/** 悬浮球 */
-export type FloatingBallProps = {
-  /**
-   * 可以进行拖动的方向，xy 表示自由移动
-   * @default xy
-   */
-  axis?: 'x' | 'y' | 'xy';
-  /** 自动磁吸到边界 */
-  magnetic?: 'x' | 'y';
-  /** 贴边时触发 isLeft: true 代表是左或上方向上贴边 */
-  onMagnetic?: (isLeft: boolean) => void;
-  /** 位置偏移时触发 */
-  onOffsetChange?: (offset: { x: number; y: number }) => void;
-  children?: React.ReactNode;
-} & NativeProps<
-  | '--initial-position-left'
-  | '--initial-position-right'
-  | '--initial-position-top'
-  | '--initial-position-bottom'
-  | '--z-index'
->;
 
 const FloatingBall: FC<FloatingBallProps> = ({ axis = 'xy', magnetic, ...props }) => {
   const idRef = useRef(randomStr(classPrefix));

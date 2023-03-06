@@ -3,4 +3,4 @@ import FloatingBall from './floating-ball';
 
 export { FloatingBall };
 export default FloatingBall;
-export type { FloatingBallProps } from './floating-ball';
+export type { FloatingBallProps } from './type';

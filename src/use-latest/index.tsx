@@ -8,3 +8,4 @@ function useLatest<T>(value: T) {
 }
 
 export default useLatest;
+export { useLatest };

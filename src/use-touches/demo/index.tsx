@@ -1,6 +1,6 @@
 import { View } from '@tarojs/components';
 import React, { useRef, useState } from 'react';
-import useTouchs from '..';
+import useTouches from '..';
 import './index.less';
 
 const Demo: React.FC = () => {
@@ -10,7 +10,7 @@ const Demo: React.FC = () => {
     y: 0,
   });
 
-  const { info } = useTouchs(ref, {
+  const { info } = useTouches(ref, {
     onTouchStart(e) {
       console.log('onTouchStart: ', e);
     },

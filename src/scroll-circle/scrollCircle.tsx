@@ -170,8 +170,8 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
       } else {
         mathMethods = xy > 0 ? 'floor' : 'ceil';
       }
-      // 触摸时间小于100 则视为是点击
-      touchInfo.current.isClick = tInfo.time < 150;
+      // 触摸距离小于10，并且触摸时间小于120ms才算点击
+      touchInfo.current.isClick = Math.abs(xy) < 10 && tInfo.time < 120;
       setDuration(_duration);
       const _deg = cardDeg.current * Math[mathMethods](deg / cardDeg.current);
       setRotateDeg(_deg);
