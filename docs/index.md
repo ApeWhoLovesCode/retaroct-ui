@@ -1,7 +1,7 @@
 ---
 hero:
   title: retaroct-ui
-  desc: npm i retaroct-ui
+  desc: 基于 taro 小程序封装的react组件库
   actions:
     - text: Getting Started
       link: /components
@@ -18,10 +18,12 @@ features:
 footer: Open-source MIT Licensed | Copyright © 2020<br />Powered by [dumi](https://d.umijs.org)
 ---
 
-## Hello retaroct-ui!
-
 #### 使用
 
 ```
 npm i retaroct-ui
 ```
+
+#### 相关技术
+
+`react` , `hooks` , `ts` , `taro`
