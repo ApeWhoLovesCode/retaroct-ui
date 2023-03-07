@@ -15,8 +15,10 @@
     "test:coverage": "umi-test --coverage",
     "prepublishOnly": "npm run build",
     "device": "cd taro-device && cnpm run dev:h5",
+    "deviceBuild": "cd taro-device && npm run build:h5",
     "copyDevice": "node ./helper/copyDevice.js",
     "fileChange": "node ./helper/fileChange.js",
+    "prodBuild": "concurrently \"npm run docs:build\" \"npm run copyDevice\" \"npm run deviceBuild\"",
     "webpack": "dumi webpack"
   },
   "files": [
