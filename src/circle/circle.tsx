@@ -54,8 +54,11 @@ const Circle = (comProps: CircleProps) => {
     curVal: 0,
     curColor: '',
     timer: undefined,
+    ratio: 1,
   });
   const [ready, setReady] = useState(false);
+
+  const ratioSize = size * canvasRef.current.ratio;
 
   /** 在canvas上绘画 */
   const drawCanvas = (
@@ -65,23 +68,24 @@ const Circle = (comProps: CircleProps) => {
     endAngle: number,
     fill?: string,
   ) => {
-    const position = size / 2;
-    const radius = position - strokeWidth / 2;
+    const position = ratioSize / 2;
+    const _strokeWidth = strokeWidth * canvasRef.current.ratio;
+    const radius = position - _strokeWidth / 2;
     context.strokeStyle = strokeStyle as string;
-    context.lineWidth = strokeWidth;
+    context.lineWidth = _strokeWidth;
     context.lineCap = lineCap;
     context.beginPath();
     context.arc(position, position, radius, beginAngle, endAngle, !clockwise);
     context.stroke();
     if (fill) {
-      context.setFillStyle(fill);
+      context.fillStyle = fill;
       context.fill();
     }
   };
 
   /** 画圆 */
   const drawCircle = (curVal: number) => {
-    canvasRef.current.ctx?.clearRect(0, 0, size, size);
+    canvasRef.current.ctx?.clearRect(0, 0, ratioSize, ratioSize);
     /** 绘画背景圆环 */
     drawCanvas(canvasRef.current.ctx!, layerColor, 0, PERIMETER, fill);
     const formatVal = range(curVal, 0, MAX);
@@ -102,7 +106,7 @@ const Circle = (comProps: CircleProps) => {
       try {
         const _color = color as Record<string, string>;
         if (process.env.TARO_ENV === 'weapp') {
-          const linearColor = canvasRef.current.ctx?.createLinearGradient(size, 0, 0, 0);
+          const linearColor = canvasRef.current.ctx?.createLinearGradient(ratioSize, 0, 0, 0);
           Object.keys(color)
             .sort((a, b) => parseFloat(a) - parseFloat(b))
             .map((key: any) => linearColor!.addColorStop(parseFloat(key) / 100, _color[key]));
@@ -191,9 +195,9 @@ const Circle = (comProps: CircleProps) => {
           setReady(true);
         });
       } else {
-        // const ctx = createCanvasContext(idRef.current);
         getNodeContext(`#${idRef.current}`).then((ctx) => {
           canvasRef.current.ctx = ctx;
+          canvasRef.current.ratio = window.devicePixelRatio;
           setReady(true);
         });
       }
@@ -217,11 +221,11 @@ const Circle = (comProps: CircleProps) => {
         className={`${classPrefix}-canvas`}
         // eslint-disable-next-line
         // @ts-ignore
-        width={size}
+        width={ratioSize}
         // @ts-ignore
-        height={size}
+        height={ratioSize}
         // 用于透传 WebComponents 上的属性到内部 H5 标签上 没有会导致圆出问题，变成椭圆
-        nativeProps={{ width: size, height: size }}
+        nativeProps={{ width: ratioSize, height: ratioSize }}
         style={{ width: size + 'px', height: size + 'px' }}
       ></Canvas>
       <View className={`${classPrefix}-text`}>{text ?? children}</View>
@@ -239,4 +243,6 @@ type CanvasRef = {
   /** 当前进度条的颜色 */
   curColor: string | Taro.CanvasGradient;
   timer?: number;
+  /** 分辨率比例 */
+  ratio: number;
 };
