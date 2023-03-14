@@ -110,16 +110,11 @@ const useTouch = () => {
     });
   };
 
-  const isVertical = () => state.current.direction === 'vertical';
-  const isHorizontal = () => state.current.direction === 'horizontal';
-
   return {
     info: state.current,
     move,
     start,
     reset,
-    isVertical,
-    isHorizontal,
   };
 };
 

@@ -1,19 +1,13 @@
 import { View } from '@tarojs/components';
-import { useState, useEffect, FC, useRef, useCallback } from 'react';
+import { useState, useEffect, FC, useRef } from 'react';
 import { withNativeProps } from '../utils/native-props';
 import getEleInfo from '../utils/getEleInfo';
 import { nextTick } from '@tarojs/taro';
 import React from 'react';
 import { randomStr } from '../utils/random';
-import {
-  getScreenInfo,
-  handleMouseOfTouch,
-  isMobile,
-  MouseTouchEvent,
-  screenH,
-  screenW,
-} from '../utils/handleDom';
+import { getScreenInfo, screenH, screenW } from '../utils/handleDom';
 import { FloatingBallProps } from './type';
+import useTouchEvent from '../use-touch-event';
 
 const classPrefix = `retaroct-floating-ball`;
 
@@ -33,38 +27,21 @@ const FloatingBall: FC<FloatingBallProps> = ({ axis = 'xy', magnetic, ...props }
   /** 动画时间 */
   const duration = useRef(0.1);
 
-  const onTouchStart = (e: MouseTouchEvent) => {
-    e.stopPropagation();
-    const _e = handleMouseOfTouch(e);
-    touchRef.current.startX = _e.clientX - info.x;
-    touchRef.current.startY = _e.clientY - info.y;
-    if (!isMobile()) {
-      document.addEventListener('mousemove', onTouchMove, true);
-      document.addEventListener('mouseup', onTouchEnd, true);
-    }
-    duration.current = 0.1;
-  };
-  const onTouchMove = useCallback(
-    (e: MouseTouchEvent) => {
-      e.stopPropagation();
-      const _e = handleMouseOfTouch(e);
-      const x = axis === 'y' ? 0 : _e.clientX - touchRef.current.startX;
-      const y = axis === 'x' ? 0 : _e.clientY - touchRef.current.startY;
+  const { info: _info, onTouchFn } = useTouchEvent({
+    onTouchStart: () => {
+      touchRef.current.startX = info.x;
+      touchRef.current.startY = info.y;
+      duration.current = 0.1;
+    },
+    onTouchMove: () => {
+      const x = axis === 'y' ? 0 : _info.deltaX + touchRef.current.startX;
+      const y = axis === 'x' ? 0 : _info.deltaY + touchRef.current.startY;
       setInfo({ x, y });
       props.onOffsetChange?.({ x, y });
     },
-    [axis],
-  );
-  const onTouchEnd = useCallback(
-    (e: MouseTouchEvent) => {
-      e.stopPropagation();
-      if (!isMobile()) {
-        document.removeEventListener('mousemove', onTouchMove, true);
-        document.removeEventListener('mouseup', onTouchEnd, true);
-      }
-      const _e = handleMouseOfTouch(e);
-      let x = axis === 'y' ? 0 : _e.clientX - touchRef.current.startX;
-      let y = axis === 'x' ? 0 : _e.clientY - touchRef.current.startY;
+    onTouchEnd: () => {
+      let x = axis === 'y' ? 0 : _info.deltaX + touchRef.current.startX;
+      let y = axis === 'x' ? 0 : _info.deltaY + touchRef.current.startY;
       const { w, h, l, r, t, b } = ball.current;
       if (magnetic === 'x') {
         const l_r = l < r ? l : r;
@@ -84,8 +61,7 @@ const FloatingBall: FC<FloatingBallProps> = ({ axis = 'xy', magnetic, ...props }
       duration.current = 0.3;
       setInfo({ x, y });
     },
-    [axis, magnetic, screenW, screenH],
-  );
+  });
 
   useEffect(() => {
     const init = async () => {
@@ -104,22 +80,6 @@ const FloatingBall: FC<FloatingBallProps> = ({ axis = 'xy', magnetic, ...props }
     });
   }, []);
 
-  const handleEvent = () => {
-    if (!isMobile()) {
-      return {
-        onMouseDown: onTouchStart,
-        onMouseUp: onTouchEnd,
-      };
-    } else {
-      return {
-        onTouchStart: onTouchStart,
-        onTouchMove: onTouchMove,
-        onTouchEnd: onTouchEnd,
-        onTouchCancel: onTouchEnd,
-      };
-    }
-  };
-
   return withNativeProps(
     props,
     <View className={`${classPrefix} ${idRef.current}`}>
@@ -130,7 +90,7 @@ const FloatingBall: FC<FloatingBallProps> = ({ axis = 'xy', magnetic, ...props }
           transitionDuration: duration.current + 's',
           transform: `translate(${info.x}px, ${info.y}px)`,
         }}
-        {...handleEvent()}
+        {...onTouchFn}
       >
         {props.children}
       </View>
