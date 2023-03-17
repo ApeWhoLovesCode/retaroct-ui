@@ -4,7 +4,7 @@ import getEleInfo from '../utils/getEleInfo';
 import { getLineAngle } from '../utils/handleCircle';
 import Taro, { nextTick } from '@tarojs/taro';
 import { randomStr } from '../utils/random';
-import { classBem, getScreenInfo, isMobile, screenH, screenW } from '../utils/handleDom';
+import { classBem, getScreenInfo, isMobile } from '../utils/handleDom';
 import useTouchEvent from '../use-touch-event';
 import useDebounce from '../use-debounce';
 import { CircleInfoType, CircleTouchType, ScrollCircleProps, ScrollRotateItemType } from './type';
@@ -59,10 +59,13 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
     pageSize: 10,
   });
   const [duration, setDuration] = useState(0.6);
+  const circleDiv = useRef({
+    w: 0,
+    h: 0,
+  });
 
   const init = async () => {
     getScreenInfo();
-    isVertical.current = screenH > screenW;
     let cWrap = { width: 0, height: 0 };
     let cInfo = { width: 0, height: 0 };
     if (Taro.getEnv() === Taro.ENV_TYPE.WEB) {
@@ -80,10 +83,13 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
       cWrap = res[0] as { width: number; height: number };
       cInfo = res[1] as { width: number; height: number };
     }
+    circleDiv.current.w = cWrap.width;
+    circleDiv.current.h = cWrap.height;
+    isVertical.current = cWrap.height > cWrap.width;
     info.current.circleWrapWH = cWrap?.[isVertical.current ? 'height' : 'width'] ?? 0;
     info.current.cardWH = cInfo?.[isVertical.current ? 'height' : 'width'] ?? 0;
     const cWH = cInfo?.[isVertical.current ? 'width' : 'height'] ?? 0;
-    info.current.circleR = Math.round(isVertical.current ? screenH : screenW);
+    info.current.circleR = Math.round(isVertical.current ? cWrap.height : cWrap.width);
     // 屏幕宽高度对应的圆的角度
     info.current.scrollViewDeg = getLineAngle(info.current.circleWrapWH, info.current.circleR);
     // 每张卡片所占用的角度
@@ -103,14 +109,14 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
     } else {
       cardDeg.current = _cardDeg;
     }
-    const text = isVertical.current ? '高' : '宽';
-    console.log(
-      `可滚动区域${text}度: ${info.current.circleWrapWH}px\n` +
-        `可滚动区域占的度数: ${info.current.scrollViewDeg}°\n` +
-        `卡片${text}度: ${info.current.cardWH}px\n` +
-        `圆的半径: ${info.current.circleR}px\n` +
-        `卡片间的角度: ${cardDeg.current}°`,
-    );
+    // const text = isVertical.current ? '高' : '宽';
+    // console.log(
+    //   `可滚动区域${text}度: ${info.current.circleWrapWH}px\n` +
+    //     `可滚动区域占的度数: ${info.current.scrollViewDeg}°\n` +
+    //     `卡片${text}度: ${info.current.cardWH}px\n` +
+    //     `圆的半径: ${info.current.circleR}px\n` +
+    //     `卡片间的角度: ${cardDeg.current}°`,
+    // );
     onPageChange?.({ pageNum, pageSize });
     setRotateDeg(cardDeg.current * initCartNum);
   };
@@ -195,9 +201,9 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
 
   const circleStyle = useMemo(() => {
     let w = 0,
-      h = screenH / 2;
+      h = info.current.circleR;
     if (isVertical.current) {
-      w = screenW / 2;
+      w = info.current.circleR;
       h = 0;
     }
     return {
@@ -221,8 +227,8 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
       <View
         className={`${classPrefix} ${idRef.current}`}
         style={{
-          width: isVertical.current ? `${info.current.circleR * 2}px` : width,
-          height: isVertical.current ? height : `${info.current.circleR * 2}px`,
+          width: width,
+          height: height,
         }}
       >
         <View className={`${classPrefix}-area`} style={circleStyle} {...onTouchFn}>
