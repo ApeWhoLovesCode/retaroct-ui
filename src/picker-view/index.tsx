@@ -1,6 +1,7 @@
 import PickerView from './picker-view';
-import './index.less';
+import './picker-view.less';
+import './picker-column.less';
 
 export { PickerView };
 export default PickerView;
-export type { PickerViewProps, PickerViewInstance } from './type';
+export type { PickerViewProps, PickerColumnProps } from './type';

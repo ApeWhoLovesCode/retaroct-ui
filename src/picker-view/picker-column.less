@@ -1,4 +1,17 @@
 @import '../style/index.less';
 @class-prefix: ~'retaroct-picker-column';
 .@{class-prefix} {
+  overflow: hidden;
+  font-size: 16px;
+  text-align: center;
+  &-item {
+    padding: 0 10px;
+    &-selected {
+      color: @black;
+      font-weight: bold;
+    }
+    &-disabled {
+      opacity: 0.6;
+    }
+  }
 }

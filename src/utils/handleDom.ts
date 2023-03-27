@@ -45,6 +45,15 @@ export const classBem = (classnames: string, obj?: { [key in string]?: boolean }
   return str;
 };
 
+/** 处理并合并类名 */
+export const classMergeBem = (classnames: string, arr?: string[]) => {
+  let str = classnames;
+  arr?.forEach((key) => {
+    str += ' ' + classnames + '-' + key;
+  });
+  return str;
+};
+
 /** 判断是移动端还是pc端 */
 export const isMobile = () => {
   // h5

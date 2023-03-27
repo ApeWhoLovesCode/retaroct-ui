@@ -1,40 +1,128 @@
 import { View, Text } from '@tarojs/components';
-import Taro from '@tarojs/taro';
-import React, { useState, useEffect, useMemo } from 'react';
-import './index.less';
-import { NativeProps, withNativeProps } from '../utils/native-props';
+import Taro, { nextTick } from '@tarojs/taro';
+import React, { useState, useEffect, useMemo, forwardRef, useImperativeHandle } from 'react';
+import { withNativeProps } from '../utils/native-props';
 import useMergeProps from '../use-merge-props';
 import useSetState from '../use-set-state';
+import useTouchEvent from '../use-touch-event';
+import { PickerColumnInstance, PickerColumnOption, PickerColumnProps } from './type';
+import { range } from '../utils/format';
+import { isObj } from '../utils/validate';
 
-const classPrefix = `retaroct-pickerColumn`;
+const DEFAULT_DURATION = 200;
 
-export type PickerColumnProps = {
-  defaultIndex?: number;
-  itemHeight: number;
-  visibleItemCount: string | number;
-} & NativeProps;
+const classPrefix = `retaroct-picker-column`;
 
-const defaultProps = {};
+const defaultProps = {
+  itemHeight: 48,
+  visibleItemCount: 5,
+};
 type RequireType = keyof typeof defaultProps;
 
-const PickerColumn = (comProps: PickerColumnProps) => {
+const PickerColumn = forwardRef<PickerColumnInstance, PickerColumnProps>((comProps, ref) => {
   const props = useMergeProps<PickerColumnProps, RequireType>(comProps, defaultProps);
-  const { defaultIndex, itemHeight, visibleItemCount, ...ret } = props;
+  const {
+    textKey,
+    initialOptions,
+    itemHeight,
+    value,
+    valueKey,
+    visibleItemCount,
+    onChange,
+    ...ret
+  } = props;
 
-  const [options, setOptions] = useState<Array<any>>([]);
+  const [options, setOptions] = useState<PickerColumnOption[]>([]);
   const [state, updateState] = useSetState({
-    index: defaultIndex,
+    curIndex: 0,
+    startOffset: 0,
     offset: 0,
     duration: 0,
-    // options: deepClone(initialOptions),
   });
 
-  /** 一开始的偏移量，假设itemHeight为44，若要定位到第一个元素，则baseOffset为 44 * 2 */
-  const baseOffset = (itemHeight * (+visibleItemCount - 1)) / 2;
+  useEffect(() => {
+    setOptions(initialOptions ?? []);
+    const index = initialOptions?.findIndex((o) => o[textKey ?? valueKey] === value);
+    if (index && index !== -1 && index !== state.curIndex) {
+      setIndex(index);
+    }
+  }, [initialOptions, value]);
+
+  /** 一开始的偏移量 */
+  const baseOffset = (+itemHeight * (visibleItemCount - 1)) / 2;
+
+  const setIndex = (index: number, userAction?: boolean) => {
+    const offset = -index * +itemHeight;
+    if (index !== state.curIndex) {
+      updateState({ curIndex: index });
+      if (userAction) {
+        nextTick(() => {
+          onChange?.();
+        });
+      }
+    }
+    updateState({ offset });
+  };
+
+  /** 缓速 */
+  const ease = (distance: number) => {
+    const height = +itemHeight;
+    const max = options.length * height;
+    if (distance > height || distance < -max) {
+      const v = distance < 0 ? -1 : 1;
+      distance = Math.abs(distance);
+      if (v < 0) distance -= max - height;
+      if (distance < height * 2) {
+        distance = height + (distance - height) / 2;
+      } else {
+        distance = height * 1.5 + (distance - height * 2) / 4;
+      }
+      distance *= v;
+      if (v < 0) distance -= max - height;
+    }
+    return distance;
+  };
+
+  const { info, onTouchFn } = useTouchEvent({
+    onTouchStart() {
+      updateState({
+        duration: 0,
+        startOffset: state.offset,
+      });
+    },
+    onTouchMove() {
+      updateState({ offset: ease(state.startOffset + info.deltaY) });
+    },
+    onTouchEnd() {
+      const index = range(Math.round(-state.offset / +itemHeight), 0, options.length - 1);
+      setIndex(index, true);
+      updateState({ duration: DEFAULT_DURATION });
+    },
+    isStopEvent: true,
+  });
+
+  const getOptionText = (option: [] | string | PickerColumnOption): string | [] => {
+    if (isObj(option) && textKey in (option as PickerColumnOption)) {
+      const objOption = option as PickerColumnOption;
+      return objOption[textKey];
+    }
+    return option as [];
+  };
+
+  useImperativeHandle(ref, () => ({
+    getCurrentIndex: () => state.curIndex,
+    getValue: () => options[state.curIndex],
+    setIndex,
+  }));
 
   const renderItem = options.map((option, index) => (
-    <View key={index} className={`${classPrefix}-item`} style={{ height: itemHeight + 'px' }}>
-      {index}
+    <View
+      key={index}
+      disable-scroll
+      className={`${classPrefix}-item`}
+      style={{ height: itemHeight + 'px', lineHeight: itemHeight + 'px' }}
+    >
+      {getOptionText(option)}
     </View>
   ));
 
@@ -48,11 +136,12 @@ const PickerColumn = (comProps: PickerColumnProps) => {
           transitionDuration: `${state.duration}ms`,
           transitionProperty: state.duration ? 'all' : 'none',
         }}
+        {...onTouchFn}
       >
         {renderItem}
       </View>
     </View>,
   );
-};
+});
 
 export default PickerColumn;

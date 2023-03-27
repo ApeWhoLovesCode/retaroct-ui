@@ -1,28 +1,30 @@
-import { ITouchEvent } from '@tarojs/components';
 import { ReactNode } from 'react';
 import { NativeProps } from '../utils/native-props';
 
-export type PickerViewProps = {
-  /**
-   * @description 选项为对象的时候，文字对应的 key
-   * @default text
-   */
-  valueKey?: string;
-  /**
-   * @description 顶部栏位置，可选值为bottom
-   * @default top
-   */
-  toolbarPosition?: string;
-  /**
-   * @description 	单列选择器的默认选中项索引,多列选择器请参考下方的 Columns 配置
-   * @default 0
-   */
-  defaultIndex?: number;
+/** 列选项 */
+export type PickerColumnOption = {
+  text?: React.ReactNode;
+  value?: string;
+  children?: PickerColumnOption[];
+  disabled?: boolean;
+} & Record<string, any>;
+
+/** 列 */
+export type PickerColumn<T = PickerColumnOption> = (string | T)[];
+
+export type PickerCommonProps<T> = {
   /**
    * @description 	每一项数据，可为字符或者对象，对象默认展示值是valueKey设置的key
    * @default []
    */
-  columns?: any[];
+  columns?: PickerColumn<T> | PickerColumn<T>[];
+  /** columns 的 key */
+  columnsFieldNames?: PickerFieldNames;
+  /**
+   * @description 顶部栏位置，可选值为bottom
+   * @default top
+   */
+  toolbarPosition?: PickerViewToolbarPosition;
   /**
    * @description 	顶部栏标题
    * @default ''
@@ -54,93 +56,61 @@ export type PickerViewProps = {
    */
   visibleItemCount?: number;
   /**
-   * @description 变化触发方法
-   */
-  onChange?: (e: PickerChangeEvents) => void;
-  /**
-   * @description 取消触发方法
-   */
-  onCancel?: (e: PickerEvents) => void;
-  /**
-   * @description 确认触发方法
-   */
-  onConfirm?: (e: PickerEvents) => void;
-  /**
    * @description 	是否显示顶部栏
    * @default       false
    */
   showToolbar?: boolean;
+  /** 点击取消按钮时触发 */
+  onCancel?: () => void;
+};
+
+export type PickerViewProps<T = PickerColumnOption> = PickerCommonProps<T> & {
+  /** 选中项 */
+  value?: string[];
+  /** 选项改变时触发 */
+  onChange?: (event: PickerChangeEvents) => void;
+  /** 点击完成按钮时触发 */
+  onConfirm?: (event: PickerChangeEvents) => void;
 } & NativeProps;
 
-/**
- * @title 事件 onConfirm 和 onCancel
- * @description 继承了Taro的ITouchEvent类型
- */
-export interface PickerEvents extends ITouchEvent {
-  /**
-   * @description 返回选项对应的值和选项对应的下标
-   */
-  detail: {
-    value: any;
-    index: number | number[];
-  };
-}
+export type PickerViewToolbarPosition = 'top' | 'bottom';
 
 /**
  * @title 触发事件 onChange
- * @description 继承了Taro的ITouchEvent类型
  */
-export interface PickerChangeEvents extends ITouchEvent {
-  /**
-   * @description 返回选项对应的值、picker实例和多列返回当前第多少列、单列返回选项对应值
-   */
-  detail: {
-    value: any;
-    picker: PickerViewInstance;
-    index: number;
-  };
-}
+export type PickerChangeEvents<T = PickerColumnOption> = {
+  /** 当前值 */
+  value: string[];
+  /** 当前值的索引数组 */
+  indexes: number[];
+  /** 选择的行 */
+  selectedRows: T[];
+};
 
-/**
- * @title 组件实例
- * @description 通过ref获取到的方法如下
- */
-export type PickerViewInstance = {
-  /**
-   * @description 设置每一列的数据，异步获取到最新的values
-   */
-  setColumnValues: (index: number, options: string[]) => Promise<any>;
-  /**
-   * @description 获取每一列的值
-   * @default
-   */
-  getColumnValues: (index: number[]) => any[];
-  /**
-   * @description 设置某一列的值
-   */
-  setColumnValue: (index: number, value: any) => any;
-  /**
-   * @description 获取某一列的值
-   */
-  getColumnValue: (index: number) => any;
-  /**
-   * @description 每列的数据
-   */
-  columns: any[];
-  /**
-   * @description 获取每一列展示的下标
-   */
-  getIndexes: () => number[];
-  /**
-   * @description 设置每一列展示的下标
-   */
-  setIndexes: (indexes: number[]) => void;
-  /**
-   * @description 每一列展示的值
-   */
-  getValues: () => any;
-  /**
-   * @description 触发确认的方法
-   */
-  confirm: () => void;
+export type PickerFieldNames = {
+  text?: string;
+  value?: string;
+  children?: string;
+};
+
+export type PickerColumnProps = {
+  valueKey?: string;
+  textKey: string;
+  itemHeight?: number | string;
+  visibleItemCount?: number;
+  initialOptions?: PickerColumnOption[];
+  value: string;
+  onChange?: () => void;
+} & NativeProps;
+
+export type PickerColumnInstance = {
+  getCurrentIndex: () => number;
+  getValue: () => PickerColumnOption;
+  setIndex: (index: number, userAction?: boolean) => void;
+};
+
+export type PickerValueExtend = {
+  columns: PickerColumnOption[][];
+  items: (PickerColumnOption | null | any)[];
+  indexes: number[];
 };
