@@ -4,4 +4,12 @@ import './picker-column.less';
 
 export { PickerView };
 export default PickerView;
-export type { PickerViewProps, PickerColumnProps } from './type';
+export type {
+  PickerViewProps,
+  PickerViewInstance,
+  PickerColumn,
+  PickerColumnOption,
+  PickerViewToolbarPosition,
+  PickerChangeEvents,
+  PickerFieldNames,
+} from './type';

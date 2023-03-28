@@ -1,5 +1,5 @@
 import { View } from '@tarojs/components';
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useMemo, forwardRef } from 'react';
 import { withNativeProps } from '../utils/native-props';
 import useMergeProps from '../use-merge-props';
 import {
@@ -7,6 +7,7 @@ import {
   PickerViewProps,
   PickerColumnOption,
   PickerViewToolbarPosition,
+  PickerViewInstance,
 } from './type';
 import Column from './picker-column';
 import { isObj } from '../utils/validate';
@@ -23,7 +24,7 @@ const defaultProps = {
 };
 type RequireType = keyof typeof defaultProps;
 
-const PickerView = (comProps: PickerViewProps) => {
+const PickerView = forwardRef<PickerViewInstance, PickerViewProps>((comProps, ref) => {
   const props = useMergeProps<PickerViewProps, RequireType>(comProps, defaultProps);
   const {
     value,
@@ -175,6 +176,6 @@ const PickerView = (comProps: PickerViewProps) => {
       {toolbarPosition === 'bottom' ? renderToolbar : null}
     </View>,
   );
-};
+});
 
 export default PickerView;

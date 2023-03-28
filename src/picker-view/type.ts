@@ -75,6 +75,8 @@ export type PickerViewProps<T = PickerColumnOption> = PickerCommonProps<T> & {
 
 export type PickerViewToolbarPosition = 'top' | 'bottom';
 
+export type PickerViewInstance = {};
+
 /**
  * @title 触发事件 onChange
  */
