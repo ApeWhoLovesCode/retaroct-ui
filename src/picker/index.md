@@ -1,5 +1,5 @@
 ---
-title: picker-view 选择器
+title: picker 选择器
 nav:
   title: 组件
   path: /components
@@ -11,7 +11,7 @@ group:
 
 # 组件介绍
 
-触摸拖动选择器组件
+自带弹出层的选择器组件
 
 ## 代码演示
 
