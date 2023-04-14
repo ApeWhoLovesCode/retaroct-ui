@@ -83,6 +83,21 @@ const PickerColumn = forwardRef<PickerColumnInstance, PickerColumnProps>((comPro
     return distance;
   };
 
+  const getOffsetIndex = (offset: number) =>
+    range(Math.round(-offset / +itemHeight), 0, options.length - 1);
+
+  /** 执行惯性滑动 */
+  const momentum = (distance: number, _duration: number) => {
+    /** 计算出惯性滑动的距离 s = v / A [A为常量，0.003为一个比较合适的值] */
+    const speed = Math.abs(distance / _duration);
+    /** 当前距离 + 惯性滑动距离 = 最终距离 */
+    const destination = state.offset + (speed / 0.003) * (distance < 0 ? -1 : 1);
+    /** 通过最终距离的偏移量来计算应该锁定的index值 */
+    const index = getOffsetIndex(destination);
+    updateState({ duration: 800 });
+    setIndex(index, true);
+  };
+
   const { info, onTouchFn } = useTouchEvent({
     onTouchStart() {
       updateState({
@@ -94,7 +109,13 @@ const PickerColumn = forwardRef<PickerColumnInstance, PickerColumnProps>((comPro
       updateState({ offset: ease(state.startOffset + info.deltaY) });
     },
     onTouchEnd() {
-      const index = range(Math.round(-state.offset / +itemHeight), 0, options.length - 1);
+      // 处理惯性滚动
+      if (info.time < 300 && Math.abs(info.deltaY) > 15) {
+        momentum(info.deltaY, info.time);
+        return;
+      }
+
+      const index = getOffsetIndex(state.offset);
       setIndex(index, true);
       updateState({ duration: DEFAULT_DURATION });
     },

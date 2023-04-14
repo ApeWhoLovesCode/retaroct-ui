@@ -5,23 +5,30 @@ const MIN_DISTANCE = 10;
 
 export type TouchDirection = '' | 'vertical' | 'horizontal';
 export type TouchState = {
-  /** 由始至终的x,y值 */
-  preX: number;
-  preY: number;
-  x: number;
-  y: number;
-  /** 起始的位置 */
+  /** x的起始的位置 */
   startX: number;
+  /** y的起始的位置 */
   startY: number;
-  /** 偏移的值 */
+  /** x的偏移量 */
   deltaX: number;
+  /** y的偏移量 */
   deltaY: number;
-  /** 位移的值 正数 */
+  /** x的位移 正数 */
   offsetX: number;
+  /** y的位移 正数 */
   offsetY: number;
   /** 当前移动的方向 */
   direction: TouchDirection;
+  /** 触摸开始到结束的时间 */
   time: number;
+  /** 起始的由始至终的x值 */
+  preX: number;
+  /** 起始的由始至终的y值 */
+  preY: number;
+  /** 由始至终的x值 */
+  x: number;
+  /** 由始至终的y值 */
+  y: number;
 };
 
 function getDirection(x: number, y: number) {
