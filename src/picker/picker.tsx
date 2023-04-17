@@ -6,12 +6,14 @@ import Popup from '../popup';
 
 const classPrefix = `retaroct-picker`;
 
-const defaultProps = {};
+const defaultProps = {
+  isPop: true,
+};
 type RequireType = keyof typeof defaultProps;
 
 const Picker = forwardRef<PickerInstance, PickerProps>((comProps, ref) => {
   const props = useMergeProps<PickerProps, RequireType>(comProps, defaultProps);
-  const { ...ret } = props;
+  const { isPop, ...ret } = props;
 
   const pickerRef = useRef<PickerInstance>(null);
 
@@ -20,9 +22,15 @@ const Picker = forwardRef<PickerInstance, PickerProps>((comProps, ref) => {
   }));
 
   return (
-    <Popup round {...ret} position="bottom">
-      <PickerView {...ret} ref={pickerRef} />
-    </Popup>
+    <div className={classPrefix}>
+      {isPop ? (
+        <Popup round {...ret} position="bottom">
+          <PickerView {...ret} ref={pickerRef} />
+        </Popup>
+      ) : (
+        <PickerView {...ret} ref={pickerRef} />
+      )}
+    </div>
   );
 });
 
