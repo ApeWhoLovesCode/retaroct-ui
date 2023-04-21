@@ -45,7 +45,7 @@ export function dateFormatEnglish(date?: Date | number) {
 }
 
 /** 加0 */
-export const addZero = (v: number) => (v >= 10 ? '' : '0') + v;
+export const addZero = (v: number | string) => (+v >= 10 ? '' : '0') + v;
 
 /** 格式化剩余时间 */
 export function formatRemainTime(time?: number, format = 'D天HH时mm分ss秒') {
