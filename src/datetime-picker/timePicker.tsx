@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import useMergeProps from '../use-merge-props';
 import Picker from '../picker';
-import { TimePickerFormatType, TimePickerProps } from './type';
+import { DatetimePickerColumnType, TimePickerProps } from './type';
 import { addZero, range } from '../utils/format';
 import { PickerChangeEvents } from '../picker-view';
 import useUpdateEffect from '../use-update-effect';
@@ -12,7 +12,7 @@ const defaultProps = {
   maxHour: 23,
   minMinute: 0,
   maxMinute: 59,
-  formatter: (type: TimePickerFormatType, value: string) => value,
+  formatter: (type: DatetimePickerColumnType, value: string) => value,
 };
 type RequireType = keyof typeof defaultProps;
 
@@ -25,12 +25,10 @@ const TimePicker = (comProps: TimePickerProps) => {
     if (!str) {
       str = `${addZero(minHour)}:${addZero(minMinute)}`;
     }
-    const [hour, minute] = str.split(':');
-    return (
-      addZero(range(+hour, +minHour, +maxHour)) +
-      ':' +
-      addZero(range(+minute, +minMinute, +maxMinute))
-    );
+    let [hour, minute] = str.split(':');
+    hour = addZero(range(+hour, +minHour, +maxHour));
+    minute = addZero(range(+minute, +minMinute, +maxMinute));
+    return `${hour}:${minute}`;
   };
 
   const [currentDate, setCurrentDate] = useState(() =>
@@ -38,12 +36,12 @@ const TimePicker = (comProps: TimePickerProps) => {
   );
 
   const pickerValue = useMemo(() => {
-    const [hour, minute] = currentDate.split(':');
-    return [formatter('hour', hour), formatter('minute', minute)];
+    const val = currentDate.split(':');
+    return [formatter('hour', val[0]), formatter('minute', val[1])];
   }, [currentDate, formatter]);
 
   const columns = useMemo(() => {
-    const arr: { type: TimePickerFormatType; values: string[] }[] = [
+    const arr: { type: DatetimePickerColumnType; values: string[] }[] = [
       { type: 'hour', values: createNumList(+minHour, +maxHour) },
       { type: 'minute', values: createNumList(+minMinute, +maxMinute) },
     ];

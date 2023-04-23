@@ -14,14 +14,14 @@ export type DatetimePickerShared = {
   /** 时间类型 */
   type?: DatetimePickerType;
   /** 选项过滤函数	 */
-  filter?: (type: TimePickerFormatType, values: string[]) => string[];
+  filter?: (type: DatetimePickerColumnType, values: string[]) => string[];
   /**
    * 自定义列排序数组,
    * 子项可选值为: year、month、day、hour、minute
    */
-  columnsOrder?: string[];
+  columnsOrder?: DatetimePickerColumnType[];
   /** 选项格式化函数	*/
-  formatter?: (type: TimePickerFormatType, value: string) => string;
+  formatter?: (type: DatetimePickerColumnType, value: string) => string;
   onCancel?: () => void;
 } & Omit<PickerProps, 'value' | 'defaultValue' | 'onConfirm' | 'onChange' | 'columns'>;
 
@@ -57,5 +57,3 @@ export type TimePickerProps = {
 export type DatetimePickerProps = DatePickerProps | TimePickerProps;
 
 export type DateTimePickerInstance = {};
-
-export type TimePickerFormatType = 'hour' | 'minute';

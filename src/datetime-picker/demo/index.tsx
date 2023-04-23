@@ -5,10 +5,24 @@ import DatetimePicker from '../datetimePicker';
 
 export default () => {
   // const [isShow, setIsShow] = useState(false);
+  const [date, setDate] = useState(new Date());
   const [val, setVal] = useState('11:30');
 
   return (
     <View>
+      <DemoBlock title="选择日期" padding="0 12px">
+        <DatetimePicker
+          isPop={false}
+          type="date"
+          minDate={new Date(2020, 0, 1)}
+          maxDate={new Date(2025, 10, 1)}
+          value={date}
+          onChange={(v) => {
+            console.log('v: ', v);
+            setDate(v);
+          }}
+        />
+      </DemoBlock>
       <DemoBlock title="选择时间" padding="0 12px">
         <DatetimePicker
           // show={isShow}

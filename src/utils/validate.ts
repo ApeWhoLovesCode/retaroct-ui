@@ -25,3 +25,6 @@ export function isNumber(value: any) {
 export function isBoolean(value: any) {
   return typeof value === 'boolean';
 }
+export function isDate(val: Date): val is Date {
+  return Object.prototype.toString.call(val) === '[object Date]' && !isNaN(val.getTime());
+}
