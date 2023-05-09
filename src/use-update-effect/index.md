@@ -1,7 +1,7 @@
 ---
 title: use-update-effect
 nav:
-  title: 组件
+  title: 钩子
   path: /hooks
   order: 2
 group:
