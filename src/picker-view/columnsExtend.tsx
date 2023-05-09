@@ -96,7 +96,7 @@ export function generateColumnsExtend(
     let cls = typeof rawColumns === 'function' ? rawColumns(val) : rawColumns;
     if (!Array.isArray(cls![0])) cls = [cls!];
     return cls!.map((column) =>
-      column.map((item) => {
+      (column as PickerColumnOption | PickerColumn<PickerColumnOption>).map((item: any) => {
         if (typeof item === 'string') return { [textKey]: item, [valueKey]: item };
         if (!(valueKey in item)) item[valueKey] = item[textKey];
         return item;
@@ -108,7 +108,7 @@ export function generateColumnsExtend(
     return val.map((v, index) => {
       const column = columns()[index];
       if (!column) return null;
-      return column.find((item) => item[valueKey] === v) ?? undefined;
+      return column.find((item: any) => item[valueKey] === v) ?? undefined;
     });
   });
 
@@ -116,7 +116,7 @@ export function generateColumnsExtend(
     return val.map((v, index) => {
       const column = columns()[index];
       if (!column) return null;
-      return column.findIndex((item) => item[valueKey] === v) ?? null;
+      return column.findIndex((item: any) => item[valueKey] === v) ?? null;
     });
   });
 

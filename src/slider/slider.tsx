@@ -8,7 +8,7 @@ import { range } from '../utils/format';
 import getEleInfo from '../utils/getEleInfo';
 import { classBem, stylePxTransform } from '../utils/handleDom';
 import { SliderProps, ValueType } from './type';
-import { UseTouchesOptions } from '../use-touches';
+import { UseTouchesOptions } from '../use-touch-event';
 
 const classPrefix = `retaroct-slider`;
 
