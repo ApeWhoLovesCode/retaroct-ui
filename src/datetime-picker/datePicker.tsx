@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import './index.less';
 import useMergeProps from '../use-merge-props';
 import { DatePickerProps, DatetimePickerColumnType, DatetimePickerType } from './type';
