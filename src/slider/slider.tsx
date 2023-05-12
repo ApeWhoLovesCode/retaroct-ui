@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { withNativeProps } from '../utils/native-props';
 import useMergeProps from '../use-merge-props';
 import { randomStr } from '../utils/random';
-import useTouchEvent from '../use-touch-event';
+import useTouchEvent, { UseTouchEventParams } from '../use-touch-event';
 import { range } from '../utils/format';
 import getEleInfo from '../utils/getEleInfo';
 import { classBem, stylePxTransform } from '../utils/handleDom';
@@ -69,13 +69,11 @@ const Slider = (comProps: SliderProps) => {
   /** 从数字或数组中获取value */
   const getVal = (v: ValueType) => (typeof v === 'number' ? v : [...v]);
 
-  const getOptions = (i: number): UseTouchesOptions => ({
+  const getOptions = (i: number): UseTouchEventParams => ({
     onTouchStart() {
-      if (disabled) return;
       onDragStart?.(_value);
     },
     onTouchMove(_, info) {
-      if (disabled) return;
       const { w, h } = sliderInfo.current;
       const _preVal = (preVal![i] ?? preVal) - min;
       let val = _range(
@@ -92,9 +90,11 @@ const Slider = (comProps: SliderProps) => {
       onChange?.(newVal);
     },
     onTouchEnd() {
-      if (disabled) return;
       setPreVal(getVal(_value));
       onDragEnd?.(_value);
+    },
+    isDisable: {
+      all: disabled,
     },
   });
   const { onTouchFn: onTouchFn_1 } = useTouchEvent(getOptions(0));

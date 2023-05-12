@@ -39,24 +39,25 @@ const PullToRefresh: React.FC<PullToRefreshProps> = (comProps) => {
     cur: 0,
   });
 
+  /** 是否是可触摸了 */
+  const isTouchable = status !== 'loading';
+
   const { info, onTouchFn } = useTouchEvent({
     onTouchStart: () => {
-      if (isTouchable()) {
-        getHeaderTop().then((top) => {
-          headerTop.current.cur = top;
-          if (!isNotPull()) {
-            setState((s) => ({ ...s, duration: 0 }));
-          }
-        });
-      }
+      getHeaderTop().then((top) => {
+        headerTop.current.cur = top;
+        if (!isNotPull()) {
+          setState((s) => ({ ...s, duration: 0 }));
+        }
+      });
     },
     onTouchMove: () => {
-      if (!isTouchable() || isNotPull()) return;
+      if (isNotPull()) return;
       const distance = ease(info.deltaY);
       setStatusFn(distance);
     },
     onTouchEnd: async () => {
-      if (!isTouchable() || isNotPull()) return;
+      if (isNotPull()) return;
       if (status === 'pulling') {
         setStatusFn(0);
       } else if (status === 'loosing') {
@@ -68,10 +69,10 @@ const PullToRefresh: React.FC<PullToRefreshProps> = (comProps) => {
         props.onRefreshEnd?.();
       }
     },
+    isDisable: {
+      all: !isTouchable,
+    },
   });
-
-  /** 是否是可触摸了 */
-  const isTouchable = () => status !== 'loading';
 
   /** 当前不是下拉 */
   const isNotPull = () => {

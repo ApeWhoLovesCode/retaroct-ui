@@ -71,7 +71,7 @@ const SlideAction = forwardRef<SwipeActionRef, SwipeActionProps>(
         duration.current = 0.1;
       },
       onTouchMove: () => {
-        if (touchRef.current.status === 'lock') return;
+        // if(touchRef.current.status === 'lock') return
         if (touchRef.current.status !== 'active') {
           // 当前垂直方向滚动大于10px
           if (info.offsetY > 10) {
@@ -94,8 +94,8 @@ const SlideAction = forwardRef<SwipeActionRef, SwipeActionProps>(
           }
         });
       },
-      onTouchEnd: (e: MouseTouchEvent) => {
-        e.stopPropagation();
+      onTouchEnd: () => {
+        // 这里不能省略--待解决
         if (touchRef.current.status === 'lock') return;
         const x = info.deltaX;
         const direction = x > 0 ? 'left' : 'right';
@@ -118,6 +118,10 @@ const SlideAction = forwardRef<SwipeActionRef, SwipeActionProps>(
         if (_moveX !== 0) {
           onActionsReveal?.(direction);
         }
+      },
+      isDisable: {
+        onTouchMove: touchRef.current.status === 'lock',
+        onTouchEnd: touchRef.current.status === 'lock',
       },
     });
 
