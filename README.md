@@ -16,10 +16,19 @@ npm i retaroct-ui
 
 ## Getting Started
 
-安装依赖(Install dependencies),
+```bash
+# 推荐使用 node 16
+nvm use 16
+# 没有安装 taro 的可以安装一下
+npm install -g @tarojs/cli@3.4.11
+# 安装其他依赖
+npm i
+```
+
+打包文档(Build documentation)
 
 ```bash
-$ cnpm i
+$ npm run docs:build
 ```
 
 运行项目(Start the dev server)
@@ -28,14 +37,8 @@ $ cnpm i
 $ npm run start
 ```
 
-打包(Build)
+打包(Build) 发布 npm
 
 ```bash
 $ npm run build
-```
-
-打包文档(Build documentation)
-
-```bash
-$ npm run docs:build
 ```

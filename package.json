@@ -14,7 +14,7 @@
     "test": "umi-test",
     "test:coverage": "umi-test --coverage",
     "prepublishOnly": "npm run build",
-    "device": "cd taro-device && cnpm run dev:h5",
+    "device": "cd taro-device && npm run dev:h5",
     "deviceBuild": "cd taro-device && npm run build:h5",
     "copyDevice": "node ./helper/copyDevice.js",
     "fileChange": "node ./helper/fileChange.js",
